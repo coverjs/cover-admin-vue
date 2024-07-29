@@ -5,22 +5,26 @@
   "type": "module",
   "scripts": {
     "bootstrap": "pnpm install",
-    "gen":"node ./gen-api.js",
+    "gen": "node ./gen-api.js",
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@onion-interceptor/pipes": "0.0.3-beta",
     "ant-design-vue": "^4.2.3",
     "axios": "^1.7.2",
     "dayjs": "^1.11.12",
     "lodash-es": "^4.17.21",
-    "onion-interceptor": "^0.0.3",
+    "object-hash": "^3.0.0",
+    "onion-interceptor": "latest",
     "pinia": "^2.2.0",
     "vue": "^3.4.31",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/object-hash": "^3.0.6",
     "@vitejs/plugin-vue": "^5.0.5",
     "swagger-typescript-api": "^13.0.13",
     "typescript": "^5.2.2",

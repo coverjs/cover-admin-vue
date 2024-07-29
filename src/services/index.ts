@@ -15,13 +15,27 @@ export interface CreateUserDto {
    * @example "admin"
    */
   username: string;
-  /** 手机号 */
-  mobile: string;
-  /** 邮箱 */
+  /**
+   * 密码
+   * @example "admin"
+   */
+  password: string;
+  /**
+   * 邮箱
+   * @example "admin@admin.com"
+   */
   email: string;
+  /**
+   * 角色id
+   * @example 1
+   */
+  roleId: number;
+  /**
+   * 昵称
+   * @example "admin"
+   */
+  nickname: string;
 }
-
-export type UpdateUserDto = object;
 
 export interface AccountLoginVo {
   /** token */
@@ -77,6 +91,10 @@ import axios from "axios";
 
 export type QueryParamsType = Record<string | number, any>;
 
+export interface CustromRequestParams<Options = any> {
+  customOptions?: Options;
+}
+
 export interface FullRequestParams extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
   /** set parameter to `true` for call `securityWorker` for this request */
   secure?: boolean;
@@ -92,7 +110,7 @@ export interface FullRequestParams extends Omit<AxiosRequestConfig, "data" | "pa
   body?: unknown;
 }
 
-export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" | "path">;
+export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" | "path"> & CustromRequestParams;
 
 export interface ApiConfig<SecurityDataType = unknown> extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
   securityWorker?: (
@@ -196,7 +214,7 @@ export class HttpClient<SecurityDataType = unknown> {
       ...requestParams,
       headers: {
         ...(requestParams.headers || {}),
-        ...(type && type !== ContentType.FormData ? { "Content-Type": type } : {}),
+        ...(type ? { "Content-Type": type } : {}),
       },
       params: query,
       responseType: responseFormat,
@@ -222,90 +240,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 用户管理
      * @name UserControllerCreate
      * @summary 创建用户
-     * @request POST:/api/user
+     * @request POST:/api/user/create
      * @secure
      */
     userControllerCreate: (data: CreateUserDto, params: RequestParams = {}) =>
       this.request<CommonResponseVo, any>({
-        path: `/api/user`,
+        path: `/api/user/create`,
         method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags 用户管理
-     * @name UserControllerFindAll
-     * @summary 查询所有用户
-     * @request GET:/api/user
-     * @secure
-     */
-    userControllerFindAll: (params: RequestParams = {}) =>
-      this.request<CommonResponseVo, any>({
-        path: `/api/user`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags 用户管理
-     * @name UserControllerFindOne
-     * @summary 查询单个用户
-     * @request GET:/api/user/{id}
-     * @secure
-     */
-    userControllerFindOne: (id: string, params: RequestParams = {}) =>
-      this.request<CommonResponseVo, any>({
-        path: `/api/user/${id}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags 用户管理
-     * @name UserControllerUpdate
-     * @summary 更新用户
-     * @request PATCH:/api/user/{id}
-     * @secure
-     */
-    userControllerUpdate: (id: string, data: UpdateUserDto, params: RequestParams = {}) =>
-      this.request<CommonResponseVo, any>({
-        path: `/api/user/${id}`,
-        method: "PATCH",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags 用户管理
-     * @name UserControllerRemove
-     * @summary 删除用户
-     * @request DELETE:/api/user/{id}
-     * @secure
-     */
-    userControllerRemove: (id: string, params: RequestParams = {}) =>
-      this.request<CommonResponseVo, any>({
-        path: `/api/user/${id}`,
-        method: "DELETE",
-        secure: true,
         format: "json",
         ...params,
       }),

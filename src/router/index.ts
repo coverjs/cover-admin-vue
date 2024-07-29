@@ -11,6 +11,11 @@ export const router = createRouter({
       name: "home",
       component: () => import("../pages/home/index.vue"),
     },
+    {
+      path: "/login",
+      name: "login",
+      component: () => import("../pages/sys/login/Login.vue"),
+    }
   ] as RouteRecordRaw[],
 });
 
