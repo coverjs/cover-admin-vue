@@ -1,7 +1,9 @@
 import "ant-design-vue/dist/reset.css";
+import "./styles/index.scss";
 import { createApp } from "vue";
 import { setupStore } from "./store";
-import { setupRouter } from "./router";
+import { setupRouter, router } from "./router";
+import { setupRouterGuards } from "./router/guard";
 import App from "./App.vue";
 
 function bootstrap() {
@@ -10,6 +12,8 @@ function bootstrap() {
   setupStore(app);
 
   setupRouter(app);
+
+  setupRouterGuards(router);
 
   app.mount("#app");
 }

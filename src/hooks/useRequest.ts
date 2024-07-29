@@ -1,3 +1,5 @@
-export default function useRequest() {
+export function useRequest() {
   // todo
 }
+
+export default useRequest;

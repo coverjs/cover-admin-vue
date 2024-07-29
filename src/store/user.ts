@@ -3,44 +3,73 @@ import type { RequestParams } from "@/types";
 
 import { defineStore } from "pinia";
 import { ref, computed, reactive } from "vue";
-import { createApi } from "@/utils";
 import { each, get, set } from "lodash-es";
+import { createApi } from "@/utils";
+import { router } from "@/router";
+import { store } from "@/store";
 
 const api = createApi();
 
-export const useUserStore = defineStore("app-user", () => {
-  const token = ref<string>("");
-  const userInfo = reactive({
-    username: "",
-    nickname: "",
-    email: "",
-    role: {},
-  });
+export const useUserStore = defineStore(
+  "app-user",
+  () => {
+    const token = ref<string | void>("");
+    const userInfo = reactive({
+      username: "",
+      nickname: "",
+      email: "",
+      role: {},
+    });
 
-  const getToken = computed(() => token.value);
+    const getToken = computed(() => token.value);
 
-  function setToken(value: string) {
-    token.value = value;
-  }
+    function setToken(value: string | void) {
+      token.value = value;
+    }
 
-  async function login(data: AccountLoginDto) {
-    const { data: res } = await api.accountControllerLogin(data, {
-      customOptions: {
-        authInterceptorEnabled: false,
-      },
-    } as RequestParams);
-    if (res.code === 0) {
-      setToken(res.data!.token);
+    async function login(data: AccountLoginDto, goHome: boolean = true) {
+      const { data: res } = await api.accountControllerLogin(data, {
+        customOptions: {
+          authInterceptorEnabled: false,
+        },
+      } as RequestParams);
+      if (res.code === 0) {
+        setToken(res.data!.token);
+        await afterLoginAction(goHome);
+      }
+      return userInfo;
+    }
+    async function afterLoginAction(goHome?: boolean) {
+      if (!getToken) return;
 
-      const { data: _res } = await api.accountControllerGetCurrentUser();
-      if (_res.code === 0) {
-        each(get(_res, "data"), (value, key) => {
+      await getUserInfoAction();
+
+      goHome && (await router.replace("/"));
+    }
+
+    async function getUserInfoAction() {
+      const { data: res } = await api.accountControllerGetCurrentUser();
+      if (res.code === 0) {
+        each(get(res, "data"), (value, key) => {
           set(userInfo, key, value);
         });
       }
+      return userInfo;
     }
-    return res;
-  }
 
-  return { token, userInfo, login, getToken, setToken };
-});
+    return {
+      token,
+      userInfo,
+      getToken,
+      setToken,
+      login,
+      afterLoginAction,
+      getUserInfoAction,
+    };
+  },
+  { persist: { paths: ["token"] } }
+);
+
+export function useUserStoreWithOut() {
+  return useUserStore(store);
+}

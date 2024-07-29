@@ -73,6 +73,8 @@ export interface CreateRoleDto {
   desricption?: string;
 }
 
+export type QueryRoleDto = object;
+
 export interface CommonResponseVo {
   /**
    * 响应状态码
@@ -118,6 +120,7 @@ export interface ApiConfig<SecurityDataType = unknown> extends Omit<AxiosRequest
   ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
   secure?: boolean;
   format?: ResponseType;
+  customOptions?: CustromRequestParams["customOptions"];
 }
 
 export enum ContentType {
@@ -324,11 +327,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/role
      * @secure
      */
-    roleControllerFindAll: (params: RequestParams = {}) =>
+    roleControllerFindAll: (data: QueryRoleDto, params: RequestParams = {}) =>
       this.request<CommonResponseVo, any>({
         path: `/api/role`,
         method: "GET",
+        body: data,
         secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),

@@ -1,34 +1,79 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import type { FormInstance } from "ant-design-vue/lib/form/Form";
+import { reactive, ref } from "vue";
+import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 import { useUserStore } from "@/store/user";
 import { AccountLoginDto } from "@/services";
+import { useMessage } from "@/hooks";
 
 const userStore = useUserStore();
+const { notification } = useMessage();
 const formData = reactive({
   username: "admin",
   password: "admin",
 });
 
-async function onSubmit() {
+const formRef = ref<FormInstance>();
+const rememberMe = ref(false);
+const submitLoading = ref(false);
+
+async function onFinish() {
   const data = {
     ...formData,
     type: "account" as AccountLoginDto["type"],
   };
-  const res = await userStore.login(data);
-  console.log(res);
+  try {
+    submitLoading.value = true;
+    const userInfo = await userStore.login(data);
+    notification.success({
+      message: "登录成功",
+      description: `欢迎回来，${userInfo.nickname}`,
+      duration: 3,
+    });
+  } finally {
+    submitLoading.value = false;
+  }
 }
 </script>
 
 <template>
-  <a-form :model="formData" @submit="onSubmit">
-    <a-form-item label="用户名">
-      <a-input v-model:value="formData.username" />
+  <a-form class="login-form" ref="formRef" :model="formData" @finish="onFinish">
+    <a-form-item
+      name="username"
+      :rules="[{ required: true, message: '请输入用户名' }]"
+    >
+      <a-input v-model:value="formData.username" size="large">
+        <template #prefix>
+          <user-outlined />
+        </template>
+      </a-input>
     </a-form-item>
-    <a-form-item label="密码">
-      <a-input v-model:value="formData.password" type="password" />
+    <a-form-item
+      name="password"
+      :rules="[{ required: true, message: '请输入密码' }]"
+    >
+      <a-input-password
+        v-model:value="formData.password"
+        size="large"
+        visiblity-toggle
+      >
+        <template #prefix>
+          <lock-outlined />
+        </template>
+      </a-input-password>
     </a-form-item>
     <a-form-item>
-      <a-button type="primary" html-type="submit">登录</a-button>
+      <a-checkbox v-model:checked="rememberMe" size="small">记住我</a-checkbox>
+    </a-form-item>
+    <a-form-item>
+      <a-button
+        type="primary"
+        html-type="submit"
+        size="large"
+        :loading="submitLoading"
+        block
+        >登录</a-button
+      >
     </a-form-item>
   </a-form>
 </template>
