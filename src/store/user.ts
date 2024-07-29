@@ -2,12 +2,20 @@ import type { AccountLoginDto } from "@/services";
 import type { RequestParams } from "@/types";
 
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { ref, computed, reactive } from "vue";
 import { createApi } from "@/utils";
+import { each, get, set } from "lodash-es";
+
+const api = createApi();
 
 export const useUserStore = defineStore("app-user", () => {
   const token = ref<string>("");
-  const api = createApi();
+  const userInfo = reactive({
+    username: "",
+    nickname: "",
+    email: "",
+    role: {},
+  });
 
   const getToken = computed(() => token.value);
 
@@ -16,16 +24,23 @@ export const useUserStore = defineStore("app-user", () => {
   }
 
   async function login(data: AccountLoginDto) {
-    const res = await api.accountControllerLogin(data, {
+    const { data: res } = await api.accountControllerLogin(data, {
       customOptions: {
         authInterceptorEnabled: false,
       },
     } as RequestParams);
-    if (res.data.code === 0) {
-      setToken(res.data?.data?.token!);
+    if (res.code === 0) {
+      setToken(res.data!.token);
+
+      const { data: _res } = await api.accountControllerGetCurrentUser();
+      if (_res.code === 0) {
+        each(get(_res, "data"), (value, key) => {
+          set(userInfo, key, value);
+        });
+      }
     }
-    return res.data;
+    return res;
   }
 
-  return { login, getToken };
+  return { token, userInfo, login, getToken, setToken };
 });

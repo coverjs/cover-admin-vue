@@ -5,7 +5,5 @@ defineOptions({
 </script>
 
 <template>
-  <config-provider>
-    <router-view />
-  </config-provider>
+  <router-view />
 </template>

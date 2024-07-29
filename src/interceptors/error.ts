@@ -1,7 +1,7 @@
 import type { Middleware } from "onion-interceptor";
 import type { RequestParams } from "@/types";
 
-import { catchError, finalize } from "@onion-interceptor/pipes";
+import { catchError } from "@onion-interceptor/pipes";
 import { getReqOptItem } from "@/utils";
 
 export const errorInterceptor: Middleware = async function errorInterceptor(
@@ -15,12 +15,10 @@ export const errorInterceptor: Middleware = async function errorInterceptor(
     return await next();
   }
 
-  console.log("errorInterceptor start", ctx);
   await next(
     catchError((err) => {
       console.log("errorInterceptor catchError", err);
       return err;
-    }),
-    finalize(() => {console.log("errorInterceptor end", ctx) ;})
+    })
   );
 };

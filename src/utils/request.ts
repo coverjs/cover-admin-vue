@@ -10,13 +10,13 @@ const DEFAULT_CONFIG = {
   baseURL: "http://154.221.27.105:1118",
 } as const;
 
-const apis: Map<string, Api<unknown>> = new Map();
+const apis: Map<string, Api<unknown>["api"]> = new Map();
 
 export function createApi(config: ApiConfig = DEFAULT_CONFIG) {
   const key = objHash(config);
 
   if (apis.has(key)) {
-    return apis.get(key)?.api!;
+    return apis.get(key)!;
   }
 
   const http = new Api(config);
@@ -24,6 +24,6 @@ export function createApi(config: ApiConfig = DEFAULT_CONFIG) {
   const onionInterceptor = new OnionInterceptor(http.instance);
   onionInterceptor.use(...interceptors);
 
-  apis.set(key, http);
+  apis.set(key, http.api);
   return http.api;
 }
