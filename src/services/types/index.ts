@@ -1,9 +1,7 @@
-import type { CustromRequestParams } from "@/services/http";
-
 export type ErrorMessageMode = "none" | "modal" | "message" | void;
 export type SuccessMessageMode = ErrorMessageMode;
 
-export interface CustomRequestOptions {
+interface CustomRequestOptions {
   loadingInterceptorEnabled?: boolean;
   errorInterceptorEnabled?: boolean;
   authInterceptorEnabled?: boolean;
@@ -13,4 +11,4 @@ export interface CustomRequestOptions {
   successMessageMode?: SuccessMessageMode;
 }
 
-export type RequestParams = CustromRequestParams<CustomRequestOptions>;
+export default CustomRequestOptions;

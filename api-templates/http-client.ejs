@@ -3,12 +3,14 @@ const { apiConfig, generateResponses, config } = it;
 %>
 
 import type { AxiosInstance, AxiosRequestConfig, HeadersDefaults, ResponseType, AxiosResponse } from "axios";
+import type CustomOptions from '../types';
 import axios from "axios";
+
 
 export type QueryParamsType = Record<string | number, any>;
 
-export interface CustromRequestParams<Options = any> {
-  customOptions?: Options;
+export interface CustromRequestParams {
+  customOptions?: CustomOptions;
 }
 
 export interface FullRequestParams extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
