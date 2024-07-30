@@ -3,8 +3,8 @@ import type { FormInstance } from "ant-design-vue/lib/form/Form";
 import { reactive, ref } from "vue";
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 import { useUserStore } from "@/store/user";
-import { AccountLoginDto } from "@/services";
 import { useMessage } from "@/hooks";
+import { AccountLoginDto } from "@/services/http";
 
 const userStore = useUserStore();
 const { notification } = useMessage();

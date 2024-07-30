@@ -1,14 +1,11 @@
-import type { AccountLoginDto } from "@/services";
 import type { RequestParams } from "@/types";
-
 import { defineStore } from "pinia";
 import { ref, computed, reactive } from "vue";
 import { each, get, set } from "lodash-es";
-import { createApi } from "@/utils";
 import { router } from "@/router";
 import { store } from "@/store";
-
-const api = createApi();
+import { api } from "@/services";
+import { AccountLoginDto } from "@/services/http";
 
 export const useUserStore = defineStore(
   "app-user",
