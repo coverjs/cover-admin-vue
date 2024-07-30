@@ -1,10 +1,11 @@
 import type { ApiConfig } from "./http";
-import type { CustomRequestOptions } from "@/types";
+// import { RequestParams, type CustomRequestOptions } from "@/types";
 import { Api } from "./http";
 import { interceptors } from "@/interceptors";
 import { OnionInterceptor } from "onion-interceptor";
 
 import objHash from "object-hash";
+import CustomRequestOptions from "@/services/types";
 
 const DEFAULT_CONFIG = {
   baseURL: "http://154.221.27.105:1118",

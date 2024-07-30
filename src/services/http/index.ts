@@ -90,11 +90,12 @@ export interface CommonResponseVo {
 
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
 import axios from "axios";
+import type CustomOptions from "../types";
 
 export type QueryParamsType = Record<string | number, any>;
 
-export interface CustromRequestParams<Options = any> {
-  customOptions?: Options;
+export interface CustromRequestParams {
+  customOptions?: CustomOptions;
 }
 
 export interface FullRequestParams extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {

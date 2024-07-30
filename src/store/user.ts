@@ -1,4 +1,4 @@
-import type { RequestParams } from "@/types";
+// import type { RequestParams } from "@/types";
 import { defineStore } from "pinia";
 import { ref, computed, reactive } from "vue";
 import { each, get, set } from "lodash-es";
@@ -29,7 +29,7 @@ export const useUserStore = defineStore(
         customOptions: {
           authInterceptorEnabled: false,
         },
-      } as RequestParams);
+      });
       if (res.code === 0) {
         setToken(res.data!.token);
         await afterLoginAction(goHome);
