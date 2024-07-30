@@ -1,4 +1,4 @@
-import { CustromRequestParams } from "@/services";
+import type { CustromRequestParams } from "@/services/http";
 
 export type ErrorMessageMode = "none" | "modal" | "message" | void;
 export type SuccessMessageMode = ErrorMessageMode;
