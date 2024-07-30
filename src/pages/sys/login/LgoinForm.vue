@@ -6,6 +6,8 @@ import { useUserStore } from "@/store/user";
 import { useMessage } from "@/hooks";
 import { AccountLoginDto } from "@/services/http";
 
+defineOptions({ name: "LoginForm" });
+
 const userStore = useUserStore();
 const { notification } = useMessage();
 const formData = reactive({

@@ -1,4 +1,5 @@
-import type { CustomRequestOptions, RequestParams } from "@/types";
+import type { RequestParams } from "@/services/http";
+import type { CustomRequestOptions } from "@/types";
 
 const DEFAULT_CONFIG: CustomRequestOptions = {
   authInterceptorEnabled: true,

@@ -4,7 +4,7 @@ defineOptions({ name: "AppMain" });
 
 <template>
   <div class="main-container">
-    <router-view />
+     <slot></slot>
   </div>
 </template>
 

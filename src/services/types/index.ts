@@ -1,7 +1,7 @@
 export type ErrorMessageMode = "none" | "modal" | "message" | void;
 export type SuccessMessageMode = ErrorMessageMode;
 
-interface CustomRequestOptions {
+export interface CustomRequestOptions {
   loadingInterceptorEnabled?: boolean;
   errorInterceptorEnabled?: boolean;
   authInterceptorEnabled?: boolean;

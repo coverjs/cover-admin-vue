@@ -16,7 +16,9 @@ defineOptions({ name: "DafaultLayout" });
         <navbar></navbar>
       </a-layout-header>
       <a-layout-content>
-        <app-main></app-main>
+        <app-main>
+          <slot></slot>
+        </app-main>
       </a-layout-content>
     </a-layout>
   </a-layout>

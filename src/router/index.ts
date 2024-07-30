@@ -2,31 +2,18 @@ import type { RouteRecordRaw } from "vue-router";
 import type { App } from "vue";
 
 import { createRouter, createWebHashHistory } from "vue-router";
-import layout from "../layouts/default/index.vue";
 
 const publicRoute: RouteRecordRaw[] = [
   {
     path: "/",
-    name: "root",
-    redirect: "/home",
+    name: "home",
+    component: () => import("../pages/home/index.vue"),
   },
   {
     path: "/login",
     name: "login",
-    meta: { ignoreAuth: true },
+    meta: { ignoreAuth: true, layout: "login" },
     component: () => import("../pages/sys/login/index.vue"),
-  },
-  {
-    path: "/home",
-    name: "home",
-    component: layout,
-    children: [
-      {
-        path: "",
-        name: "home",
-        component: () => import("../pages/home/index.vue"),
-      },
-    ],
   },
 ];
 

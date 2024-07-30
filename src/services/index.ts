@@ -1,5 +1,4 @@
 import type { ApiConfig } from "./http";
-// import { RequestParams, type CustomRequestOptions } from "@/types";
 import { Api } from "./http";
 import { interceptors } from "@/interceptors";
 import { OnionInterceptor } from "onion-interceptor";
