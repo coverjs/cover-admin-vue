@@ -38,5 +38,9 @@
     "unplugin-vue-components": "^0.27.3",
     "vite": "^5.3.4",
     "vue-tsc": "^2.0.24"
+  },
+  "volta": {
+    "node": "20.16.0",
+    "pnpm": "9.3.0"
   }
 }
