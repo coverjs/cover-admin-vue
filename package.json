@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "bootstrap": "pnpm install",
-    "gen": "node ./gen-api.js",
+    "openapi": "cover openapi",
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
@@ -32,6 +32,7 @@
     "@types/object-hash": "^3.0.6",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vitejs/plugin-vue-jsx": "^4.0.0",
+    "cover-cli": "^0.2.0",
     "sass": "^1.77.8",
     "swagger-typescript-api": "^13.0.13",
     "typescript": "^5.2.2",
