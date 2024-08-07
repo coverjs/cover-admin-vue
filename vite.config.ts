@@ -1,7 +1,8 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
-import Components from "unplugin-vue-components/vite";
+import components from "unplugin-vue-components/vite";
+import vueRouter from "unplugin-vue-router/vite";
 import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
 import { resolve } from "path";
 
@@ -10,7 +11,10 @@ export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
-    Components({
+    vueRouter({
+      exclude:['**/components/*.vue']
+    }),
+    components({
       resolvers: [
         AntDesignVueResolver({
           importStyle: false,

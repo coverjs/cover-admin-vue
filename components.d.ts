@@ -23,6 +23,8 @@ declare module 'vue' {
     ATypography: typeof import('ant-design-vue/es')['Typography']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    LgoinForm: typeof import('./src/components/LgoinForm.vue')['default']
+    'LgoinForm.comp': typeof import('./src/components/LgoinForm.comp.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

@@ -2,14 +2,20 @@
 import type { FormInstance } from "ant-design-vue/lib/form/Form";
 import { reactive, ref } from "vue";
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
-import { useUserStore } from "@/store/user";
-import { useMessage } from "@/hooks";
-import { AccountLoginDto } from "@/services/http";
 
 defineOptions({ name: "LoginForm" });
 
-const userStore = useUserStore();
-const { notification } = useMessage();
+withDefaults(
+  defineProps<{
+    loading: boolean;
+  }>(),
+  { loading: false }
+);
+
+defineEmits<{
+  (e: "submit", formData: { username: string; password: string }): void;
+}>();
+
 const formData = reactive({
   username: "admin",
   password: "admin",
@@ -17,29 +23,15 @@ const formData = reactive({
 
 const formRef = ref<FormInstance>();
 const rememberMe = ref(false);
-const submitLoading = ref(false);
-
-async function onFinish() {
-  const data = {
-    ...formData,
-    type: "account" as AccountLoginDto["type"],
-  };
-  try {
-    submitLoading.value = true;
-    const userInfo = await userStore.login(data);
-    notification.success({
-      message: "登录成功",
-      description: `欢迎回来，${userInfo.nickname}`,
-      duration: 3,
-    });
-  } finally {
-    submitLoading.value = false;
-  }
-}
 </script>
 
 <template>
-  <a-form class="login-form" ref="formRef" :model="formData" @finish="onFinish">
+  <a-form
+    class="login-form"
+    ref="formRef"
+    :model="formData"
+    @finish="$emit('submit', formData)"
+  >
     <a-form-item
       name="username"
       :rules="[{ required: true, message: '请输入用户名' }]"
@@ -72,7 +64,7 @@ async function onFinish() {
         type="primary"
         html-type="submit"
         size="large"
-        :loading="submitLoading"
+        :loading="loading"
         block
         >登录</a-button
       >
