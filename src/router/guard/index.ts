@@ -1,6 +1,6 @@
 import type { Router } from "vue-router";
 import { Modal, notification } from "ant-design-vue";
-import { createPermissionGuard } from "./permissionGuard";
+import { createPermissionGuard } from "./permission";
 import { AxiosCanceler } from "@/interceptors";
 import nProgress from "nprogress";
 

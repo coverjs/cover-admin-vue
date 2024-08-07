@@ -6,16 +6,16 @@ export function createPermissionGuard(router: Router) {
   router.beforeEach(async (to, _from, next) => {
     const token = userStore.getToken;
 
-    if (!token) {
-      if (to.meta.ignoreAuth) {
-        next();
-        return;
-      }
-
+    if (!token && !to.meta.ignoreAuth) {
       next({
         path: "/login",
         replace: true,
       });
+      return;
+    }
+
+    if (to.name === "login" && token) {
+      next("/");
       return;
     }
 

@@ -1,4 +1,3 @@
-// import type { RequestParams } from "@/types";
 import { defineStore } from "pinia";
 import { ref, computed, reactive } from "vue";
 import { each, get, set } from "lodash-es";
@@ -36,8 +35,9 @@ export const useUserStore = defineStore(
       }
       return userInfo;
     }
+
     async function afterLoginAction(goHome?: boolean) {
-      if (!getToken) return;
+      if (!getToken.value) return;
 
       await getUserInfoAction();
 
@@ -45,6 +45,8 @@ export const useUserStore = defineStore(
     }
 
     async function getUserInfoAction() {
+      if (getToken.value) return;
+
       const { data: res } = await api.accountControllerGetCurrentUser();
       if (res.code === 0) {
         each(get(res, "data"), (value, key) => {
