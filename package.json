@@ -47,8 +47,10 @@
     "unplugin-vue-components": "^0.27.3",
     "unplugin-vue-router": "^0.10.2",
     "vite": "^5.3.4",
+    "vite-plugin-pwa": "^0.20.1",
     "vite-plugin-vue-layouts": "^0.11.0",
-    "vue-tsc": "^2.0.24"
+    "vue-tsc": "^2.0.24",
+    "workbox-window": "^7.1.0"
   },
   "volta": {
     "node": "20.16.0",

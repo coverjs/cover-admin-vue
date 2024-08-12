@@ -25,7 +25,11 @@
 
     "baseUrl": "./",
     "paths": { "@/*": ["./src/*"] },
-    "types": ["unplugin-vue-router/client", "vite-plugin-vue-layouts/client"]
+    "types": [
+      "unplugin-vue-router/client",
+      "vite-plugin-vue-layouts/client",
+      "vite-plugin-pwa/client"
+    ]
   },
   "include": [
     "src/**/*.ts",
