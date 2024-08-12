@@ -9,7 +9,7 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "Bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -25,12 +25,13 @@
 
     "baseUrl": "./",
     "paths": { "@/*": ["./src/*"] },
-    "types": ["unplugin-vue-router/client"]
+    "types": ["unplugin-vue-router/client", "vite-plugin-vue-layouts/client"]
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "./typed-router.d.ts"
-, "src/pages/login/components/LgoinForm.vue"  ]
+    "./typed-router.d.ts",
+    "./auto-imports.d.ts"
+  ]
 }

@@ -1,4 +1,5 @@
 import type { Router } from "vue-router";
+
 import { useUserStoreWithOut } from "@/store";
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStoreWithOut();

@@ -2,7 +2,10 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import components from "unplugin-vue-components/vite";
+import layouts from "vite-plugin-vue-layouts";
 import vueRouter from "unplugin-vue-router/vite";
+import autoImport from "unplugin-auto-import/vite";
+import { VueRouterAutoImports } from "unplugin-vue-router";
 import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
 import { resolve } from "path";
 
@@ -12,7 +15,12 @@ export default defineConfig({
     vue(),
     vueJsx(),
     vueRouter({
-      exclude:['**/components/*.vue']
+      exclude: ["**/components/*.vue"],
+    }),
+    layouts({
+      layoutsDirs: "src/layouts",
+      pagesDirs: "src/pages",
+      defaultLayout: "default",
     }),
     components({
       resolvers: [
@@ -20,6 +28,25 @@ export default defineConfig({
           importStyle: false,
         }),
       ],
+    }),
+    autoImport({
+      // targets to transform
+      include: [
+        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+        /\.vue$/,
+        /\.vue\?vue/, // .vue
+        /\.md$/, // .md
+      ],
+      imports: [
+        // presets
+        "vue",
+        "pinia",
+        "@vueuse/core",
+        VueRouterAutoImports,
+      ],
+      eslintrc: {
+        enabled: true,
+      },
     }),
   ],
   resolve: {

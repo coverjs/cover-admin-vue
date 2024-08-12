@@ -1,24 +1,16 @@
 <script setup lang="ts">
-import Navbar from "./Navbar.vue";
-import Sidebar from "./Sidebar/index.vue";
-import AppMain from "./AppMain.vue";
-
 defineOptions({ name: "DafaultLayout" });
 </script>
 
 <template>
   <a-layout class="app-wrapper">
-    <a-layout-sider>
-      <sidebar></sidebar>
-    </a-layout-sider>
+    <a-layout-sider> sidebar </a-layout-sider>
     <a-layout>
       <a-layout-header style="background: #fff">
-        <navbar></navbar>
+        <layout-header />
       </a-layout-header>
       <a-layout-content>
-        <app-main>
-          <slot></slot>
-        </app-main>
+        <router-view></router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>
