@@ -1,5 +1,3 @@
-import { defineStore } from "pinia";
-import { ref, computed, reactive } from "vue";
 import { each, get, set } from "lodash-es";
 import { router } from "@/router";
 import { store } from "@/store";
@@ -7,7 +5,7 @@ import { api } from "@/services";
 import { AccountLoginDto } from "@/services/http";
 
 export const useUserStore = defineStore(
-  "app-user",
+  "user",
   () => {
     const token = ref<string | void>("");
     const userInfo = reactive({
@@ -36,6 +34,11 @@ export const useUserStore = defineStore(
       return userInfo;
     }
 
+    function logout() {
+      setToken(void 0);
+      router.replace("/login");
+    }
+
     async function afterLoginAction(goHome?: boolean) {
       if (!getToken.value) return;
 
@@ -45,7 +48,7 @@ export const useUserStore = defineStore(
     }
 
     async function getUserInfoAction() {
-      if (getToken.value) return;
+      if (!getToken.value) return;
 
       const { data: res } = await api.accountControllerGetCurrentUser();
       if (res.code === 0) {
@@ -62,6 +65,7 @@ export const useUserStore = defineStore(
       getToken,
       setToken,
       login,
+      logout,
       afterLoginAction,
       getUserInfoAction,
     };

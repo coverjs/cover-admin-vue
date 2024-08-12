@@ -1,6 +1,5 @@
 import type { ModalFuncProps } from "ant-design-vue/lib/modal/Modal";
 import { Modal, message as Message, notification } from "ant-design-vue";
-import { h } from "vue";
 
 import {
   InfoCircleFilled,
@@ -19,7 +18,7 @@ export interface NotifyApi {
   warn(config: NotificationArgsProps): void;
   warning(config: NotificationArgsProps): void;
   open(args: NotificationArgsProps): void;
-  close(key: String): void;
+  close(key: string): void;
   config(options: ConfigProps): void;
   destroy(): void;
 }

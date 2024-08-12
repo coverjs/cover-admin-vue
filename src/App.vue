@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from "@/store/user";
-import LayoutControl from "./layouts/index.vue";
-import { onMounted } from "vue";
+
 defineOptions({
   name: "App",
 });
@@ -14,7 +13,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <layout-control>
-    <router-view />
-  </layout-control>
+  <router-view />
 </template>

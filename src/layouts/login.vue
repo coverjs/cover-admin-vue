@@ -4,7 +4,7 @@ defineOptions({ name: "LoginLayout" });
 
 <template>
   <div class="login-container">
-    <slot></slot>
+    <router-view></router-view>
   </div>
 </template>
 

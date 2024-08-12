@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { FormInstance } from "ant-design-vue/lib/form/Form";
-import { reactive, ref } from "vue";
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 
 defineOptions({ name: "LoginForm" });

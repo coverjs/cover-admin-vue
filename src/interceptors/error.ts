@@ -81,7 +81,7 @@ function checkStatus(
 
   msgMap.set(401, (msg: string) => {
     userStore.setToken(void 0);
-    let res = msg || "登录过期，请重新登录";
+    const res = msg || "登录过期，请重新登录";
     // logout 逻辑
     return res;
   });

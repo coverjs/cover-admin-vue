@@ -53,6 +53,9 @@ export function createMessageGuard(router: Router) {
     try {
       Modal.destroyAll();
       notification.destroy();
-    } catch (error) {}
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_) {
+      /** nothing */
+    }
   });
 }
