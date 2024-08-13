@@ -19,6 +19,7 @@
     "login": "Login",
     "logout": "Logout",
     "prompt": "Prompt",
+    "error": "Error",
     "cancel": "Cancel",
     "confirm": "Comfirm",
     "noData": "No Data",

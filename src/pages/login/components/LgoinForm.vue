@@ -14,15 +14,15 @@ withDefaults(
 defineEmits<{
   (e: "submit", formData: { username: string; password: string }): void;
 }>();
+const { t } = useI18n();
 
 const formData = reactive({
-  username: "admin",
-  password: "admin",
+  username: "",
+  password: "",
 });
 
 const formRef = ref<FormInstance>();
 const rememberMe = ref(false);
-const { t } = useI18n();
 </script>
 
 <template>
@@ -36,7 +36,11 @@ const { t } = useI18n();
       name="username"
       :rules="[{ required: true, message: t('authentication.usernameTip') }]"
     >
-      <a-input v-model:value="formData.username" size="large">
+      <a-input
+        v-model:value="formData.username"
+        :placeholder="t('authentication.username')"
+        size="large"
+      >
         <template #prefix>
           <user-outlined />
         </template>
@@ -48,6 +52,7 @@ const { t } = useI18n();
     >
       <a-input-password
         v-model:value="formData.password"
+        :placeholder="t('authentication.password')"
         size="large"
         visiblity-toggle
       >

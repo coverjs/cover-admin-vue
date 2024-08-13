@@ -46,4 +46,6 @@ export async function setupLocale(
   await loadMessages(defaultLang);
 }
 
+export const t = i18n.global.t as (key: string, ...args: any[]) => string;
+
 export default setupLocale;

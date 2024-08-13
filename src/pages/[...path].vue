@@ -5,9 +5,5 @@ defineOptions({
 </script>
 
 <template>
-  <exception-page
-    :status="404"
-    title="404"
-    sub-title="Sorry, you are not authorized to access this page."
-  />
+  <fallback-page :status="404" />
 </template>
