@@ -5,11 +5,11 @@ import {
   UploadOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-} from "@ant-design/icons-vue";
+} from '@ant-design/icons-vue';
 
-defineOptions({ name: "DafaultLayout" });
+defineOptions({ name: 'DafaultLayout' });
 
-const selectedKeys = ref<string[]>(["1"]);
+const selectedKeys = ref<string[]>(['1']);
 const collapsed = ref<boolean>(false);
 </script>
 
@@ -33,7 +33,7 @@ const collapsed = ref<boolean>(false);
       </a-menu>
     </a-layout-sider>
     <a-layout>
-      <a-layout-header style="background: #fff; padding-left: 20px;">
+      <a-layout-header style="background: #fff; padding-left: 20px">
         <layout-header>
           <menu-unfold-outlined
             v-if="collapsed"

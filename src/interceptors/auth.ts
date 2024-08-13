@@ -1,14 +1,14 @@
-import type { Middleware } from "onion-interceptor";
-import type { RequestParams } from "@/types";
+import type { Middleware } from 'onion-interceptor';
+import type { RequestParams } from '@/types';
 
-import { getReqOptItem } from "@/utils";
-import { useUserStore } from "@/store/user";
-import { assign } from "lodash-es";
+import { getReqOptItem } from '@/utils';
+import { useUserStore } from '@/store/user';
+import { assign } from 'lodash-es';
 
 export const authInterceptor: Middleware = async function (ctx, next) {
   const [requestParams] = ctx.args! as [RequestParams];
 
-  if (!getReqOptItem(requestParams, "authInterceptorEnabled")) {
+  if (!getReqOptItem(requestParams, 'authInterceptorEnabled')) {
     return await next();
   }
 

@@ -1,5 +1,5 @@
-import type { RequestParams } from "@/services/http";
-import type { CustomRequestOptions } from "@/types";
+import type { RequestParams } from '@/services/http';
+import type { CustomRequestOptions } from '@/types';
 
 const DEFAULT_CONFIG: CustomRequestOptions = {
   authInterceptorEnabled: true,
@@ -9,7 +9,7 @@ const DEFAULT_CONFIG: CustomRequestOptions = {
 
 export function getReqOptItem(
   params: RequestParams,
-  key: keyof CustomRequestOptions
+  key: keyof CustomRequestOptions,
 ) {
   return !!(params?.customOptions?.[key] ?? DEFAULT_CONFIG[key]);
 }

@@ -1,8 +1,8 @@
-import type { Router } from "vue-router";
-import { Modal, notification } from "ant-design-vue";
-import { createPermissionGuard } from "./permission";
-import { AxiosCanceler } from "@/interceptors";
-import nProgress from "nprogress";
+import type { Router } from 'vue-router';
+import { Modal, notification } from 'ant-design-vue';
+import { createPermissionGuard } from './permission';
+import { AxiosCanceler } from '@/interceptors';
+import nProgress from 'nprogress';
 
 export function setupRouterGuards(router: Router) {
   createPageGuard(router);
@@ -14,13 +14,13 @@ export function setupRouterGuards(router: Router) {
 
 function createPageGuard(router: Router) {
   const loadedPage = new Map<string, boolean>();
-  router.beforeEach(async (to) => {
+  router.beforeEach(async to => {
     to.meta.loaded = loadedPage.has(to.path);
 
     return true;
   });
 
-  router.afterEach((to) => {
+  router.afterEach(to => {
     loadedPage.set(to.path, true);
   });
 }
@@ -34,7 +34,7 @@ function createHttpGuard(router: Router) {
 }
 
 export function createProgressGuard(router: Router) {
-  router.beforeEach(async (to) => {
+  router.beforeEach(async to => {
     if (to.meta.loaded) {
       return true;
     }

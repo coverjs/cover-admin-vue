@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { LanguagesType } from "@/locales/types";
+import type { LanguagesType } from '@/locales/types';
 
-import { TranslationOutlined } from "@ant-design/icons-vue";
-import { loadMessages } from "@/locales";
-import { i18n } from "@/locales/i18n";
+import { TranslationOutlined } from '@ant-design/icons-vue';
+import { loadMessages } from '@/locales';
+import { i18n } from '@/locales/i18n';
 
 defineOptions({
-  name: "LanguageToggle",
+  name: 'LanguageToggle',
 });
 
 const selectedKeys = ref([i18n.global.locale.value]);
