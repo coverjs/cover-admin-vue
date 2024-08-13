@@ -4,7 +4,8 @@ import type { RequestParams, ErrorMessageMode } from "@/types";
 import { tap } from "@onion-interceptor/pipes";
 import { getReqOptItem } from "@/utils";
 import { useMessage } from "@/hooks";
-import { useUserStoreWithOut } from "@/store";
+import { useUserStore } from "@/store";
+import { t } from "@/locales";
 import { isCancel } from "axios";
 import { isNil } from "lodash-es";
 
@@ -26,13 +27,20 @@ export const errorInterceptor: Middleware = async function (ctx, next) {
       (ctx) => {
         const code = ctx.res?.data.code;
         if (code !== 0) {
+          const errMsg = ctx.res?.data.msg;
           if (errorMessageMode === "modal") {
-            createErrorModal({ title: "错误", content: ctx.res?.data.msg });
+            createErrorModal({
+              title: t("common.error"),
+              content: errMsg,
+            });
           }
           if (errorMessageMode === "message") {
-            createMessage.error(ctx.res?.data.msg);
+            createMessage.error({
+              content: errMsg,
+              key: `global_error_message_${errMsg}`,
+            });
           }
-          throw new Error(ctx.res?.data.msg ?? ctx.res!.statusText);
+          throw new Error(errMsg ?? ctx.res!.statusText);
         }
       },
       (err: any) => {
@@ -43,14 +51,25 @@ export const errorInterceptor: Middleware = async function (ctx, next) {
         const status = ctx.res?.status;
         let errMsg = "";
         try {
-          if (code === "ECONNABORTED" && message.indexOf("timeout") !== -1) {
-            errMsg = "请求超时";
+          if (code === "ECONNABORTED" || message.includes("timeout")) {
+            errMsg = t("fallback.http.requestTimeout");
           }
+          if (
+            code === "ERR_NETWORK" ||
+            err?.toString().includes("Network Error")
+          ) {
+            errMsg = t("fallback.http.networkError");
+          }
+
           if (errMsg && errorMessageMode === "modal") {
-            createErrorModal({ title: "错误", content: errMsg });
+            createErrorModal({ title: t("common.error"), content: errMsg });
           }
+
           if (errMsg && errorMessageMode === "message") {
-            createMessage.error(errMsg);
+            createMessage.error({
+              content: errMsg,
+              key: `global_error_message_${errMsg}`,
+            });
           }
 
           if (!isNil(status) && status >= 400 && status <= 500)
@@ -69,27 +88,34 @@ export const errorInterceptor: Middleware = async function (ctx, next) {
 };
 
 const msgMap = new Map();
-msgMap.set(400, (msg: string) => msg);
+let logout: () => void | void;
+
+msgMap.set(400, (msg?: string) => msg || t("fallback.http.badRequest"));
+
+msgMap.set(401, (msg?: string) => {
+  const res = msg || t("fallback.http.unauthorized");
+  logout?.();
+  return res;
+});
+
+msgMap.set(403, (msg?: string) => msg || t("fallback.http.forbidden"));
+
+msgMap.set(404, (msg?: string) => msg || t("fallback.http.notFound"));
+
+msgMap.set(408, (msg?: string) => msg || t("fallback.http.requestTimeout"));
+
 function checkStatus(
   status: number,
   msg: string,
   errorMessageMode: ErrorMessageMode = "message"
 ) {
-  const userStore = useUserStoreWithOut();
-
   let errMsg = "";
-
-  msgMap.set(401, (msg: string) => {
-    userStore.setToken(void 0);
-    const res = msg || "登录过期，请重新登录";
-    // logout 逻辑
-    return res;
-  });
-
-  errMsg = msgMap.get(status)?.(msg) ?? msg;
+  const userStore = useUserStore();
+  logout = () => userStore?.logout();
+  errMsg = msgMap.get(status)?.(msg) ?? t("fallback.http.internalServerError");
 
   if (errMsg && errorMessageMode === "modal") {
-    createErrorModal({ title: "错误提示", content: errMsg });
+    createErrorModal({ title: t("common.error"), content: errMsg });
     return;
   }
   if (errMsg && errorMessageMode === "message") {

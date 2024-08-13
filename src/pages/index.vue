@@ -2,9 +2,6 @@
 defineOptions({
   name: "HomePage",
 });
-
 </script>
 
-<template>
-  <h2>this is home page</h2>
-</template>
+<template>this is home page</template>

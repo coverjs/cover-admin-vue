@@ -9,10 +9,11 @@ defineOptions({
   name: "LanguageToggle",
 });
 
-const lang = computed(() => i18n.global.locale.value);
+const selectedKeys = ref([i18n.global.locale.value]);
 
 async function handleUpdate(value: LanguagesType) {
   await loadMessages(value);
+  selectedKeys.value = [value];
 }
 </script>
 
@@ -20,13 +21,12 @@ async function handleUpdate(value: LanguagesType) {
   <a-dropdown placement="bottom">
     <TranslationOutlined />
     <template #overlay>
-      <a-menu @click="handleUpdate($event.key)">
-        <a-menu-item key="zh-CN" :disabled="lang === 'zh-CN'">
-          简体中文
-        </a-menu-item>
-        <a-menu-item key="en-US" :disabled="lang === 'en-US'">
-          English
-        </a-menu-item>
+      <a-menu
+        v-model:selectedKeys="selectedKeys"
+        @click="handleUpdate($event.key)"
+      >
+        <a-menu-item key="zh-CN"> 简体中文 </a-menu-item>
+        <a-menu-item key="en-US"> English </a-menu-item>
       </a-menu>
     </template>
   </a-dropdown>

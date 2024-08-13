@@ -2,7 +2,7 @@ import type { Middleware } from "onion-interceptor";
 import type { RequestParams } from "@/types";
 
 import { getReqOptItem } from "@/utils";
-import { useUserStoreWithOut } from "@/store/user";
+import { useUserStore } from "@/store/user";
 import { assign } from "lodash-es";
 
 export const authInterceptor: Middleware = async function (ctx, next) {
@@ -12,7 +12,7 @@ export const authInterceptor: Middleware = async function (ctx, next) {
     return await next();
   }
 
-  const userStore = useUserStoreWithOut();
+  const userStore = useUserStore();
   const token = userStore.getToken;
 
   if (token) {
