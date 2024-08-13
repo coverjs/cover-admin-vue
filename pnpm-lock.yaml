@@ -47,6 +47,9 @@ importers:
       vue:
         specifier: ^3.4.31
         version: 3.4.34(typescript@5.5.4)
+      vue-i18n:
+        specifier: 10.0.0-beta.5
+        version: 10.0.0-beta.5(vue@3.4.34(typescript@5.5.4))
       vue-router:
         specifier: ^4.4.0
         version: 4.4.0(vue@3.4.34(typescript@5.5.4))
@@ -946,6 +949,18 @@ packages:
   '@humanwhocodes/retry@0.3.0':
     resolution: {integrity: sha512-d2CGZR2o7fS6sWB7DG/3a95bGKQyHMACZ5aW8qGkkqQpUoZV6C0X7Pc7l4ZNMZkfNBf4VWNe9E1jRsf0G146Ew==}
     engines: {node: '>=18.18'}
+
+  '@intlify/core-base@10.0.0-beta.5':
+    resolution: {integrity: sha512-XWLOYbHz5QMJ1lGxjnSr3lTLB+kJqEaf507NCnqAG2X0Ffz/W6h/o7dDlvsPZ668FhnAlXc2/eQzqq5kC+NF6g==}
+    engines: {node: '>= 16'}
+
+  '@intlify/message-compiler@10.0.0-beta.5':
+    resolution: {integrity: sha512-hLLchnM1dmtSEruerkzvU9vePsLqBXz3RU85SCx/Vd12fFQiymP+/5Rn9MJ8MyfLmIOLDEx4PRh+/GkIQP6oog==}
+    engines: {node: '>= 16'}
+
+  '@intlify/shared@10.0.0-beta.5':
+    resolution: {integrity: sha512-g9bq5Y1bOcC9qxtNk4UWtF3sXm6Wh0fGISb7vD5aLyF7yQv7ZFjxQjJzBP2GqG/9+PAGYutqjP1GGadNqFtyAQ==}
+    engines: {node: '>= 16'}
 
   '@jridgewell/gen-mapping@0.3.5':
     resolution: {integrity: sha512-IzL8ZoEDIBRWEzlCcRhOaCupYyN5gdIK+Q6fbFdPDg6HqX6jpkItn7DFIpW9LQzXG6Df9sA7+OKnq0qlz/GaQg==}
@@ -2965,6 +2980,12 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
+  vue-i18n@10.0.0-beta.5:
+    resolution: {integrity: sha512-P5TUo4Ux/NgQLP1OGGRnHGxkh3CPiUt4W2RcDUeoYj+26GGz9H736DY3gw5fyFdiNT9JSXhuLK7yB49pk062Yw==}
+    engines: {node: '>= 16'}
+    peerDependencies:
+      vue: ^3.0.0
+
   vue-router@4.4.0:
     resolution: {integrity: sha512-HB+t2p611aIZraV2aPSRNXf0Z/oLZFrlygJm+sZbdJaW6lcFqEDQwnzUBXn+DApw+/QzDU/I9TeWx9izEjTmsA==}
     peerDependencies:
@@ -4075,6 +4096,18 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/retry@0.3.0': {}
+
+  '@intlify/core-base@10.0.0-beta.5':
+    dependencies:
+      '@intlify/message-compiler': 10.0.0-beta.5
+      '@intlify/shared': 10.0.0-beta.5
+
+  '@intlify/message-compiler@10.0.0-beta.5':
+    dependencies:
+      '@intlify/shared': 10.0.0-beta.5
+      source-map-js: 1.2.0
+
+  '@intlify/shared@10.0.0-beta.5': {}
 
   '@jridgewell/gen-mapping@0.3.5':
     dependencies:
@@ -6286,6 +6319,13 @@ snapshots:
       semver: 7.6.3
     transitivePeerDependencies:
       - supports-color
+
+  vue-i18n@10.0.0-beta.5(vue@3.4.34(typescript@5.5.4)):
+    dependencies:
+      '@intlify/core-base': 10.0.0-beta.5
+      '@intlify/shared': 10.0.0-beta.5
+      '@vue/devtools-api': 6.6.3
+      vue: 3.4.34(typescript@5.5.4)
 
   vue-router@4.4.0(vue@3.4.34(typescript@5.5.4)):
     dependencies:

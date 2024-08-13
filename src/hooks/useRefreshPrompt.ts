@@ -1,12 +1,16 @@
 import { useRegisterSW } from "virtual:pwa-register/vue";
-import { notification, Button } from "ant-design-vue";
+import { Button } from "ant-design-vue";
+
+import useMessage from "./useMessage";
 
 export function useRefreshPrompt(pollingInterval: number = 10000) {
+  const { notification } = useMessage();
+  const { t } = useI18n();
   const { updateServiceWorker } = useRegisterSW({
     onNeedRefresh() {
       notification.info({
-        message: "new version",
-        description: "New content available, click on reload button to update.",
+        message: t("widgets.checkUpdatesTitle"),
+        description: t("widgets.checkUpdatesDescription"),
         placement: "bottomRight",
         duration: 0,
         btn: h(
@@ -17,7 +21,7 @@ export function useRefreshPrompt(pollingInterval: number = 10000) {
               await updateServiceWorker(true);
             },
           },
-          "Reload"
+          t("common.refresh")
         ),
       });
     },

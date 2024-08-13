@@ -44,6 +44,7 @@ export default defineConfig({
         "vue",
         "pinia",
         "@vueuse/core",
+        "vue-i18n",
         VueRouterAutoImports,
       ],
       eslintrc: {
@@ -65,5 +66,5 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
-  }
+  },
 });

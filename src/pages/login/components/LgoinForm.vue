@@ -22,6 +22,7 @@ const formData = reactive({
 
 const formRef = ref<FormInstance>();
 const rememberMe = ref(false);
+const { t } = useI18n();
 </script>
 
 <template>
@@ -33,7 +34,7 @@ const rememberMe = ref(false);
   >
     <a-form-item
       name="username"
-      :rules="[{ required: true, message: '请输入用户名' }]"
+      :rules="[{ required: true, message: t('authentication.usernameTip') }]"
     >
       <a-input v-model:value="formData.username" size="large">
         <template #prefix>
@@ -43,7 +44,7 @@ const rememberMe = ref(false);
     </a-form-item>
     <a-form-item
       name="password"
-      :rules="[{ required: true, message: '请输入密码' }]"
+      :rules="[{ required: true, message: t('authentication.passwordTip') }]"
     >
       <a-input-password
         v-model:value="formData.password"
@@ -56,7 +57,9 @@ const rememberMe = ref(false);
       </a-input-password>
     </a-form-item>
     <a-form-item>
-      <a-checkbox v-model:checked="rememberMe" size="small">记住我</a-checkbox>
+      <a-checkbox v-model:checked="rememberMe" size="small">{{
+        t("authentication.rememberMe")
+      }}</a-checkbox>
     </a-form-item>
     <a-form-item>
       <a-button
@@ -65,7 +68,7 @@ const rememberMe = ref(false);
         size="large"
         :loading="loading"
         block
-        >登录</a-button
+        >{{ t("common.login") }}</a-button
       >
     </a-form-item>
   </a-form>
