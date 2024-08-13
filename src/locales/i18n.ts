@@ -1,17 +1,17 @@
-import type { LanguagesType } from "./types";
-import { createI18n } from "vue-i18n";
-import { each } from "lodash-es";
+import type { LanguagesType } from './types';
+import { createI18n } from 'vue-i18n';
+import { each } from 'lodash-es';
 
 const loadedLangs = new Set<string>();
 
 export const i18n = createI18n({
   legacy: false,
   globalInjection: true,
-  locale: "",
+  locale: '',
   messages: {},
 });
 
-const modules = import.meta.glob("./langs/*.json");
+const modules = import.meta.glob('./langs/*.json');
 
 const localesMap = loadLocalesMap(modules);
 

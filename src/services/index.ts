@@ -1,13 +1,13 @@
-import type { ApiConfig } from "./http";
-import { Api } from "./http";
-import { interceptors } from "@/interceptors";
-import { OnionInterceptor } from "onion-interceptor";
+import type { ApiConfig } from './http';
+import { Api } from './http';
+import { interceptors } from '@/interceptors';
+import { OnionInterceptor } from 'onion-interceptor';
 
-import objHash from "object-hash";
-import CustomRequestOptions from "@/services/types";
+import objHash from 'object-hash';
+import CustomRequestOptions from '@/services/types';
 
 const DEFAULT_CONFIG = {
-  baseURL: "http://154.221.27.105:1118",
+  baseURL: 'http://154.221.27.105:1118',
   customOptions: {
     // 是否开启loading拦截器
     loadingInterceptorEnabled: true,
@@ -20,13 +20,13 @@ const DEFAULT_CONFIG = {
     // 是否携带token
     withToken: true,
     // 错误提示方式
-    errorMessageMode: "message",
+    errorMessageMode: 'message',
     // 成功提示方式
-    successMessageMode: "message",
+    successMessageMode: 'message',
   } as CustomRequestOptions,
 } as const;
 
-const apis: Map<string, Api<unknown>["api"]> = new Map();
+const apis: Map<string, Api<unknown>['api']> = new Map();
 
 export function createApi(config: ApiConfig = DEFAULT_CONFIG) {
   const key = objHash(config);

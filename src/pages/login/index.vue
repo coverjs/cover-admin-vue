@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useUserStore } from "@/store/user";
-import { useMessage } from "@/hooks";
-import { AccountLoginDto } from "@/services/http";
-import LoginForm from "./components/LgoinForm.vue";
+import { useUserStore } from '@/store/user';
+import { useMessage } from '@/hooks';
+import { AccountLoginDto } from '@/services/http';
+import LoginForm from './components/LgoinForm.vue';
 
-defineOptions({ name: "LoginPage" });
+defineOptions({ name: 'LoginPage' });
 
 const submitLoading = ref(false);
 
@@ -14,14 +14,14 @@ const { t } = useI18n();
 async function onSubmit(formData: { username: string; password: string }) {
   const data = {
     ...formData,
-    type: "account" as AccountLoginDto["type"],
+    type: 'account' as AccountLoginDto['type'],
   };
   try {
     submitLoading.value = true;
     const userInfo = await userStore.login(data);
     notification.success({
-      message: t("authentication.loginSuccess"),
-      description: `${t("authentication.loginSuccessDesc")},${userInfo.nickname}`,
+      message: t('authentication.loginSuccess'),
+      description: `${t('authentication.loginSuccessDesc')},${userInfo.nickname}`,
       duration: 3,
     });
   } finally {
@@ -34,7 +34,7 @@ async function onSubmit(formData: { username: string; password: string }) {
   <div class="login-form-container">
     <a-typography class="title-container">
       <a-typography-title class="title" :level="3">{{
-        t("authentication.loginTitle")
+        t('authentication.loginTitle')
       }}</a-typography-title>
       <language-toggle />
     </a-typography>

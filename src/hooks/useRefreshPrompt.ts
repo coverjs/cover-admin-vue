@@ -1,7 +1,7 @@
-import { useRegisterSW } from "virtual:pwa-register/vue";
-import { Button } from "ant-design-vue";
+import { useRegisterSW } from 'virtual:pwa-register/vue';
+import { Button } from 'ant-design-vue';
 
-import useMessage from "./useMessage";
+import useMessage from './useMessage';
 
 export function useRefreshPrompt(pollingInterval: number = 10000) {
   const { notification } = useMessage();
@@ -9,19 +9,19 @@ export function useRefreshPrompt(pollingInterval: number = 10000) {
   const { updateServiceWorker } = useRegisterSW({
     onNeedRefresh() {
       notification.info({
-        message: t("widgets.checkUpdatesTitle"),
-        description: t("widgets.checkUpdatesDescription"),
-        placement: "bottomRight",
+        message: t('widgets.checkUpdatesTitle'),
+        description: t('widgets.checkUpdatesDescription'),
+        placement: 'bottomRight',
         duration: 0,
         btn: h(
           Button,
           {
-            type: "primary",
+            type: 'primary',
             onClick: async () => {
               await updateServiceWorker(true);
             },
           },
-          t("common.refresh")
+          t('common.refresh'),
         ),
       });
     },

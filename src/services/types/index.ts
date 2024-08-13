@@ -1,4 +1,4 @@
-export type ErrorMessageMode = "none" | "modal" | "message" | void;
+export type ErrorMessageMode = 'none' | 'modal' | 'message' | void;
 export type SuccessMessageMode = ErrorMessageMode;
 
 export interface CustomRequestOptions {

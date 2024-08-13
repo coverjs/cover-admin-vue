@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useUserStore } from "@/store/user";
+import { useUserStore } from '@/store/user';
 
-defineOptions({ name: "LayoutHeader" });
+defineOptions({ name: 'LayoutHeader' });
 
 const userStore = useUserStore();
 const { t } = useI18n();
@@ -22,7 +22,7 @@ const { t } = useI18n();
           <template #overlay>
             <a-menu @click="userStore.logout">
               <a-menu-item>
-                {{ t("common.logout") }}
+                {{ t('common.logout') }}
               </a-menu-item>
             </a-menu>
           </template>

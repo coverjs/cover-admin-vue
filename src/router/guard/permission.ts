@@ -1,6 +1,6 @@
-import type { Router } from "vue-router";
+import type { Router } from 'vue-router';
 
-import { useUserStore } from "@/store";
+import { useUserStore } from '@/store';
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStore();
 
@@ -9,14 +9,14 @@ export function createPermissionGuard(router: Router) {
 
     if (!token && !to.meta.ignoreAuth) {
       next({
-        path: "/login",
+        path: '/login',
         replace: true,
       });
       return;
     }
 
-    if (to.name === "login" && token) {
-      next("/");
+    if (to.name === 'login' && token) {
+      next('/');
       return;
     }
 

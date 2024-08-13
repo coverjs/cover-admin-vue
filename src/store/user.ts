@@ -1,17 +1,17 @@
-import { each, get, set } from "lodash-es";
-import { router } from "@/router";
-import { store } from "@/store";
-import { api } from "@/services";
-import { AccountLoginDto } from "@/services/http";
+import { each, get, set } from 'lodash-es';
+import { router } from '@/router';
+import { store } from '@/store';
+import { api } from '@/services';
+import { AccountLoginDto } from '@/services/http';
 
 export const useUserStore = defineStore(
-  "user",
+  'user',
   () => {
-    const token = ref<string | void>("");
+    const token = ref<string | void>('');
     const userInfo = reactive({
-      username: "",
-      nickname: "",
-      email: "",
+      username: '',
+      nickname: '',
+      email: '',
       role: {},
     });
 
@@ -36,7 +36,7 @@ export const useUserStore = defineStore(
 
     function logout() {
       setToken(void 0);
-      router.replace("/login");
+      router.replace('/login');
     }
 
     async function afterLoginAction(goHome?: boolean) {
@@ -44,7 +44,7 @@ export const useUserStore = defineStore(
 
       await getUserInfoAction();
 
-      goHome && (await router.replace("/"));
+      goHome && (await router.replace('/'));
     }
 
     async function getUserInfoAction() {
@@ -52,7 +52,7 @@ export const useUserStore = defineStore(
 
       const { data: res } = await api.accountControllerGetCurrentUser();
       if (res.code === 0) {
-        each(get(res, "data"), (value, key) => {
+        each(get(res, 'data'), (value, key) => {
           set(userInfo, key, value);
         });
       }
@@ -70,7 +70,7 @@ export const useUserStore = defineStore(
       getUserInfoAction,
     };
   },
-  { persist: { paths: ["token"] } }
+  { persist: { paths: ['token'] } },
 );
 
 export function useUserStoreWithOut() {

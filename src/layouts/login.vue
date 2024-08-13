@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineOptions({ name: "LoginLayout" });
+defineOptions({ name: 'LoginLayout' });
 </script>
 
 <template>

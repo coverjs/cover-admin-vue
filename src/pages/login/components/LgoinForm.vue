@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import type { FormInstance } from "ant-design-vue/lib/form/Form";
-import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
+import type { FormInstance } from 'ant-design-vue/lib/form/Form';
+import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 
-defineOptions({ name: "LoginForm" });
+defineOptions({ name: 'LoginForm' });
 
 withDefaults(
   defineProps<{
     loading: boolean;
   }>(),
-  { loading: false }
+  { loading: false },
 );
 
 defineEmits<{
-  (e: "submit", formData: { username: string; password: string }): void;
+  (e: 'submit', formData: { username: string; password: string }): void;
 }>();
 const { t } = useI18n();
 
 const formData = reactive({
-  username: "",
-  password: "",
+  username: '',
+  password: '',
 });
 
 const formRef = ref<FormInstance>();
@@ -63,7 +63,7 @@ const rememberMe = ref(false);
     </a-form-item>
     <a-form-item>
       <a-checkbox v-model:checked="rememberMe" size="small">{{
-        t("authentication.rememberMe")
+        t('authentication.rememberMe')
       }}</a-checkbox>
     </a-form-item>
     <a-form-item>
@@ -73,7 +73,7 @@ const rememberMe = ref(false);
         size="large"
         :loading="loading"
         block
-        >{{ t("common.login") }}</a-button
+        >{{ t('common.login') }}</a-button
       >
     </a-form-item>
   </a-form>

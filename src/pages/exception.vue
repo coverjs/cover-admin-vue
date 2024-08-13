@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineOptions({
-  name: "ExceptionPage",
+  name: 'ExceptionPage',
 });
 const route = useRoute();
 </script>

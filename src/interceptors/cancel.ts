@@ -1,12 +1,12 @@
-import type { AxiosRequestConfig } from "axios";
-import { Middleware } from "onion-interceptor";
-import type { RequestParams } from "@/types";
+import type { AxiosRequestConfig } from 'axios';
+import { Middleware } from 'onion-interceptor';
+import type { RequestParams } from '@/types';
 
 // 用于存储每个请求的标识和取消函数
 const pendingMap = new Map<string, AbortController>();
 
 const getPendingUrl = (config: AxiosRequestConfig): string => {
-  return [config.method, config.url].join("&");
+  return [config.method, config.url].join('&');
 };
 
 export class AxiosCanceler {
@@ -29,7 +29,7 @@ export class AxiosCanceler {
    * 清除所有等待中的请求
    */
   public removeAllPending(): void {
-    pendingMap.forEach((abortController) => {
+    pendingMap.forEach(abortController => {
       if (abortController) {
         abortController.abort();
       }
@@ -66,7 +66,8 @@ export const cancelInterceptor: Middleware = async function (ctx, next) {
   const [requestParams] = ctx.args! as [RequestParams];
   const ignoreCancelToken =
     requestParams?.customOptions?.ignoreCancelToken ?? true;
-  !ignoreCancelToken && axiosCanceler.addPending(ctx.cfg! as AxiosRequestConfig);
+  !ignoreCancelToken &&
+    axiosCanceler.addPending(ctx.cfg! as AxiosRequestConfig);
   await next();
   const res = ctx.res;
   res && axiosCanceler.removePending(res.config);
