@@ -27,4 +27,7 @@ module.exports = [
       "@typescript-eslint/no-unsafe-function-type": "off",
     },
   },
+  {
+    ignores: ["**/dist/**"],
+  },
 ];

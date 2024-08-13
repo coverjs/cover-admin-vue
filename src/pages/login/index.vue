@@ -10,6 +10,7 @@ const submitLoading = ref(false);
 
 const userStore = useUserStore();
 const { notification } = useMessage();
+const { t } = useI18n();
 async function onSubmit(formData: { username: string; password: string }) {
   const data = {
     ...formData,
@@ -19,8 +20,8 @@ async function onSubmit(formData: { username: string; password: string }) {
     submitLoading.value = true;
     const userInfo = await userStore.login(data);
     notification.success({
-      message: "登录成功",
-      description: `欢迎回来，${userInfo.nickname}`,
+      message: t("authentication.loginSuccess"),
+      description: `${t("authentication.loginSuccessDesc")},${userInfo.nickname}`,
       duration: 3,
     });
   } finally {
@@ -32,7 +33,10 @@ async function onSubmit(formData: { username: string; password: string }) {
 <template>
   <div class="login-form-container">
     <a-typography class="title-container">
-      <a-typography-title class="title" :level="3">用户登录</a-typography-title>
+      <a-typography-title class="title" :level="3">{{
+        t("authentication.loginTitle")
+      }}</a-typography-title>
+      <language-toggle />
     </a-typography>
     <LoginForm :loading="submitLoading" @submit="onSubmit" />
   </div>
@@ -42,10 +46,15 @@ async function onSubmit(formData: { username: string; password: string }) {
 .login-form-container {
   width: 300px;
   margin: auto;
+  .title-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 </style>
 
-<route lang="yml">
+<route lang="yaml">
 name: login
 meta:
   layout: login
