@@ -11,13 +11,21 @@ defineOptions({ name: 'DafaultLayout' });
 
 const selectedKeys = ref<string[]>(['1']);
 const collapsed = ref<boolean>(false);
+const appTitle = ref(import.meta.env.VITE_APP_TITLE || 'Cover Admin');
 </script>
 
 <template>
   <a-layout class="app-wrapper">
-    <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
-      <div class="logo"></div>
-      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
+    <a-layout-sider
+      v-model:collapsed="collapsed"
+      theme="light"
+      :trigger="null"
+      collapsible
+    >
+      <div class="title">
+        <span v-if="!collapsed"> {{ appTitle }} </span>
+      </div>
+      <a-menu v-model:selectedKeys="selectedKeys" mode="inline">
         <a-menu-item key="1">
           <user-outlined />
           <span>nav 1</span>
@@ -51,8 +59,6 @@ const collapsed = ref<boolean>(false);
         :style="{
           margin: '24px 16px',
           padding: '24px',
-          background: '#fff',
-          minHeight: '280px',
         }"
       >
         <router-view />
@@ -66,24 +72,15 @@ const collapsed = ref<boolean>(false);
   position: relative;
   height: 100%;
   width: 100%;
-}
-
-#components-layout-demo-custom-trigger .trigger {
-  font-size: 18px;
-  line-height: 64px;
-  padding: 0 24px;
-  cursor: pointer;
-  transition: color 0.3s;
-}
-
-#components-layout-demo-custom-trigger .trigger:hover {
-  color: #1890ff;
-}
-
-#components-layout-demo-custom-trigger .logo {
-  height: 32px;
-  background: rgba(255, 255, 255, 0.3);
-  margin: 16px;
+  .title {
+    border-inline-end: 1px solid rgba(5, 5, 5, 0.06);
+    height: 65px;
+    font-size: 20px;
+    line-height: 24px;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+  }
 }
 
 .site-layout .site-layout-background {

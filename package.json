@@ -6,9 +6,10 @@
   "scripts": {
     "bootstrap": "pnpm install",
     "openapi": "cover openapi",
-    "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "dev": "vite --mode development",
+    "build": "vue-tsc -b && vite build --mode production",
     "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit --skipLibCheck",
     "lint": "eslint --ignore-pattern .gitignore .",
     "format": "npx prettier -c -w --config .prettierrc.json src"
   },
@@ -49,6 +50,7 @@
     "unplugin-vue-components": "^0.27.3",
     "unplugin-vue-router": "^0.10.2",
     "vite": "^5.3.4",
+    "vite-plugin-html": "^3.2.2",
     "vite-plugin-pwa": "^0.20.1",
     "vite-plugin-vue-layouts": "^0.11.0",
     "vue-tsc": "^2.0.24",

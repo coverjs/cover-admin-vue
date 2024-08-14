@@ -8,11 +8,14 @@ import { setupRouterGuards } from './router/guard';
 import App from './App.vue';
 
 function bootstrap() {
+  const env = import.meta.env.PROD ? 'prod' : 'dev';
+  const namespace = `${import.meta.env.VITE_APP_NAMESPACE}-${env}`;
+
   const app = createApp(App);
 
   setupLocale(app);
 
-  setupStore(app);
+  setupStore(app, { namespace });
 
   setupRouter(app);
 
