@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { RouteMeta } from 'vue-router';
 import {
   UserOutlined,
   VideoCameraOutlined,
@@ -12,6 +13,28 @@ defineOptions({ name: 'DafaultLayout' });
 const selectedKeys = ref<string[]>(['1']);
 const collapsed = ref<boolean>(false);
 const appTitle = ref(import.meta.env.VITE_APP_TITLE || 'Cover Admin');
+
+const exception = ref(false);
+const exceptionCode = ref(403);
+
+const route = useRoute();
+
+function checkedException(meta: RouteMeta) {
+  if (meta.exception) {
+    exception.value = true;
+    exceptionCode.value = meta.exceptionCode as number;
+  } else {
+    exception.value = false;
+  }
+}
+
+watch(
+  () => route.meta,
+  val => {
+    checkedException(val);
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
@@ -61,7 +84,8 @@ const appTitle = ref(import.meta.env.VITE_APP_TITLE || 'Cover Admin');
           padding: '24px',
         }"
       >
-        <router-view />
+        <fallback-page v-if="exception" :status="Number(exceptionCode)" />
+        <router-view v-else />
       </a-layout-content>
     </a-layout>
   </a-layout>

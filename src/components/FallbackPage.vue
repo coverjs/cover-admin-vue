@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { PageEnum } from '@/enums';
 defineOptions({
   name: 'FallbackPage',
 });
@@ -27,7 +28,7 @@ const title = computed(() => titleMap.get(props.status)?.() ?? 'Error');
 const subTitle = computed(() => descMap.get(props.status)?.() ?? '');
 
 function backHome() {
-  router.replace('/');
+  router.replace(PageEnum.BASE_HOME);
 }
 </script>
 

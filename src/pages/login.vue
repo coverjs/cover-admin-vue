@@ -2,14 +2,13 @@
 import { useUserStore } from '@/store/user';
 import { useMessage } from '@/hooks';
 import { AccountLoginDto } from '@/services/http';
-import LoginForm from './components/LgoinForm.vue';
 
 defineOptions({ name: 'LoginPage' });
 
 const submitLoading = ref(false);
 
 const userStore = useUserStore();
-const { notification } = useMessage();
+const { createNotify } = useMessage();
 const { t } = useI18n();
 async function onSubmit(formData: { username: string; password: string }) {
   const data = {
@@ -19,7 +18,7 @@ async function onSubmit(formData: { username: string; password: string }) {
   try {
     submitLoading.value = true;
     const userInfo = await userStore.login(data);
-    notification.success({
+    createNotify.success({
       message: t('authentication.loginSuccess'),
       description: `${t('authentication.loginSuccessDesc')},${userInfo.nickname}`,
       duration: 3,
@@ -38,7 +37,7 @@ async function onSubmit(formData: { username: string; password: string }) {
       }}</a-typography-title>
       <language-toggle />
     </a-typography>
-    <LoginForm :loading="submitLoading" @submit="onSubmit" />
+    <login-form :loading="submitLoading" @submit="onSubmit" />
   </div>
 </template>
 

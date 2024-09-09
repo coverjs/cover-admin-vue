@@ -1,34 +1,12 @@
 import type { ModalFuncProps } from 'ant-design-vue/lib/modal/Modal';
-import { Modal, message as Message, notification } from 'ant-design-vue';
+import { Modal, message, notification } from 'ant-design-vue';
 
 import {
   InfoCircleFilled,
   CheckCircleFilled,
   CloseCircleFilled,
 } from '@ant-design/icons-vue';
-import {
-  NotificationArgsProps,
-  ConfigProps,
-} from 'ant-design-vue/lib/notification';
 
-export interface NotifyApi {
-  info(config: NotificationArgsProps): void;
-  success(config: NotificationArgsProps): void;
-  error(config: NotificationArgsProps): void;
-  warn(config: NotificationArgsProps): void;
-  warning(config: NotificationArgsProps): void;
-  open(args: NotificationArgsProps): void;
-  close(key: string): void;
-  config(options: ConfigProps): void;
-  destroy(): void;
-}
-
-export declare type NotificationPlacement =
-  | 'topLeft'
-  | 'topRight'
-  | 'bottomLeft'
-  | 'bottomRight';
-export declare type IconType = 'success' | 'info' | 'error' | 'warning';
 export interface ModalOptionsEx extends Omit<ModalFuncProps, 'iconType'> {
   iconType: 'warning' | 'success' | 'error' | 'info';
 }
@@ -63,9 +41,9 @@ function createConfirm(options: ModalOptionsEx) {
 }
 
 const getBaseOptions = () => {
-  // const { t } = useI18n();
+  const { t } = useI18n();
   return {
-    okText: 'Ok',
+    okText: t('common.confirm'),
     centered: true,
   };
 };
@@ -108,8 +86,8 @@ notification.config({
  */
 export function useMessage() {
   return {
-    createMessage: Message,
-    notification: notification as NotifyApi,
+    createMessage: message,
+    createNotify: notification,
     createConfirm,
     createSuccessModal,
     createErrorModal,
