@@ -2,6 +2,7 @@ import { each, get, set } from 'lodash-es';
 import { router } from '@/router';
 import { store } from '@/store';
 import { api } from '@/services';
+import { PageEnum } from '@/enums';
 import { AccountLoginDto } from '@/services/http';
 
 export const useUserStore = defineStore(
@@ -36,7 +37,7 @@ export const useUserStore = defineStore(
 
     function logout() {
       setToken(void 0);
-      router.replace('/login');
+      router.replace(PageEnum.BASE_LOGIN);
     }
 
     async function afterLoginAction(goHome?: boolean) {
@@ -44,7 +45,7 @@ export const useUserStore = defineStore(
 
       await getUserInfoAction();
 
-      goHome && (await router.replace('/'));
+      goHome && (await router.replace(PageEnum.BASE_HOME));
     }
 
     async function getUserInfoAction() {

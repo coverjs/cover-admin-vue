@@ -7,7 +7,7 @@ import objHash from 'object-hash';
 import CustomRequestOptions from '@/services/types';
 
 const DEFAULT_CONFIG = {
-  baseURL: 'http://154.221.27.105:1118',
+  baseURL: import.meta.env.VITE_API_BASE,
   customOptions: {
     // 是否开启loading拦截器
     loadingInterceptorEnabled: true,

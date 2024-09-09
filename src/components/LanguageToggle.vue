@@ -18,7 +18,7 @@ async function handleUpdate(value: LanguagesType) {
 </script>
 
 <template>
-  <a-dropdown placement="bottom">
+  <a-dropdown placement="bottom" trigger="click">
     <TranslationOutlined />
     <template #overlay>
       <a-menu
@@ -31,3 +31,9 @@ async function handleUpdate(value: LanguagesType) {
     </template>
   </a-dropdown>
 </template>
+
+<style lang="scss" scoped>
+.ant-dropdown-trigger {
+  height: 24px;
+}
+</style>

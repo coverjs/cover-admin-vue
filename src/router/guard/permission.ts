@@ -6,6 +6,7 @@ export function createPermissionGuard(router: Router) {
 
   router.beforeEach(async (to, _from, next) => {
     const token = userStore.getToken;
+    to.meta.exception = false;
 
     if (!token && !to.meta.ignoreAuth) {
       next({
@@ -18,6 +19,11 @@ export function createPermissionGuard(router: Router) {
     if (to.name === 'login' && token) {
       next('/');
       return;
+    }
+
+    if (to.path === '/403') {
+      to.meta.exception = true;
+      to.meta.exceptionCode = 403;
     }
 
     next();

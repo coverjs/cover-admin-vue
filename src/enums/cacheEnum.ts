@@ -1,0 +1,4 @@
+export enum CacheEnum {
+  LOGIN_REMEMBER_ME = 'LOGIN_REMEMBER_ME__',
+  LOGIN_USERNAME = 'LOGIN_USERNAME__',
+}

@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { VueRouterAutoImports } from 'unplugin-vue-router';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
+import { createHtmlPlugin as html } from 'vite-plugin-html';
 import { resolve } from 'path';
 
 import vue from '@vitejs/plugin-vue';
@@ -18,6 +19,9 @@ export default defineConfig({
     vueJsx(),
     vueRouter({
       exclude: ['**/components/*.vue'],
+    }),
+    html({
+      minify: true,
     }),
     layouts({
       layoutsDirs: 'src/layouts',

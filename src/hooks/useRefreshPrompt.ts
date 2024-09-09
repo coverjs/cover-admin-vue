@@ -4,11 +4,11 @@ import { Button } from 'ant-design-vue';
 import useMessage from './useMessage';
 
 export function useRefreshPrompt(pollingInterval: number = 10000) {
-  const { notification } = useMessage();
+  const { createNotify } = useMessage();
   const { t } = useI18n();
   const { updateServiceWorker } = useRegisterSW({
     onNeedRefresh() {
-      notification.info({
+      createNotify.info({
         message: t('widgets.checkUpdatesTitle'),
         description: t('widgets.checkUpdatesDescription'),
         placement: 'bottomRight',
