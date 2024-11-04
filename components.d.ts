@@ -7,7 +7,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AApp: typeof import('ant-design-vue/es')['App']
     AAvatar: typeof import('ant-design-vue/es')['Avatar']
     AButton: typeof import('ant-design-vue/es')['Button']
     ACheckbox: typeof import('ant-design-vue/es')['Checkbox']
@@ -26,14 +25,11 @@ declare module 'vue' {
     AMenuItem: typeof import('ant-design-vue/es')['MenuItem']
     AResult: typeof import('ant-design-vue/es')['Result']
     ARow: typeof import('ant-design-vue/es')['Row']
-    ASpace: typeof import('ant-design-vue/es')['Space']
     ATypography: typeof import('ant-design-vue/es')['Typography']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
-    ExceptionPage: typeof import('./src/components/FallbackPage.vue')['default']
     FallbackPage: typeof import('./src/components/FallbackPage.vue')['default']
     LanguageToggle: typeof import('./src/components/LanguageToggle.vue')['default']
     LayoutHeader: typeof import('./src/components/LayoutHeader.vue')['default']
-    LgoinForm: typeof import('./src/components/LoginForm.vue')['default']
     LoginForm: typeof import('./src/components/LoginForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

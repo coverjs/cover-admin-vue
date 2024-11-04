@@ -7,7 +7,7 @@ import objHash from 'object-hash';
 import CustomRequestOptions from '@/services/types';
 
 const DEFAULT_CONFIG = {
-  baseURL: import.meta.env.VITE_API_BASE,
+  baseURL: import.meta.env.VITE_GLOB_API_URL,
   customOptions: {
     // 是否开启loading拦截器
     loadingInterceptorEnabled: true,
