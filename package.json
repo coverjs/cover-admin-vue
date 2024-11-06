@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
-    "@onion-interceptor/pipes": "^1.0.0",
+    "@onion-interceptor/pipes": "^1.0.1",
     "@vueuse/core": "^10.11.1",
     "ant-design-vue": "^4.2.3",
     "axios": "^1.7.2",
@@ -23,7 +23,7 @@
     "lodash-es": "^4.17.21",
     "nprogress": "^0.2.0",
     "object-hash": "^3.0.0",
-    "onion-interceptor": "^1.0.0",
+    "onion-interceptor": "^1.0.2",
     "pinia": "^2.2.0",
     "pinia-plugin-persistedstate": "^3.2.1",
     "vue": "^3.4.31",

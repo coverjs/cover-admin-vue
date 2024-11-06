@@ -12,8 +12,8 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1(vue@3.4.34(typescript@5.5.4))
       '@onion-interceptor/pipes':
-        specifier: ^1.0.0
-        version: 1.0.0(onion-interceptor@1.0.0)
+        specifier: ^1.0.1
+        version: 1.0.1(onion-interceptor@1.0.2)
       '@vueuse/core':
         specifier: ^10.11.1
         version: 10.11.1(vue@3.4.34(typescript@5.5.4))
@@ -36,8 +36,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       onion-interceptor:
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.0.2
+        version: 1.0.2
       pinia:
         specifier: ^2.2.0
         version: 2.2.0(typescript@5.5.4)(vue@3.4.34(typescript@5.5.4))
@@ -998,10 +998,10 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==, tarball: https://r2.cnpmjs.org/@nodelib/fs.walk/-/fs.walk-1.2.8.tgz}
     engines: {node: '>= 8'}
 
-  '@onion-interceptor/pipes@1.0.0':
-    resolution: {integrity: sha512-PLgh7wm6WlUn8SgYrP32j2x3wCS3DJZ1vqB8zMHaFmk4U0MyeIBIGWME+ytwh+M90UC7EaY/x0n35BmV/xj9gQ==}
+  '@onion-interceptor/pipes@1.0.1':
+    resolution: {integrity: sha512-Ylisokg/LDWRROs399tVo2NNrax7GYgtnXtFHBMgpd8tM0KtuUHgTUi4ed1Bs8sYCe0xcJl+RA3oUFKlYvn1Tg==}
     peerDependencies:
-      onion-interceptor: ^1.0.0
+      onion-interceptor: ^1.0.1
 
   '@rollup/plugin-babel@5.3.1':
     resolution: {integrity: sha512-WFfdLWU/xVWKeRQnKmIAQULUI7Il0gZnBIH/ZFO069wYIfPu+8zrfp/KMW0atmELoRDq8FbiP3VCss9MhCut7Q==}
@@ -1080,55 +1080,46 @@ packages:
     resolution: {integrity: sha512-MXg1xp+e5GhZ3Vit1gGEyoC+dyQUBy2JgVQ+3hUrD9wZMkUw/ywgkpK7oZgnB6kPpGrxJ41clkPPnsknuD6M2Q==}
     cpu: [arm]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-arm-musleabihf@4.19.1':
     resolution: {integrity: sha512-DZNLwIY4ftPSRVkJEaxYkq7u2zel7aah57HESuNkUnz+3bZHxwkCUkrfS2IWC1sxK6F2QNIR0Qr/YXw7nkF3Pw==}
     cpu: [arm]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-arm64-gnu@4.19.1':
     resolution: {integrity: sha512-C7evongnjyxdngSDRRSQv5GvyfISizgtk9RM+z2biV5kY6S/NF/wta7K+DanmktC5DkuaJQgoKGf7KUDmA7RUw==}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-arm64-musl@4.19.1':
     resolution: {integrity: sha512-89tFWqxfxLLHkAthAcrTs9etAoBFRduNfWdl2xUs/yLV+7XDrJ5yuXMHptNqf1Zw0UCA3cAutkAiAokYCkaPtw==}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-powerpc64le-gnu@4.19.1':
     resolution: {integrity: sha512-PromGeV50sq+YfaisG8W3fd+Cl6mnOOiNv2qKKqKCpiiEke2KiKVyDqG/Mb9GWKbYMHj5a01fq/qlUR28PFhCQ==}
     cpu: [ppc64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-gnu@4.19.1':
     resolution: {integrity: sha512-/1BmHYh+iz0cNCP0oHCuF8CSiNj0JOGf0jRlSo3L/FAyZyG2rGBuKpkZVH9YF+x58r1jgWxvm1aRg3DHrLDt6A==}
     cpu: [riscv64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-s390x-gnu@4.19.1':
     resolution: {integrity: sha512-0cYP5rGkQWRZKy9/HtsWVStLXzCF3cCBTRI+qRL8Z+wkYlqN7zrSYm6FuY5Kd5ysS5aH0q5lVgb/WbG4jqXN1Q==}
     cpu: [s390x]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-x64-gnu@4.19.1':
     resolution: {integrity: sha512-XUXeI9eM8rMP8aGvii/aOOiMvTs7xlCosq9xCjcqI9+5hBxtjDpD+7Abm1ZhVIFE1J2h2VIg0t2DX/gjespC2Q==}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-x64-musl@4.19.1':
     resolution: {integrity: sha512-V7cBw/cKXMfEVhpSvVZhC+iGifD6U1zJ4tbibjjN+Xi3blSXaj/rJynAkCFFQfoG6VZrAiP7uGVzL440Q6Me2Q==}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-win32-arm64-msvc@4.19.1':
     resolution: {integrity: sha512-88brja2vldW/76jWATlBqHEoGjJLRnP0WOEKAUbMcXaAZnemNhlAHSyj4jIwMoP2T750LE9lblvD4e2jXleZsA==}
@@ -2447,8 +2438,8 @@ packages:
   once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
 
-  onion-interceptor@1.0.0:
-    resolution: {integrity: sha512-QWp62zMVyYD/LSldpN2Kjcyp6Qcb8LFv73QeRROGL2kSgghHC/bvfQyRLN3I2MPTYYHypHqalQayfjTJzMIHrQ==}
+  onion-interceptor@1.0.2:
+    resolution: {integrity: sha512-MJzoQUwd2B+OBtHeoyfY/9+Zx0bgN2SYwXAIfUg/Z+T1aUsUHGbuA6+JeumPKiPtzlUVC0efIWJFQaxbdUl+Wg==}
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -4244,9 +4235,9 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@onion-interceptor/pipes@1.0.0(onion-interceptor@1.0.0)':
+  '@onion-interceptor/pipes@1.0.1(onion-interceptor@1.0.2)':
     dependencies:
-      onion-interceptor: 1.0.0
+      onion-interceptor: 1.0.2
 
   '@rollup/plugin-babel@5.3.1(@babel/core@7.24.9)(rollup@2.79.1)':
     dependencies:
@@ -5815,7 +5806,7 @@ snapshots:
     dependencies:
       wrappy: 1.0.2
 
-  onion-interceptor@1.0.0: {}
+  onion-interceptor@1.0.2: {}
 
   optionator@0.9.4:
     dependencies:
