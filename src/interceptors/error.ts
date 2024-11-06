@@ -1,5 +1,6 @@
 import type { Middleware } from 'onion-interceptor';
 import type { RequestParams, ErrorMessageMode } from '@/types';
+import type { AxiosError } from 'axios';
 
 import { tap } from '@onion-interceptor/pipes';
 import { getReqOptItem } from '@/utils';
@@ -49,7 +50,8 @@ export const errorInterceptor: Middleware = async function (ctx, next) {
         }
         const code = get(err, 'code');
         const message = get(err, 'message')! as string;
-        const status = ctx.res?.status;
+        const status =
+          ctx?.res?.status ?? (err as AxiosError)?.response?.status;
         let errMsg = '';
         try {
           if (code === 'ECONNABORTED' || message?.includes('timeout')) {
@@ -72,11 +74,10 @@ export const errorInterceptor: Middleware = async function (ctx, next) {
               key: `global_error_message_${errMsg}`,
             });
           }
-
           if (!isNil(status) && status >= 400 && status <= 500)
             checkStatus(
               status,
-              ctx.res?.data.msg ?? ctx.res!.statusText,
+              ctx.res?.data?.msg ?? ctx.res?.statusText,
               errorMessageMode,
             );
           return err;
@@ -99,6 +100,10 @@ msgMap.set(401, (msg?: string) => {
 msgMap.set(403, (msg?: string) => msg || t('fallback.http.forbidden'));
 msgMap.set(404, (msg?: string) => msg || t('fallback.http.notFound'));
 msgMap.set(408, (msg?: string) => msg || t('fallback.http.requestTimeout'));
+msgMap.set(
+  500,
+  (msg?: string) => msg || t('fallback.http.internalServerError'),
+);
 
 function checkStatus(
   status: number,
