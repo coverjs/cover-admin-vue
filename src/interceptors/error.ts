@@ -1,4 +1,4 @@
-import type { Middleware } from 'onion-interceptor';
+import type { Context, Middleware } from 'onion-interceptor';
 import type { RequestParams, ErrorMessageMode } from '@/types';
 import type { AxiosError } from 'axios';
 
@@ -10,87 +10,10 @@ import { t } from '@/locales';
 import { isCancel } from 'axios';
 import { isNil, get } from 'lodash-es';
 
-const { createMessage, createErrorModal } = useMessage();
-
-export const errorInterceptor: Middleware = async function (ctx, next) {
-  const [requestParams] = ctx.args! as [RequestParams];
-  const errorMessageMode: ErrorMessageMode =
-    requestParams.customOptions?.errorMessageMode ??
-    ctx!.cfg?.customOptions.errorMessageMode;
-
-  // 禁用error拦截器
-  if (!getReqOptItem(requestParams, 'errorInterceptorEnabled')) {
-    return await next();
-  }
-
-  await next(
-    tap(
-      ctx => {
-        const code = ctx.res?.data.code;
-        if (code !== 0) {
-          const errMsg = ctx.res?.data.msg;
-          if (errorMessageMode === 'modal') {
-            createErrorModal({
-              title: t('common.error'),
-              content: errMsg,
-            });
-          }
-          if (errorMessageMode === 'message') {
-            createMessage.error({
-              content: errMsg,
-              key: `global_error_message_${errMsg}`,
-            });
-          }
-          throw new Error(errMsg ?? ctx.res!.statusText);
-        }
-      },
-      err => {
-        if (isCancel(err)) {
-          return err;
-        }
-        const code = get(err, 'code');
-        const message = get(err, 'message')! as string;
-        const status =
-          ctx?.res?.status ?? (err as AxiosError)?.response?.status;
-        let errMsg = '';
-        try {
-          if (code === 'ECONNABORTED' || message?.includes('timeout')) {
-            errMsg = t('fallback.http.requestTimeout');
-          }
-          if (
-            code === 'ERR_NETWORK' ||
-            err?.toString().includes('Network Error')
-          ) {
-            errMsg = t('fallback.http.networkError');
-          }
-
-          if (errMsg && errorMessageMode === 'modal') {
-            createErrorModal({ title: t('common.error'), content: errMsg });
-          }
-
-          if (errMsg && errorMessageMode === 'message') {
-            createMessage.error({
-              content: errMsg,
-              key: `global_error_message_${errMsg}`,
-            });
-          }
-          if (!isNil(status) && status >= 400 && status <= 500)
-            checkStatus(
-              status,
-              ctx.res?.data?.msg ?? ctx.res?.statusText,
-              errorMessageMode,
-            );
-          return err;
-        } catch (_e) {
-          return _e as unknown as string;
-        }
-      },
-    ),
-  );
-};
-
 let logout: () => void | void;
+const { createMessage, createErrorModal } = useMessage();
 const msgMap = new Map();
+
 msgMap.set(400, (msg?: string) => msg || t('fallback.http.badRequest'));
 msgMap.set(401, (msg?: string) => {
   const res = msg || t('fallback.http.unauthorized');
@@ -105,20 +28,88 @@ msgMap.set(
   (msg?: string) => msg || t('fallback.http.internalServerError'),
 );
 
+export const errorInterceptor: Middleware = async function (ctx, next) {
+  const [requestParams] = ctx.args! as [RequestParams];
+  const errorMessageMode: ErrorMessageMode =
+    requestParams.customOptions?.errorMessageMode ??
+    ctx!.cfg?.customOptions.errorMessageMode;
+
+  const userStore = useUserStore();
+  logout = () => userStore?.logout();
+
+  // 禁用error拦截器
+  if (!getReqOptItem(requestParams, 'errorInterceptorEnabled')) {
+    return await next();
+  }
+
+  await next(
+    tap(
+      ctx => {
+        const code = ctx.res?.data.code;
+        if (code === 0) return;
+
+        const errMsg = ctx.res?.data.msg;
+        callMsg(errMsg, errorMessageMode);
+        throw new Error(errMsg ?? ctx.res!.statusText);
+      },
+      err => {
+        if (isCancel(err)) return err;
+        try {
+          return handleError(ctx, err as AxiosError, errorMessageMode);
+        } catch (_e) {
+          return _e as unknown as string;
+        }
+      },
+    ),
+  );
+};
+
+function handleError(
+  ctx: Context,
+  error: AxiosError,
+  errorMessageMode: ErrorMessageMode,
+) {
+  const code = get(error, 'code');
+  const message = get(error, 'message')! as string;
+  const status = ctx?.res?.status ?? (error as AxiosError)?.response?.status;
+
+  if (code === 'ECONNABORTED' || message?.includes('timeout')) {
+    callMsg(t('fallback.http.requestTimeout'), errorMessageMode);
+    return error;
+  }
+
+  if (code === 'ERR_NETWORK' || error?.toString().includes('Network Error')) {
+    callMsg(t('fallback.http.networkError'), errorMessageMode);
+    return error;
+  }
+
+  if (!isNil(status) && status >= 400 && status <= 500) {
+    checkStatus(
+      status,
+      ctx.res?.data?.msg ?? ctx.res?.statusText,
+      errorMessageMode,
+    );
+  }
+  return error;
+}
+
 function checkStatus(
   status: number,
   msg: string,
   errorMessageMode: ErrorMessageMode = 'message',
 ) {
   let errMsg = '';
-  const userStore = useUserStore();
-  logout = () => userStore?.logout();
   errMsg = msgMap.get(status)?.(msg) ?? t('fallback.http.internalServerError');
 
+  callMsg(errMsg, errorMessageMode);
+}
+
+function callMsg(errMsg: string, errorMessageMode: ErrorMessageMode) {
   if (errMsg && errorMessageMode === 'modal') {
     createErrorModal({ title: t('common.error'), content: errMsg });
     return;
   }
+
   if (errMsg && errorMessageMode === 'message') {
     createMessage.error({
       content: errMsg,
