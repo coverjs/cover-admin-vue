@@ -104,5 +104,26 @@
     "thirdPartyLogin": "Or continue with",
     "loginAgainTitle": "Please Log In Again",
     "loginAgainSubTitle": "Your login session has expired. Please log in again to continue."
+  },
+  "app": {
+    "setting": {
+      "pageStyle": {
+        "pageStyle": "Page Style",
+        "light": "Light",
+        "dark": "Dark"
+      },
+      "themeColor": {
+        "themeColor": "Theme Color",
+        "dust": "Dust Red",
+        "volcano": "Volcano",
+        "sunset": "Sunset Orange",
+        "cyan": "Cyan",
+        "green": "Polar Green",
+        "daybreak": "Daybreak Blue",
+        "techBlue": "Technology (default)",
+        "geekBlue": "Geek Glue",
+        "purple": "Golden Purple"
+      }
+    }
   }
 }

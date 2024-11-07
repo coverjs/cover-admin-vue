@@ -104,5 +104,26 @@
     "thirdPartyLogin": "其他登录方式",
     "loginAgainTitle": "重新登录",
     "loginAgainSubTitle": "您的登录状态已过期，请重新登录以继续。"
+  },
+  "app": {
+    "setting": {
+      "pageStyle": {
+        "pageStyle": "整体风格设置",
+        "light": "亮色菜单风格",
+        "dark": "暗色菜单风格"
+      },
+      "themeColor": {
+        "themeColor": "主题色",
+        "dust": "薄暮",
+        "volcano": "火山",
+        "sunset": "日暮",
+        "cyan": "明青",
+        "green": "极光绿",
+        "daybreak": "拂晓",
+        "techBlue": "科技（默认）",
+        "geekBlue": "极客蓝",
+        "purple": "酱紫"
+      }
+    }
   }
 }

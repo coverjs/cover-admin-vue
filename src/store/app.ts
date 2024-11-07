@@ -1,0 +1,76 @@
+import { ThemeConfig } from 'ant-design-vue/es/config-provider/context';
+import { theme as antdTheme } from 'ant-design-vue/es';
+import defaultSetting from '../../config/app-config.ts';
+
+export type ThemeType = 'light' | 'dark'
+
+
+export interface LayoutSetting {
+  theme: ThemeType; // 主题
+  colorPrimary?: string;
+}
+
+
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
+
+
+export const useAppStore = defineStore('app', () => {
+  const { darkAlgorithm, defaultAlgorithm } = antdTheme;
+  const layoutSetting = reactive<LayoutSetting>(defaultSetting);
+  const themeConfig: ThemeConfig = reactive<ThemeConfig>({
+    algorithm: antdTheme.defaultAlgorithm,
+    token: {
+      colorBgContainer: '#fff',
+      colorPrimary: layoutSetting.colorPrimary,
+    },
+  });
+
+  // 监听isDark的变化
+  watch(isDark, () => {
+    if (isDark.value)
+      toggleTheme('dark');
+    else toggleTheme('light');
+  });
+
+  function toggleTheme(theme: ThemeType) {
+    if (layoutSetting.theme === theme)
+      return;
+    layoutSetting.theme = theme;
+    if (theme === 'light') {
+      toggleDark(false);
+      themeConfig.algorithm = [defaultAlgorithm];
+      if (themeConfig.token)
+        themeConfig.token.colorBgContainer = '#fff';
+    } else if (theme === 'dark') {
+      toggleDark(true);
+      themeConfig.algorithm = [darkAlgorithm];
+      if (themeConfig.token)
+        themeConfig.token.colorBgContainer = 'rgb(36, 37, 37)';
+    }
+  }
+
+  function toggleColorPrimary(color: string) {
+    layoutSetting.colorPrimary = color;
+    if (themeConfig.token) {
+      themeConfig.token.colorPrimary = color;
+    }
+  }
+
+  function changeSettingLayout(key: keyof LayoutSetting, value: any) {
+    switch (key) {
+      case 'colorPrimary':
+        toggleColorPrimary(value);
+        return;
+      case 'theme':
+        toggleTheme(value);
+        return;
+    }
+  }
+
+  return {
+    layoutSetting,
+    theme: themeConfig,
+    changeSettingLayout,
+  };
+});
