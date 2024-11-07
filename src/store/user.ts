@@ -23,7 +23,7 @@ export const useUserStore = defineStore(
     }
 
     async function login(data: AccountLoginDto, goHome: boolean = true) {
-      const { data: res } = await api.accountControllerLogin(data, {
+      const { data: res } = await api.authControllerLogin(data, {
         customOptions: {
           authInterceptorEnabled: false,
         },
@@ -51,7 +51,7 @@ export const useUserStore = defineStore(
     async function getUserInfoAction() {
       if (!getToken.value) return;
 
-      const { data: res } = await api.accountControllerGetCurrentUser();
+      const { data: res } = await api.profileControllerFindUserInfo();
       if (res.code === 0) {
         each(get(res, 'data'), (value, key) => {
           set(userInfo, key, value);

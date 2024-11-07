@@ -9,42 +9,14 @@
  * ---------------------------------------------------------------
  */
 
-export interface CreateUserDto {
-  /**
-   * 用户名
-   * @example "admin"
-   */
-  username: string;
-  /**
-   * 密码
-   * @example "admin"
-   */
-  password: string;
-  /**
-   * 邮箱
-   * @example "admin@admin.com"
-   */
-  email: string;
-  /**
-   * 角色id
-   * @example 1
-   */
-  roleId: number;
-  /**
-   * 昵称
-   * @example "admin"
-   */
-  nickname: string;
-}
-
 export interface AccountLoginVo {
-  /** token */
+  /** 登录成功后返回token */
   token: string;
 }
 
 export interface AccountLoginDto {
   /**
-   * 用户名
+   * 账号
    * @example "admin"
    */
   username: string;
@@ -53,27 +25,85 @@ export interface AccountLoginDto {
    * @example "admin"
    */
   password: string;
-  /**
-   * 登录类型
-   * @example "account"
-   */
-  type: 'account' | 'mobile';
 }
 
-export interface CreateRoleDto {
+export interface CreateUserDto {
+  /** 用户账号 */
+  username: string;
+  /** 密码 */
+  password: string;
+  /** 昵称 */
+  nickname: string;
+  /** 邮箱 */
+  email: string;
+  /** 角色id */
+  roleId: number;
+  /** 是否启用 */
+  enable: boolean;
+}
+
+export interface RoleVo {
   /**
-   * 角色名
+   * 角色id
+   * @example 1
+   */
+  id: number;
+  /**
+   * 角色名称
    * @example "admin"
    */
   name: string;
   /**
    * 角色描述
-   * @example "管理员权限"
+   * @example "管理员"
    */
-  desricption?: string;
+  description: string;
+  /** 创建时间 */
+  createdAt: string;
+  /** 更新日期 */
+  updatedAt: string;
 }
 
-export type QueryRoleDto = object;
+export interface UserInfoVo {
+  /** 账号 */
+  username: string;
+  /** 昵称 */
+  nickname: string;
+  /** 邮箱 */
+  email: string;
+  /** 角色 */
+  role: RoleVo;
+  /** 是否启用 */
+  enable: boolean;
+  /** 创建时间 */
+  createdAt: string;
+  /** 更新日期 */
+  updatedAt: string;
+}
+
+export interface CreateRoleDto {
+  /** 角色名 */
+  name: string;
+  /** 角色描述 */
+  description: string;
+}
+
+export interface ProfileVo {
+  /** 账号 */
+  username: string;
+  /** 昵称 */
+  nickname: string;
+  /** 邮箱 */
+  email: string;
+  /** 角色 */
+  role: RoleVo;
+  /** 是否启用 */
+  enable: boolean;
+  /** 创建时间 */
+  createdAt: string;
+  /** 更新日期 */
+  updatedAt: string;
+}
 
 export interface CommonResponseVo {
   /**
@@ -88,13 +118,7 @@ export interface CommonResponseVo {
   msg: string;
 }
 
-import type {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-  HeadersDefaults,
-  ResponseType,
-} from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from 'axios';
 import axios from 'axios';
 import type CustomOptions from '../types';
 
@@ -104,8 +128,7 @@ export interface CustromRequestParams {
   customOptions?: CustomOptions;
 }
 
-export interface FullRequestParams
-  extends Omit<AxiosRequestConfig, 'data' | 'params' | 'url' | 'responseType'> {
+export interface FullRequestParams extends Omit<AxiosRequestConfig, 'data' | 'params' | 'url' | 'responseType'> {
   /** set parameter to `true` for call `securityWorker` for this request */
   secure?: boolean;
   /** request path */
@@ -120,14 +143,9 @@ export interface FullRequestParams
   body?: unknown;
 }
 
-export type RequestParams = Omit<
-  FullRequestParams,
-  'body' | 'method' | 'query' | 'path'
-> &
-  CustromRequestParams;
+export type RequestParams = Omit<FullRequestParams, 'body' | 'method' | 'query' | 'path'> & CustromRequestParams;
 
-export interface ApiConfig<SecurityDataType = unknown>
-  extends Omit<AxiosRequestConfig, 'data' | 'cancelToken'> {
+export interface ApiConfig<SecurityDataType = unknown> extends Omit<AxiosRequestConfig, 'data' | 'cancelToken'> {
   securityWorker?: (
     securityData: SecurityDataType | null,
   ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
@@ -150,16 +168,8 @@ export class HttpClient<SecurityDataType = unknown> {
   private secure?: boolean;
   private format?: ResponseType;
 
-  constructor({
-    securityWorker,
-    secure,
-    format,
-    ...axiosConfig
-  }: ApiConfig<SecurityDataType> = {}) {
-    this.instance = axios.create({
-      ...axiosConfig,
-      baseURL: axiosConfig.baseURL || '',
-    });
+  constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
+    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || '' });
     this.secure = secure;
     this.format = format;
     this.securityWorker = securityWorker;
@@ -169,10 +179,7 @@ export class HttpClient<SecurityDataType = unknown> {
     this.securityData = data;
   };
 
-  protected mergeRequestParams(
-    params1: AxiosRequestConfig,
-    params2?: AxiosRequestConfig,
-  ): AxiosRequestConfig {
+  protected mergeRequestParams(params1: AxiosRequestConfig, params2?: AxiosRequestConfig): AxiosRequestConfig {
     const method = params1.method || (params2 && params2.method);
 
     return {
@@ -180,11 +187,7 @@ export class HttpClient<SecurityDataType = unknown> {
       ...params1,
       ...(params2 || {}),
       headers: {
-        ...((method &&
-          this.instance.defaults.headers[
-            method.toLowerCase() as keyof HeadersDefaults
-          ]) ||
-          {}),
+        ...((method && this.instance.defaults.headers[method.toLowerCase() as keyof HeadersDefaults]) || {}),
         ...(params1.headers || {}),
         ...((params2 && params2.headers) || {}),
       },
@@ -205,15 +208,11 @@ export class HttpClient<SecurityDataType = unknown> {
     }
     return Object.keys(input || {}).reduce((formData, key) => {
       const property = input[key];
-      const propertyContent: unknown[] =
-        property instanceof Array ? property : [property];
+      const propertyContent: any[] = property instanceof Array ? property : [property];
 
       for (const formItem of propertyContent) {
         const isFileType = formItem instanceof Blob || formItem instanceof File;
-        formData.append(
-          key,
-          isFileType ? formItem : this.stringifyFormItem(formItem),
-        );
+        formData.append(key, isFileType ? formItem : this.stringifyFormItem(formItem));
       }
 
       return formData;
@@ -237,21 +236,11 @@ export class HttpClient<SecurityDataType = unknown> {
     const requestParams = this.mergeRequestParams(params, secureParams);
     const responseFormat = format || this.format || undefined;
 
-    if (
-      type === ContentType.FormData &&
-      body &&
-      body !== null &&
-      typeof body === 'object'
-    ) {
+    if (type === ContentType.FormData && body && body !== null && typeof body === 'object') {
       body = this.createFormData(body as Record<string, unknown>);
     }
 
-    if (
-      type === ContentType.Text &&
-      body &&
-      body !== null &&
-      typeof body !== 'string'
-    ) {
+    if (type === ContentType.Text && body && body !== null && typeof body !== 'string') {
       body = JSON.stringify(body);
     }
 
@@ -270,163 +259,20 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title Cover Admin
+ * @title Cover Admin Service
  * @version 1.0.0
- * @license MIT
  * @contact
  *
- * Cover Admin 接口文档
+ * Coverjs后台服务端接口文档
  */
-export class Api<
-  SecurityDataType extends unknown,
-> extends HttpClient<SecurityDataType> {
+export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   api = {
     /**
      * No description
      *
-     * @tags 用户管理
-     * @name UserControllerCreate
-     * @summary 创建用户
-     * @request POST:/api/user/create
-     * @secure
-     */
-    userControllerCreate: (data: CreateUserDto, params: RequestParams = {}) =>
-      this.request<CommonResponseVo, any>({
-        path: `/api/user/create`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags 账号管理
-     * @name AccountControllerLogin
-     * @summary 登录
-     * @request POST:/api/account/login
-     */
-    accountControllerLogin: (
-      data: AccountLoginDto,
-      params: RequestParams = {},
-    ) =>
-      this.request<
-        CommonResponseVo & {
-          data?: AccountLoginVo;
-        },
-        any
-      >({
-        path: `/api/account/login`,
-        method: 'POST',
-        body: data,
-        type: ContentType.Json,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags 账号管理
-     * @name AccountControllerGetCurrentUser
-     * @summary 获取当前用户信息
-     * @request GET:/api/account/current
-     * @secure
-     */
-    accountControllerGetCurrentUser: (params: RequestParams = {}) =>
-      this.request<CommonResponseVo, any>({
-        path: `/api/account/current`,
-        method: 'GET',
-        secure: true,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags 角色管理
-     * @name RoleControllerCreate
-     * @summary 创建角色
-     * @request POST:/api/role
-     * @secure
-     */
-    roleControllerCreate: (data: CreateRoleDto, params: RequestParams = {}) =>
-      this.request<CommonResponseVo, any>({
-        path: `/api/role`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags 角色管理
-     * @name RoleControllerFindAll
-     * @summary 查询所有角色
-     * @request GET:/api/role
-     * @secure
-     */
-    roleControllerFindAll: (data: QueryRoleDto, params: RequestParams = {}) =>
-      this.request<CommonResponseVo, any>({
-        path: `/api/role`,
-        method: 'GET',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags 角色管理
-     * @name RoleControllerFindOne
-     * @summary 查询单个角色
-     * @request GET:/api/role/{id}
-     * @secure
-     */
-    roleControllerFindOne: (id: string, params: RequestParams = {}) =>
-      this.request<CommonResponseVo, any>({
-        path: `/api/role/${id}`,
-        method: 'GET',
-        secure: true,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags 角色管理
-     * @name RoleControllerRemove
-     * @summary 删除角色
-     * @request DELETE:/api/role/{id}
-     * @secure
-     */
-    roleControllerRemove: (id: string, params: RequestParams = {}) =>
-      this.request<CommonResponseVo, any>({
-        path: `/api/role/${id}`,
-        method: 'DELETE',
-        secure: true,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags 上传
+     * @tags 文件上传
      * @name UploadControllerUpload
-     * @summary 上传单个文件的示例
+     * @summary 单个文件上传接口示例
      * @request POST:/api/upload/file
      * @secure
      */
@@ -438,24 +284,23 @@ export class Api<
       params: RequestParams = {},
     ) =>
       this.request<
+        any,
         CommonResponseVo & {
           data?: string;
-        },
-        any
+        }
       >({
         path: `/api/upload/file`,
         method: 'POST',
         body: data,
         secure: true,
         type: ContentType.FormData,
-        format: 'json',
         ...params,
       }),
 
     /**
      * No description
      *
-     * @tags 上传
+     * @tags 文件上传
      * @name UploadControllerUploads
      * @summary 上传多个文件的示例
      * @request POST:/api/upload/files
@@ -468,26 +313,25 @@ export class Api<
       params: RequestParams = {},
     ) =>
       this.request<
+        any,
         CommonResponseVo & {
           data?: string;
-        },
-        any
+        }
       >({
         path: `/api/upload/files`,
         method: 'POST',
         body: data,
         secure: true,
         type: ContentType.FormData,
-        format: 'json',
         ...params,
       }),
 
     /**
      * No description
      *
-     * @tags 上传
+     * @tags 文件上传
      * @name UploadControllerUploadMultipleFiles
-     * @summary 按字段上传文件的示例
+     * @summary 根据字段名上传文件示例
      * @request POST:/api/upload/fields
      * @secure
      */
@@ -500,13 +344,197 @@ export class Api<
       },
       params: RequestParams = {},
     ) =>
-      this.request<CommonResponseVo, any>({
+      this.request<
+        any,
+        CommonResponseVo & {
+          data?: string;
+        }
+      >({
         path: `/api/upload/fields`,
         method: 'POST',
         body: data,
         secure: true,
         type: ContentType.FormData,
-        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 授权
+     * @name AuthControllerLogin
+     * @summary 用户登录
+     * @request POST:/api/auth
+     */
+    authControllerLogin: (data: AccountLoginDto, params: RequestParams = {}) =>
+      this.request<
+        any,
+        CommonResponseVo & {
+          data?: AccountLoginVo;
+        }
+      >({
+        path: `/api/auth`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 用户管理
+     * @name UserControllerCreate
+     * @summary 新建用户
+     * @request POST:/api/user
+     * @secure
+     */
+    userControllerCreate: (data: CreateUserDto, params: RequestParams = {}) =>
+      this.request<any, CommonResponseVo>({
+        path: `/api/user`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 用户管理
+     * @name UserControllerFindList
+     * @summary 获取用户列表
+     * @request GET:/api/user
+     * @secure
+     */
+    userControllerFindList: (
+      query?: {
+        /**
+         * 当前页码
+         * @min 1
+         * @example 1
+         */
+        pageNum?: number;
+        /**
+         * 每页条数
+         * @min 1
+         * @example 10
+         */
+        pageSize?: number;
+        /** 用户账号 */
+        username?: string;
+        /** 昵称 */
+        nickname?: string;
+        /** 邮箱 */
+        email?: string;
+        /** 角色id */
+        roleId?: number;
+        /** 是否启用 */
+        enable?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        any,
+        CommonResponseVo & {
+          data?: {
+            list: UserInfoVo[];
+            /** @default 0 */
+            total: number;
+          };
+        }
+      >({
+        path: `/api/user`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 角色管理
+     * @name RoleControllerCreate
+     * @summary 新建角色
+     * @request POST:/api/role
+     * @secure
+     */
+    roleControllerCreate: (data: CreateRoleDto, params: RequestParams = {}) =>
+      this.request<any, CommonResponseVo>({
+        path: `/api/role`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 角色管理
+     * @name RoleControllerFineList
+     * @summary 获取角色列表
+     * @request GET:/api/role
+     * @secure
+     */
+    roleControllerFineList: (
+      query?: {
+        /**
+         * 当前页码
+         * @min 1
+         * @example 1
+         */
+        pageNum?: number;
+        /**
+         * 每页条数
+         * @min 1
+         * @example 10
+         */
+        pageSize?: number;
+        /** 角色名 */
+        name?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        any,
+        CommonResponseVo & {
+          data?: {
+            list: RoleVo[];
+            /** @default 0 */
+            total: number;
+          };
+        }
+      >({
+        path: `/api/role`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 个人信息
+     * @name ProfileControllerFindUserInfo
+     * @summary 获取个人信息
+     * @request GET:/api/profile
+     * @secure
+     */
+    profileControllerFindUserInfo: (params: RequestParams = {}) =>
+      this.request<
+        any,
+        CommonResponseVo & {
+          data?: ProfileVo;
+        }
+      >({
+        path: `/api/profile`,
+        method: 'GET',
+        secure: true,
         ...params,
       }),
   };

@@ -12,7 +12,6 @@ import layouts from 'vite-plugin-vue-layouts';
 import vueRouter from 'unplugin-vue-router/vite';
 import autoImport from 'unplugin-auto-import/vite';
 
-
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
@@ -66,13 +65,15 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
+      port: parseInt(env.VITE_SERVER_PORT),
       proxy: {
         [env.VITE_GLOB_API_URL]: {
           target: env.VITE_API_BASE,
           changeOrigin: true,
           ws: false,
-          // 将前缀api替换为空字符串
-          rewrite: path => path.replace(new RegExp(`^${env.VITE_GLOB_API_URL}`), ''),
+          // // 将前缀api替换为空字符串
+          rewrite: path =>
+            path.replace(new RegExp(`^${env.VITE_GLOB_API_URL}`), ''),
         },
       },
     },

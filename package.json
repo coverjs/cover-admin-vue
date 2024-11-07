@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "bootstrap": "pnpm install",
-    "openapi": "cover openapi",
+    "openapi": "dotenv -e .env.development.local cover openapi",
     "dev": "vite --mode development",
     "build": "vue-tsc -b && vite build --mode production",
     "preview": "vite preview",
@@ -20,6 +20,7 @@
     "ant-design-vue": "^4.2.3",
     "axios": "^1.7.2",
     "dayjs": "^1.11.12",
+    "dotenv-cli": "^7.4.2",
     "lodash-es": "^4.17.21",
     "nprogress": "^0.2.0",
     "object-hash": "^3.0.0",
