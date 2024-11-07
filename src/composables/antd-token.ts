@@ -5,9 +5,6 @@ export const useAntdToken = createSharedComposable(() => {
   const { token: antdToken } = theme.useToken();
   const token = ref<GlobalToken>(antdToken.value);
 
-
-  console.log('useAntdToken', token);
-
   const setToken = (globalToken: GlobalToken) => {
     token.value = globalToken;
   };
