@@ -1,14 +1,16 @@
 <script lang="ts" setup>
 import type { RouteMeta } from 'vue-router';
 import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
-  UploadOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
 } from '@ant-design/icons-vue';
+import SettingDrawer from '@/components/SettingDrawer/index.vue';
+import { useAppStore } from '@/store/app.ts';
 
-defineOptions({ name: 'DafaultLayout' });
+defineOptions({ name: 'DefaultLayout' });
 
 const selectedKeys = ref<string[]>(['1']);
 const collapsed = ref<boolean>(false);
@@ -35,6 +37,10 @@ watch(
   },
   { immediate: true },
 );
+
+
+const appStore = useAppStore();
+const { layoutSetting } = storeToRefs(appStore);
 </script>
 
 <template>
@@ -64,7 +70,7 @@ watch(
       </a-menu>
     </a-layout-sider>
     <a-layout>
-      <a-layout-header style="background: #fff; padding-left: 20px">
+      <a-layout-header>
         <layout-header>
           <menu-unfold-outlined
             v-if="collapsed"
@@ -89,6 +95,10 @@ watch(
       </a-layout-content>
     </a-layout>
   </a-layout>
+  <SettingDrawer :theme="layoutSetting.theme"
+                 :color-primary="layoutSetting.colorPrimary"
+                 :layout-setting="layoutSetting"
+                 @settingChange="appStore.changeSettingLayout" />
 </template>
 
 <style scoped>
@@ -96,6 +106,7 @@ watch(
   position: relative;
   height: 100%;
   width: 100%;
+
   .title {
     border-inline-end: 1px solid rgba(5, 5, 5, 0.06);
     height: 65px;
@@ -107,7 +118,5 @@ watch(
   }
 }
 
-.site-layout .site-layout-background {
-  background: #fff;
-}
+
 </style>

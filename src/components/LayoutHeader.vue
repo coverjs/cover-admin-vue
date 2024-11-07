@@ -27,7 +27,7 @@ const { t } = useI18n();
               {{ userStore.userInfo.nickname }}
             </span>
             <template #overlay>
-              <a-menu @click="userStore.logout">
+              <a-menu @click="userStore.logout" theme="dark">
                 <a-menu-item>
                   {{ t('common.logout') }}
                 </a-menu-item>
