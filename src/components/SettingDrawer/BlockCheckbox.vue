@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { ThemeType } from '@/types';
 import { CheckOutlined } from '@ant-design/icons-vue';
 import { useAntdToken } from '@/hooks';
-import { ThemeType } from '@/store/app.ts';
 
 defineOptions({ name: 'BlockCheckbox' });
 

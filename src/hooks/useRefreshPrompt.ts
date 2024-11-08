@@ -9,6 +9,7 @@ export function useRefreshPrompt(pollingInterval: number = 10 * 1000) {
   const { updateServiceWorker } = useRegisterSW({
     onNeedRefresh() {
       createNotify.info({
+        key: 'refresh_prompt',
         message: t('widgets.checkUpdatesTitle'),
         description: t('widgets.checkUpdatesDescription'),
         placement: 'bottomRight',

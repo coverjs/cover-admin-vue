@@ -2,7 +2,7 @@ import { defineConfig } from 'cover-cli';
 
 export default defineConfig({
   generateApi: {
-    name: 'index.ts',
+    name: 'api.ts',
     url: `${process.env.VITE_API_BASE}/docs-json`,
     httpClientType: 'axios',
   },

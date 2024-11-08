@@ -38,7 +38,7 @@
     "@types/object-hash": "^3.0.6",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vitejs/plugin-vue-jsx": "^4.0.0",
-    "cover-cli": "^0.2.0",
+    "cover-cli": "^0.2.1",
     "dotenv-cli": "^7.4.2",
     "eslint": "^9.9.0",
     "eslint-plugin-vue": "^9.27.0",

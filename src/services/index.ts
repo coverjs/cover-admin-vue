@@ -1,6 +1,4 @@
-import type { ApiConfig } from './http';
-
-import { Api } from './http';
+import { Api, type ApiConfig } from './api';
 import { interceptors } from '@/interceptors';
 import { createInterceptor } from 'onion-interceptor';
 import { defaultRequestConfig } from '@config';
@@ -22,6 +20,6 @@ export function createApi(config: ApiConfig = defaultRequestConfig) {
   return api;
 }
 
-export * from './http';
+export * from './api';
 
 export const api = createApi();
