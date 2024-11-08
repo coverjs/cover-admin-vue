@@ -24,15 +24,15 @@
   }
 }
 
-.cover-setting-drawer-content {
+// .cover-setting-drawer-content {
 
-}
+// }
 
 
 .cover-setting-drawer-block {
   margin-bottom: 24px;
 
-  > h3 {
+  >h3 {
     font-weight: 500;
     margin-bottom: 12px;
     font-size: 14px;
@@ -112,13 +112,17 @@
         box-shadow: rgba(13, 13, 13, 0.18) 0 1px 2.5px 0;
 
         &-light {
-          &::before, &::after {
+
+          &::before,
+          &::after {
             background-color: rgb(36, 37, 37);
           }
         }
 
         &-dark {
-          &::before, &::after {
+
+          &::before,
+          &::after {
             background-color: rgba(15, 28, 41, 0.65);
           }
         }

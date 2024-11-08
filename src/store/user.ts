@@ -1,9 +1,8 @@
 import { each, get, set } from 'lodash-es';
 import { router } from '@/router';
-import { store } from '@/store';
-import { api } from '@/services';
+import { store } from '.';
+import { api, type AccountLoginDto } from '@/services';
 import { PageEnum } from '@/enums';
-import { AccountLoginDto } from '@/services/http';
 
 export const useUserStore = defineStore(
   'user',

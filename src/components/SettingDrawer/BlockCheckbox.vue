@@ -35,7 +35,7 @@ const cls = computed(() => {
       }}
     </template>
     <div :class="cls">
-      <CheckOutlined
+      <check-outlined
         v-show="checked"
         :style="{ color: token?.colorPrimary }"
         :class="`${prefixCls}-selectIcon`"

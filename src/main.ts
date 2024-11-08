@@ -3,8 +3,7 @@ import './styles/index.scss';
 import { createApp } from 'vue';
 import { setupStore } from './store';
 import { setupLocale } from './locales';
-import { setupRouter, router } from './router';
-import { setupRouterGuards } from './router/guard';
+import { setupRouter } from './router';
 import App from './App.vue';
 
 function bootstrap() {
@@ -18,8 +17,6 @@ function bootstrap() {
   setupStore(app, { namespace });
 
   setupRouter(app);
-
-  setupRouterGuards(router);
 
   app.mount('#app');
 }

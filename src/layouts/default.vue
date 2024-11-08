@@ -8,7 +8,7 @@ import {
   VideoCameraOutlined,
 } from '@ant-design/icons-vue';
 import SettingDrawer from '@/components/SettingDrawer/index.vue';
-import { useAppStore } from '@/store/app.ts';
+import { useAppStore } from '@/store';
 
 defineOptions({ name: 'DefaultLayout' });
 
@@ -37,7 +37,6 @@ watch(
   },
   { immediate: true },
 );
-
 
 const appStore = useAppStore();
 const { layoutSetting } = storeToRefs(appStore);
@@ -95,10 +94,12 @@ const { layoutSetting } = storeToRefs(appStore);
       </a-layout-content>
     </a-layout>
   </a-layout>
-  <SettingDrawer :theme="layoutSetting.theme"
-                 :color-primary="layoutSetting.colorPrimary"
-                 :layout-setting="layoutSetting"
-                 @settingChange="appStore.changeSettingLayout" />
+  <setting-drawer
+    :theme="layoutSetting.theme"
+    :color-primary="layoutSetting.colorPrimary"
+    :layout-setting="layoutSetting"
+    @settingChange="appStore.changeSettingLayout"
+  />
 </template>
 
 <style scoped>
@@ -117,6 +118,4 @@ const { layoutSetting } = storeToRefs(appStore);
     font-weight: bold;
   }
 }
-
-
 </style>

@@ -64,10 +64,12 @@ export class AxiosCanceler {
 export const cancelInterceptor: Middleware = async function (ctx, next) {
   const axiosCanceler = new AxiosCanceler();
   const [requestParams] = ctx.args! as [RequestParams];
+
   const ignoreCancelToken =
     requestParams?.customOptions?.ignoreCancelToken ?? true;
   !ignoreCancelToken &&
     axiosCanceler.addPending(ctx.cfg! as AxiosRequestConfig);
+
   await next();
   const res = ctx.res;
   res && axiosCanceler.removePending(res.config);

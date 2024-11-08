@@ -20,3 +20,4 @@ export function setupStore(app: App<Element>, options: initStoreConfig) {
 }
 
 export * from './user';
+export * from './app';

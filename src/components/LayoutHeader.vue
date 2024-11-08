@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUserStore } from '@/store/user';
+import { useUserStore } from '@/store';
 import { UserOutlined } from '@ant-design/icons-vue';
 
 defineOptions({ name: 'LayoutHeader' });
@@ -22,7 +22,7 @@ const { t } = useI18n();
           <a-dropdown placement="bottom" trigger="click">
             <span class="user-info">
               <a-avatar class="user-avatar" size="small">
-                <template #icon><UserOutlined /></template>
+                <template #icon><user-outlined /></template>
               </a-avatar>
               {{ userStore.userInfo.nickname }}
             </span>

@@ -24,7 +24,11 @@
     "noFallthroughCasesInSwitch": true,
 
     "baseUrl": "./",
-    "paths": { "@/*": ["./src/*"] },
+    "paths": {
+      "@/*": ["./src/*"],
+      "@config/*": ["./config/*"],
+      "@config": ["./config/index.ts"]
+    },
     "types": [
       "unplugin-vue-router/client",
       "vite-plugin-vue-layouts/client",
