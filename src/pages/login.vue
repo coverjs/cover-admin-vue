@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '@/store/user';
 import { useMessage } from '@/hooks';
-import { AccountLoginDto } from '@/services/http';
 
 defineOptions({ name: 'LoginPage' });
 
@@ -13,7 +12,6 @@ const { t } = useI18n();
 async function onSubmit(formData: { username: string; password: string }) {
   const data = {
     ...formData,
-    type: 'account' as AccountLoginDto['type'],
   };
   try {
     submitLoading.value = true;

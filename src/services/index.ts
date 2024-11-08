@@ -1,4 +1,5 @@
 import type { ApiConfig } from './http';
+
 import { Api } from './http';
 import { interceptors } from '@/interceptors';
 import { createInterceptor } from 'onion-interceptor';

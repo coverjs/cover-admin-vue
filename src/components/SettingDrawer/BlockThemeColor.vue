@@ -5,14 +5,14 @@ defineOptions({
   name: 'BlockThemeColor',
 });
 
-const prefixCls = shallowRef('cover-setting-drawer-block-theme-color');
-
 defineProps<{
   colorList: { key: string; color: string }[];
   color?: string;
   onChange?: (color: string) => void;
   t?: (key: string, ...args: any[]) => string;
 }>();
+
+const prefixCls = shallowRef('cover-setting-drawer-block-theme-color');
 </script>
 
 <template>
@@ -27,11 +27,9 @@ defineProps<{
           :style="{ backgroundColor: item.color }"
           @click="onChange?.(item.color)"
         >
-          <CheckOutlined v-show="color === item.color" />
+          <check-outlined v-show="color === item.color" />
         </div>
       </a-tooltip>
     </div>
   </div>
 </template>
-
-<style scoped lang="scss"></style>
