@@ -7,17 +7,20 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons-vue';
-import SettingDrawer from '@/components/SettingDrawer/index.vue';
 import { useAppStore } from '@/store';
+import { loadEnv } from '@/utils';
+
+import SettingDrawer from '@/components/SettingDrawer/index.vue';
 
 defineOptions({ name: 'DefaultLayout' });
 
 const selectedKeys = ref<string[]>(['1']);
 const collapsed = ref<boolean>(false);
-const appTitle = ref(import.meta.env.VITE_APP_TITLE || 'Cover Admin');
 
 const exception = ref(false);
 const exceptionCode = ref(403);
+
+const env = loadEnv();
 
 const route = useRoute();
 
@@ -51,7 +54,9 @@ const { layoutSetting } = storeToRefs(appStore);
       collapsible
     >
       <div class="title">
-        <span v-if="!collapsed"> {{ appTitle }} </span>
+        <span v-if="!collapsed">
+          {{ env.VITE_APP_TITLE ?? 'Cover Admin' }}
+        </span>
       </div>
       <a-menu v-model:selectedKeys="selectedKeys" mode="inline">
         <a-menu-item key="1">
@@ -95,6 +100,7 @@ const { layoutSetting } = storeToRefs(appStore);
     </a-layout>
   </a-layout>
   <setting-drawer
+    v-if="env.VITE_SHOW_SETTING === true"
     :theme="layoutSetting.theme"
     :color-primary="layoutSetting.colorPrimary"
     :layout-setting="layoutSetting"

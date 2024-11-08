@@ -2,6 +2,7 @@
 import type { FormInstance } from 'ant-design-vue/lib/form/Form';
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import { CacheEnum } from '@/enums';
+import { loadEnv } from '@/utils';
 
 defineOptions({ name: 'LoginForm' });
 
@@ -15,13 +16,16 @@ withDefaults(
 defineEmits<{
   (e: 'submit', formData: { username: string; password: string }): void;
 }>();
+
+const env = loadEnv();
 const { t } = useI18n();
+
 const rememberMeInStorage = useLocalStorage(
-  `${import.meta.env.VITE_APP_NAMESPACE}_${CacheEnum.LOGIN_REMEMBER_ME}`,
+  `${env.VITE_APP_NAMESPACE}_${CacheEnum.LOGIN_REMEMBER_ME}`,
   false,
 );
 const usernameInStorage = useLocalStorage(
-  `${import.meta.env.VITE_APP_NAMESPACE}_${CacheEnum.LOGIN_USERNAME}`,
+  `${env.VITE_APP_NAMESPACE}_${CacheEnum.LOGIN_USERNAME}`,
   '',
 );
 
