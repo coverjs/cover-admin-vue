@@ -13,3 +13,5 @@ export const useAntdToken = createSharedComposable(() => {
     setToken,
   };
 });
+
+export default useAntdToken;
