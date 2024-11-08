@@ -1,7 +1,7 @@
 import { Api, type ApiConfig } from './api';
 import { interceptors } from '@/interceptors';
-import { createInterceptor } from 'onion-interceptor';
 import { defaultRequestConfig } from '@config';
+import { createInterceptor } from 'onion-interceptor';
 
 import objHash from 'object-hash';
 

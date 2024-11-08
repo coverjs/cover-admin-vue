@@ -1,10 +1,8 @@
 import type { CustomRequestOptions, RequestParams } from '@/types';
 
-import { defaultCustomRequestOptions } from '@config';
+import { defaultCustomRequestOptions as DEFAULT } from '@config';
 
-export function getReqOptItem(
+export const getReqOptItem = (
   params: RequestParams,
   key: keyof CustomRequestOptions,
-) {
-  return !!(params?.customOptions?.[key] ?? defaultCustomRequestOptions[key]);
-}
+) => !!(params?.customOptions?.[key] ?? DEFAULT[key]);

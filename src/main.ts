@@ -1,14 +1,18 @@
-import 'ant-design-vue/dist/reset.css';
-import './styles/index.scss';
 import { createApp } from 'vue';
 import { setupStore } from './store';
 import { setupLocale } from './locales';
 import { setupRouter } from './router';
+import { loadEnv } from './utils';
+
 import App from './App.vue';
 
+import 'ant-design-vue/dist/reset.css';
+import './styles/index.scss';
+
 function bootstrap() {
-  const env = import.meta.env.PROD ? 'prod' : 'dev';
-  const namespace = `${import.meta.env.VITE_APP_NAMESPACE}-${env}`;
+  const envVals = loadEnv();
+  const env = envVals.PROD ? 'prod' : 'dev';
+  const namespace = `${envVals}-${env}`;
 
   const app = createApp(App);
 
