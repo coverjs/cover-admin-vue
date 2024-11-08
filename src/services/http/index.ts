@@ -266,14 +266,14 @@ export class HttpClient<SecurityDataType = unknown> {
  * Coverjs后台服务端接口文档
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  api = {
+  upload = {
     /**
      * No description
      *
      * @tags 文件上传
      * @name UploadControllerUpload
      * @summary 单个文件上传接口示例
-     * @request POST:/api/upload/file
+     * @request POST:/upload/file
      * @secure
      */
     uploadControllerUpload: (
@@ -289,7 +289,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           data?: string;
         }
       >({
-        path: `/api/upload/file`,
+        path: `/upload/file`,
         method: 'POST',
         body: data,
         secure: true,
@@ -303,7 +303,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 文件上传
      * @name UploadControllerUploads
      * @summary 上传多个文件的示例
-     * @request POST:/api/upload/files
+     * @request POST:/upload/files
      * @secure
      */
     uploadControllerUploads: (
@@ -318,7 +318,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           data?: string;
         }
       >({
-        path: `/api/upload/files`,
+        path: `/upload/files`,
         method: 'POST',
         body: data,
         secure: true,
@@ -332,7 +332,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 文件上传
      * @name UploadControllerUploadMultipleFiles
      * @summary 根据字段名上传文件示例
-     * @request POST:/api/upload/fields
+     * @request POST:/upload/fields
      * @secure
      */
     uploadControllerUploadMultipleFiles: (
@@ -350,21 +350,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           data?: string;
         }
       >({
-        path: `/api/upload/fields`,
+        path: `/upload/fields`,
         method: 'POST',
         body: data,
         secure: true,
         type: ContentType.FormData,
         ...params,
       }),
-
+  };
+  auth = {
     /**
      * No description
      *
      * @tags 授权
      * @name AuthControllerLogin
      * @summary 用户登录
-     * @request POST:/api/auth
+     * @request POST:/auth
      */
     authControllerLogin: (data: AccountLoginDto, params: RequestParams = {}) =>
       this.request<
@@ -373,25 +374,26 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           data?: AccountLoginVo;
         }
       >({
-        path: `/api/auth`,
+        path: `/auth`,
         method: 'POST',
         body: data,
         type: ContentType.Json,
         ...params,
       }),
-
+  };
+  user = {
     /**
      * No description
      *
      * @tags 用户管理
      * @name UserControllerCreate
      * @summary 新建用户
-     * @request POST:/api/user
+     * @request POST:/user
      * @secure
      */
     userControllerCreate: (data: CreateUserDto, params: RequestParams = {}) =>
       this.request<any, CommonResponseVo>({
-        path: `/api/user`,
+        path: `/user`,
         method: 'POST',
         body: data,
         secure: true,
@@ -405,7 +407,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 用户管理
      * @name UserControllerFindList
      * @summary 获取用户列表
-     * @request GET:/api/user
+     * @request GET:/user
      * @secure
      */
     userControllerFindList: (
@@ -445,25 +447,26 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           };
         }
       >({
-        path: `/api/user`,
+        path: `/user`,
         method: 'GET',
         query: query,
         secure: true,
         ...params,
       }),
-
+  };
+  role = {
     /**
      * No description
      *
      * @tags 角色管理
      * @name RoleControllerCreate
      * @summary 新建角色
-     * @request POST:/api/role
+     * @request POST:/role
      * @secure
      */
     roleControllerCreate: (data: CreateRoleDto, params: RequestParams = {}) =>
       this.request<any, CommonResponseVo>({
-        path: `/api/role`,
+        path: `/role`,
         method: 'POST',
         body: data,
         secure: true,
@@ -477,7 +480,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags 角色管理
      * @name RoleControllerFineList
      * @summary 获取角色列表
-     * @request GET:/api/role
+     * @request GET:/role
      * @secure
      */
     roleControllerFineList: (
@@ -509,20 +512,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           };
         }
       >({
-        path: `/api/role`,
+        path: `/role`,
         method: 'GET',
         query: query,
         secure: true,
         ...params,
       }),
-
+  };
+  profile = {
     /**
      * No description
      *
      * @tags 个人信息
      * @name ProfileControllerFindUserInfo
      * @summary 获取个人信息
-     * @request GET:/api/profile
+     * @request GET:/profile
      * @secure
      */
     profileControllerFindUserInfo: (params: RequestParams = {}) =>
@@ -532,7 +536,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           data?: ProfileVo;
         }
       >({
-        path: `/api/profile`,
+        path: `/profile`,
         method: 'GET',
         secure: true,
         ...params,
