@@ -76,8 +76,8 @@ importers:
         specifier: ^4.0.0
         version: 4.0.1(vite@5.4.10(@types/node@22.9.0)(sass@1.80.6)(terser@5.36.0))(vue@3.5.12(typescript@5.6.3))
       cover-cli:
-        specifier: ^0.2.0
-        version: 0.2.0(typescript@5.6.3)
+        specifier: ^0.2.1
+        version: 0.2.1(typescript@5.6.3)
       dotenv-cli:
         specifier: ^7.4.2
         version: 7.4.2
@@ -1572,8 +1572,8 @@ packages:
       typescript:
         optional: true
 
-  cover-cli@0.2.0:
-    resolution: {integrity: sha512-eA/0ofuZ4hQWXTt39hdyJuBHspnM7BJYLr/PNIvks26+8A86UNoe+VlDKd3mKzjXTWXLatn4yyb2NjmZuA4ooA==}
+  cover-cli@0.2.1:
+    resolution: {integrity: sha512-/h+bFJuRbHiIZb5ULmtL5bScQL+iuRzFmZBmRd+b/kuEyaWr9XJ3yKi/Pzgs9ka+oSjwtcLBNoEjSfPdcVNP/w==}
     hasBin: true
     peerDependencies:
       typescript: ^5.4.4
@@ -4767,7 +4767,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.5.4
 
-  cover-cli@0.2.0(typescript@5.6.3):
+  cover-cli@0.2.1(typescript@5.6.3):
     dependencies:
       cac: 6.7.14
       swagger-typescript-api: 13.0.22

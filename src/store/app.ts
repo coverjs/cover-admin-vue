@@ -1,13 +1,8 @@
+import type { LayoutSetting, ThemeType } from '@/types';
+
 import { ThemeConfig } from 'ant-design-vue/es/config-provider/context';
 import { theme as antdTheme } from 'ant-design-vue/es';
 import { defaultLayoutSetting } from '@config';
-
-export type ThemeType = 'light' | 'dark';
-
-export interface LayoutSetting {
-  theme: ThemeType; // 主题
-  colorPrimary?: string;
-}
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);

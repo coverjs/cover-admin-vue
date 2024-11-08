@@ -1,4 +1,4 @@
-import { LayoutSetting } from '@/store/app';
+import type { LayoutSetting } from '@/types';
 
 export const defaultLayoutSetting: LayoutSetting = {
   theme: 'light',

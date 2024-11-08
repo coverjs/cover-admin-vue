@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import type { ThemeType } from '@/types';
+import { useAppStore } from '@/store';
+import { useAntdToken } from '@/hooks';
 import {
   CloseOutlined,
   SettingOutlined,
   CheckOutlined,
 } from '@ant-design/icons-vue';
-import { ThemeType, useAppStore } from '@/store';
-import { useAntdToken } from '@/hooks';
 
 import BlockCheckbox from './BlockCheckbox.vue';
 import SettingBlock from './SettingBlock.vue';

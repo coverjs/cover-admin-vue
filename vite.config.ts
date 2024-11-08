@@ -28,6 +28,7 @@ export default defineConfig(({ mode }) => {
       vueJsx(),
       vueRouter({
         exclude: ['**/components/*.vue'],
+        importMode: 'async',
       }),
       html({
         minify: true,
@@ -82,6 +83,28 @@ export default defineConfig(({ mode }) => {
           // // 将前缀api替换为空字符串
           rewrite: path =>
             path.replace(new RegExp(`^${env.VITE_GLOB_API_URL}`), ''),
+        },
+      },
+    },
+    build: {
+      chunkSizeWarningLimit: 600,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vue: [
+              'vue',
+              'vue-router',
+              'vue-i18n',
+              'pinia',
+              'pinia-plugin-persistedstate',
+              '@vueuse/core',
+            ],
+            onion: ['onion-interceptor', '@onion-interceptor/pipes'],
+            axios: ['axios'],
+            antd: ['ant-design-vue'],
+            antdIcon: ['@ant-design/icons-vue'],
+            other: ['nprogress', 'object-hash', 'dayjs'],
+          },
         },
       },
     },
