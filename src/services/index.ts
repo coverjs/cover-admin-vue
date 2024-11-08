@@ -1,7 +1,7 @@
 import type { ApiConfig } from './http';
 import { Api } from './http';
 import { interceptors } from '@/interceptors';
-import { OnionInterceptor } from 'onion-interceptor';
+import { createInterceptor } from 'onion-interceptor';
 
 import objHash from 'object-hash';
 import CustomRequestOptions from '@/services/types';
@@ -26,7 +26,7 @@ const DEFAULT_CONFIG = {
   } as CustomRequestOptions,
 } as const;
 
-const apis: Map<string, Api<unknown>['api']> = new Map();
+const apis: Map<string, Api<unknown>> = new Map();
 
 export function createApi(config: ApiConfig = DEFAULT_CONFIG) {
   const key = objHash(config);
@@ -35,13 +35,12 @@ export function createApi(config: ApiConfig = DEFAULT_CONFIG) {
     return apis.get(key)!;
   }
 
-  const http = new Api(config);
+  const api = new Api(config);
 
-  const onionInterceptor = new OnionInterceptor(http.instance);
-  onionInterceptor.use(...interceptors);
+  createInterceptor(api.instance).use(...interceptors);
 
-  apis.set(key, http.api);
-  return http.api;
+  apis.set(key, api);
+  return api;
 }
 
 export const api = createApi();
