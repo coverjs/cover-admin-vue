@@ -16,6 +16,13 @@ import autoImport from 'unplugin-auto-import/vite';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
   return {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler',
+        },
+      },
+    },
     plugins: [
       vue(),
       vueJsx(),
