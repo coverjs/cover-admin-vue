@@ -3,7 +3,7 @@ import { Button } from 'ant-design-vue';
 
 import useMessage from './useMessage';
 
-export function useRefreshPrompt(pollingInterval: number = 10000) {
+export function useRefreshPrompt(pollingInterval: number = 10 * 1000) {
   const { createNotify } = useMessage();
   const { t } = useI18n();
   const { updateServiceWorker } = useRegisterSW({

@@ -1,23 +1,20 @@
 import { ThemeConfig } from 'ant-design-vue/es/config-provider/context';
 import { theme as antdTheme } from 'ant-design-vue/es';
-import defaultSetting from '../../config/app-config.ts';
+import { defaultLayoutSetting } from '@config';
 
-export type ThemeType = 'light' | 'dark'
-
+export type ThemeType = 'light' | 'dark';
 
 export interface LayoutSetting {
   theme: ThemeType; // 主题
   colorPrimary?: string;
 }
 
-
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 
-
 export const useAppStore = defineStore('app', () => {
   const { darkAlgorithm, defaultAlgorithm } = antdTheme;
-  const layoutSetting = reactive<LayoutSetting>(defaultSetting);
+  const layoutSetting = reactive<LayoutSetting>(defaultLayoutSetting);
   const themeConfig: ThemeConfig = reactive<ThemeConfig>({
     algorithm: antdTheme.defaultAlgorithm,
     token: {
@@ -28,20 +25,17 @@ export const useAppStore = defineStore('app', () => {
 
   // 监听isDark的变化
   watch(isDark, () => {
-    if (isDark.value)
-      toggleTheme('dark');
+    if (isDark.value) toggleTheme('dark');
     else toggleTheme('light');
   });
 
   function toggleTheme(theme: ThemeType) {
-    if (layoutSetting.theme === theme)
-      return;
+    if (layoutSetting.theme === theme) return;
     layoutSetting.theme = theme;
     if (theme === 'light') {
       toggleDark(false);
       themeConfig.algorithm = [defaultAlgorithm];
-      if (themeConfig.token)
-        themeConfig.token.colorBgContainer = '#fff';
+      if (themeConfig.token) themeConfig.token.colorBgContainer = '#fff';
     } else if (theme === 'dark') {
       toggleDark(true);
       themeConfig.algorithm = [darkAlgorithm];

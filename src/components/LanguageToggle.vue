@@ -19,7 +19,7 @@ async function handleUpdate(value: LanguagesType) {
 
 <template>
   <a-dropdown placement="bottom" trigger="click">
-    <TranslationOutlined />
+    <translation-outlined />
     <template #overlay>
       <a-menu
         v-model:selectedKeys="selectedKeys"

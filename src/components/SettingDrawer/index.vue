@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { CloseOutlined, SettingOutlined } from '@ant-design/icons-vue';
-import { ThemeType, useAppStore } from '@/store/app.ts';
+import {
+  CloseOutlined,
+  SettingOutlined,
+  CheckOutlined,
+} from '@ant-design/icons-vue';
+import { ThemeType, useAppStore } from '@/store';
 import { useAntdToken } from '@/hooks';
 
 import BlockCheckbox from './BlockCheckbox.vue';
@@ -69,12 +73,12 @@ const { t } = useI18n();
     }"
     @click="handleVisible(!open)"
   >
-    <CloseOutlined
+    <check-outlined
       v-if="open"
       :class="`${prefixCls}-handle-icon${appLayoutSetting.theme === 'light' ? '' : '-dark'}`"
       style="font-size: 20px"
     />
-    <SettingOutlined
+    <setting-outlined
       v-else
       :class="`${prefixCls}-handle-icon${appLayoutSetting.theme === 'light' ? '' : '-dark'}`"
       style="font-size: 20px"
@@ -94,12 +98,12 @@ const { t } = useI18n();
         }"
         @click="handleVisible(!open)"
       >
-        <CloseOutlined
+        <close-outlined
           v-if="open"
           :class="`${prefixCls}-handle-icon${appLayoutSetting.theme === 'light' ? '' : '-dark'}`"
           style="font-size: 20px"
         />
-        <SettingOutlined
+        <setting-outlined
           v-else
           :class="`${prefixCls}-handle-icon${appLayoutSetting.theme === 'light' ? '' : '-dark'}`"
           style="font-size: 20px"
@@ -107,16 +111,16 @@ const { t } = useI18n();
       </div>
     </template>
     <div :class="`${prefixCls}-content`">
-      <SettingBlock :title="t('app.setting.pageStyle.pageStyle')">
+      <setting-block :title="t('app.setting.pageStyle.pageStyle')">
         <div :class="`${prefixCls}-block-checkbox`">
-          <BlockCheckbox
+          <block-checkbox
             :t="t"
             theme="light"
             :is-dark="false"
             :checked="theme === 'light'"
             @click="changeTheme('light')"
           />
-          <BlockCheckbox
+          <block-checkbox
             :t="t"
             theme="dark"
             :is-dark="true"
@@ -124,15 +128,15 @@ const { t } = useI18n();
             @click="changeTheme('dark')"
           />
         </div>
-      </SettingBlock>
-      <SettingBlock :title="t('app.setting.themeColor.themeColor')">
-        <BlockThemeColor
+      </setting-block>
+      <setting-block :title="t('app.setting.themeColor.themeColor')">
+        <block-theme-color
           :t="t"
           :color-list="colorList"
           :color="colorPrimary"
           :on-change="handleThemeColorChange"
         />
-      </SettingBlock>
+      </setting-block>
     </div>
   </a-drawer>
 </template>

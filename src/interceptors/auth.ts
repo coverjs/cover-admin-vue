@@ -2,7 +2,7 @@ import type { Middleware } from 'onion-interceptor';
 import type { RequestParams } from '@/types';
 
 import { getReqOptItem } from '@/utils';
-import { useUserStore } from '@/store/user';
+import { useUserStore } from '@/store';
 import { assign } from 'lodash-es';
 
 export const authInterceptor: Middleware = async function (ctx, next) {
@@ -15,7 +15,7 @@ export const authInterceptor: Middleware = async function (ctx, next) {
   const userStore = useUserStore();
   const token = userStore.getToken;
 
-  if (token) {
+  if (token && getReqOptItem(requestParams, 'withToken')) {
     ctx.cfg!.headers = assign(ctx.cfg!.headers, {
       Authorization: `Bearer ${token}`,
     });

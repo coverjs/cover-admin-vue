@@ -4,6 +4,7 @@ import { createRouter, createWebHashHistory } from 'vue-router/auto';
 import { DataLoaderPlugin } from 'unplugin-vue-router/data-loaders';
 import { routes } from 'vue-router/auto-routes';
 import { setupLayouts } from 'virtual:generated-layouts';
+import { setupRouterGuards } from './guard';
 
 export const router = createRouter({
   history: createWebHashHistory(),
@@ -12,4 +13,5 @@ export const router = createRouter({
 
 export function setupRouter(app: App) {
   app.use(DataLoaderPlugin, { router }).use(router);
+  setupRouterGuards(router);
 }

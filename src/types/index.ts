@@ -1,5 +1,5 @@
-import type { RequestParams } from '@/services/http';
+import type { RequestParams, ApiConfig } from '@/services/http';
 
-export { RequestParams };
+export { RequestParams, ApiConfig };
 
 export * from '@/services/types';

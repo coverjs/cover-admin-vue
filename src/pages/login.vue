@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUserStore } from '@/store/user';
+import { useUserStore } from '@/store';
 import { useMessage } from '@/hooks';
 
 defineOptions({ name: 'LoginPage' });
