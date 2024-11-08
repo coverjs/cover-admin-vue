@@ -10,9 +10,6 @@ import BlockThemeColor from './BlockThemeColor.vue';
 defineOptions({
   name: 'SettingDrawer',
 });
-const appStore = useAppStore();
-const { layoutSetting: appLayoutSetting } = storeToRefs(appStore);
-const open = ref(false);
 
 withDefaults(
   defineProps<{
@@ -38,6 +35,10 @@ withDefaults(
 );
 
 const emit = defineEmits(['settingChange']);
+
+const appStore = useAppStore();
+const { layoutSetting: appLayoutSetting } = storeToRefs(appStore);
+const open = ref(false);
 
 const prefixCls = 'cover-setting-drawer';
 
@@ -136,6 +137,4 @@ const { t } = useI18n();
   </a-drawer>
 </template>
 
-<style lang="scss">
-@import './index.scss';
-</style>
+<style lang="scss" src="./index.scss"></style>
