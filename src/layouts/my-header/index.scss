@@ -1,0 +1,13 @@
+.cover-layout-header {
+  position: relative;
+  padding-inline: 50px;
+  color: var(--text-color);
+  line-height: 64px;
+  background: var(--bg-color);
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+
+  &-container {
+    display: flex;
+    padding: 0 24px;
+  }
+}

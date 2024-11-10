@@ -18,8 +18,6 @@ export const useAppStore = defineStore('app', () => {
     },
   });
 
-  console.log('layoutSetting', layoutSetting);
-  console.log('isDark', isDark.value);
 
   isDark.value = false;
   if (isDark.value || layoutSetting.theme === 'dark')
