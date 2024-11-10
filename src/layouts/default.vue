@@ -33,6 +33,8 @@ function checkedException(meta: RouteMeta) {
   }
 }
 
+console.log('env::', env);
+
 watch(
   () => route.meta,
   val => {
@@ -100,7 +102,7 @@ const { layoutSetting } = storeToRefs(appStore);
     </a-layout>
   </a-layout>
   <setting-drawer
-    v-if="env.VITE_SHOW_SETTING === true"
+    v-if="env.VITE_SHOW_SETTING === 'true'"
     :theme="layoutSetting.theme"
     :color-primary="layoutSetting.colorPrimary"
     :layout-setting="layoutSetting"

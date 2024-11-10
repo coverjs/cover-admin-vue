@@ -11,12 +11,19 @@ export const useAppStore = defineStore('app', () => {
   const { darkAlgorithm, defaultAlgorithm } = antdTheme;
   const layoutSetting = reactive<LayoutSetting>(defaultLayoutSetting);
   const themeConfig: ThemeConfig = reactive<ThemeConfig>({
-    algorithm: antdTheme.defaultAlgorithm,
+    algorithm: layoutSetting.theme === 'light' ? [defaultAlgorithm] : [darkAlgorithm],
     token: {
-      colorBgContainer: '#fff',
       colorPrimary: layoutSetting.colorPrimary,
+      colorBgContainer: layoutSetting.theme === 'light' ? '#fff' : 'rgb(36, 37, 37)',
     },
   });
+
+  console.log('layoutSetting', layoutSetting);
+  console.log('isDark', isDark.value);
+
+  isDark.value = false;
+  if (isDark.value || layoutSetting.theme === 'dark')
+    toggleTheme('dark');
 
   // 监听isDark的变化
   watch(isDark, () => {
@@ -25,7 +32,7 @@ export const useAppStore = defineStore('app', () => {
   });
 
   function toggleTheme(theme: ThemeType) {
-    if (layoutSetting.theme === theme) return;
+    // if (layoutSetting.theme === theme) return;
     layoutSetting.theme = theme;
     if (theme === 'light') {
       toggleDark(false);

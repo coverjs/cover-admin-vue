@@ -9,11 +9,10 @@ defineOptions({ name: 'LoginLayout' });
 </template>
 
 <style lang="scss" scoped>
-$bgColor: #f0f2f5;
 .login-container {
   min-height: 100%;
   min-width: 100%;
   padding-top: 40px;
-  background-color: $bgColor;
+  background: var(--bg-color-container);
 }
 </style>
