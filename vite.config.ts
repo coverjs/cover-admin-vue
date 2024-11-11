@@ -4,7 +4,7 @@ import { VueRouterAutoImports } from 'unplugin-vue-router';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 import { createHtmlPlugin as html } from 'vite-plugin-html';
 import { resolve } from 'path';
-
+import tailwindcss from 'tailwindcss';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import components from 'unplugin-vue-components/vite';
@@ -21,6 +21,9 @@ export default defineConfig(({ mode }) => {
         scss: {
           api: 'modern-compiler',
         },
+      },
+      postcss: {
+        plugins: [tailwindcss],
       },
     },
     plugins: [

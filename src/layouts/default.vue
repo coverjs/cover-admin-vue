@@ -9,8 +9,9 @@ import {
 } from '@ant-design/icons-vue';
 import { useAppStore } from '@/store';
 import { loadEnv } from '@/utils';
-
+import LayoutHeader from './layout-header/index.vue';
 import SettingDrawer from '@/components/SettingDrawer/index.vue';
+import HeaderActions from './layout-header/HeaderActions.vue';
 
 defineOptions({ name: 'DefaultLayout' });
 
@@ -74,8 +75,8 @@ const { layoutSetting } = storeToRefs(appStore);
       </a-menu>
     </a-layout-sider>
     <a-layout>
-      <a-layout-header>
-        <layout-header>
+      <LayoutHeader>
+        <template #headerContent>
           <menu-unfold-outlined
             v-if="collapsed"
             class="trigger"
@@ -86,8 +87,11 @@ const { layoutSetting } = storeToRefs(appStore);
             class="trigger"
             @click="() => (collapsed = !collapsed)"
           />
-        </layout-header>
-      </a-layout-header>
+        </template>
+        <template #headerActions>
+          <header-actions />
+        </template>
+      </LayoutHeader>
       <a-layout-content
         :style="{
           margin: '24px 16px',
@@ -100,7 +104,7 @@ const { layoutSetting } = storeToRefs(appStore);
     </a-layout>
   </a-layout>
   <setting-drawer
-    v-if="env.VITE_SHOW_SETTING === true"
+    v-if="env.VITE_SHOW_SETTING === 'true'"
     :theme="layoutSetting.theme"
     :color-primary="layoutSetting.colorPrimary"
     :layout-setting="layoutSetting"
