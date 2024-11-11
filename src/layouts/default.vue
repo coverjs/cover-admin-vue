@@ -9,10 +9,9 @@ import {
 } from '@ant-design/icons-vue';
 import { useAppStore } from '@/store';
 import { loadEnv } from '@/utils';
-import MyHeader from './my-header/index.vue';
-
+import LayoutHeader from './layout-header/index.vue';
 import SettingDrawer from '@/components/SettingDrawer/index.vue';
-import HeaderActions from '@/layouts/my-header/HeaderActions.vue';
+import HeaderActions from './layout-header/HeaderActions.vue';
 
 defineOptions({ name: 'DefaultLayout' });
 
@@ -76,7 +75,7 @@ const { layoutSetting } = storeToRefs(appStore);
       </a-menu>
     </a-layout-sider>
     <a-layout>
-      <MyHeader>
+      <LayoutHeader>
         <template #headerContent>
           <menu-unfold-outlined
             v-if="collapsed"
@@ -92,7 +91,7 @@ const { layoutSetting } = storeToRefs(appStore);
         <template #headerActions>
           <header-actions />
         </template>
-      </MyHeader>
+      </LayoutHeader>
       <a-layout-content
         :style="{
           margin: '24px 16px',

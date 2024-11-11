@@ -3,7 +3,7 @@ import { useAppStore } from '@/store';
 import { CSSProperties } from 'vue';
 
 defineOptions({
-  name: 'MyHeader',
+  name: 'LayoutHeader',
 });
 
 
