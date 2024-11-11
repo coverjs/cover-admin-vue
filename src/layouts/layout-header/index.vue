@@ -12,7 +12,6 @@ const cls = computed(() => ({
   [prefixCls.value]: true,
 }));
 
-console.log('cls::', cls.value);
 
 const appStore = useAppStore();
 const { layoutSetting } = storeToRefs(appStore);
