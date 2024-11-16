@@ -8,7 +8,6 @@ const userStore = useUserStore();
 const { t } = useI18n();
 </script>
 
-
 <template>
   <a-menu mode="horizontal" :selectable="false" class="header-menu">
     <a-menu-item>
@@ -16,12 +15,12 @@ const { t } = useI18n();
     </a-menu-item>
     <a-menu-item>
       <a-dropdown placement="bottom" trigger="click">
-            <span class="user-info">
-              <a-avatar class="user-avatar" size="small">
-                <template #icon><user-outlined /></template>
-              </a-avatar>
-              {{ userStore.userInfo.nickname }}
-            </span>
+        <span class="user-info">
+          <a-avatar class="user-avatar" size="small">
+            <template #icon><user-outlined /></template>
+          </a-avatar>
+          {{ userStore.userInfo.nickname }}
+        </span>
         <template #overlay>
           <a-menu @click="userStore.logout" theme="dark">
             <a-menu-item>
@@ -33,7 +32,6 @@ const { t } = useI18n();
     </a-menu-item>
   </a-menu>
 </template>
-
 
 <style lang="scss" scoped>
 .header-menu {

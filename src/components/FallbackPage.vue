@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { PageEnum } from '@/enums';
-defineOptions({
-  name: 'FallbackPage',
-});
+
+defineOptions({ name: 'FallbackPage' });
 
 const props = defineProps<{
   status: 403 | 404 | 500;

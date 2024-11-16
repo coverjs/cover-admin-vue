@@ -5,9 +5,7 @@ import { TranslationOutlined } from '@ant-design/icons-vue';
 import { loadMessages } from '@/locales';
 import { i18n } from '@/locales/i18n';
 
-defineOptions({
-  name: 'LanguageToggle',
-});
+defineOptions({ name: 'LanguageToggle' });
 
 const selectedKeys = ref([i18n.global.locale.value]);
 
