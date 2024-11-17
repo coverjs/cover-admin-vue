@@ -12,9 +12,7 @@ import BlockCheckbox from './BlockCheckbox.vue';
 import SettingBlock from './SettingBlock.vue';
 import BlockThemeColor from './BlockThemeColor.vue';
 
-defineOptions({
-  name: 'SettingDrawer',
-});
+defineOptions({ name: 'SettingDrawer' });
 
 withDefaults(
   defineProps<{

@@ -1,6 +1,6 @@
 import type { AxiosRequestConfig } from 'axios';
 import { Middleware } from 'onion-interceptor';
-import type { RequestParams } from '@/types';
+import { getReqOptItem } from '@/utils';
 
 // 用于存储每个请求的标识和取消函数
 const pendingMap = new Map<string, AbortController>();
@@ -63,10 +63,9 @@ export class AxiosCanceler {
 
 export const cancelInterceptor: Middleware = async function (ctx, next) {
   const axiosCanceler = new AxiosCanceler();
-  const [requestParams] = ctx.args! as [RequestParams];
 
-  const ignoreCancelToken =
-    requestParams?.customOptions?.ignoreCancelToken ?? true;
+  const ignoreCancelToken = getReqOptItem(ctx, 'ignoreCancelToken');
+
   !ignoreCancelToken &&
     axiosCanceler.addPending(ctx.cfg! as AxiosRequestConfig);
 

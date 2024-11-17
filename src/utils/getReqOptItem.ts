@@ -1,8 +1,19 @@
 import type { CustomRequestOptions, RequestParams } from '@/types';
+import type { Context } from 'onion-interceptor';
 
 import { defaultCustomRequestOptions as DEFAULT } from '@config';
+import { get } from 'lodash-es';
 
-export const getReqOptItem = (
-  params: RequestParams,
+const _getVal = (
+  obj: Record<string, any> | void,
   key: keyof CustomRequestOptions,
-) => !!(params?.customOptions?.[key] ?? DEFAULT[key]);
+) => get(obj, ['customOptions', key]);
+export const getReqOptItem = (
+  ctx: Context,
+  key: keyof CustomRequestOptions,
+) => {
+  const [params] = ctx?.args as [RequestParams];
+  const config = ctx?.cfg;
+
+  return _getVal(params, key) ?? _getVal(config, key) ?? DEFAULT[key];
+};

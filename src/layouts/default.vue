@@ -3,8 +3,10 @@ import type { RouteMeta } from 'vue-router';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import { useAppStore, useUserStore } from '@/store';
 import { loadEnv } from '@/utils';
-import LayoutHeader from './layout-header/index.vue';
+
 import SettingDrawer from '@/components/SettingDrawer/index.vue';
+import LayoutHeader from '@/components/LayoutHeader/index.vue';
+import HeaderActions from '@/components/HeaderActions.vue';
 import HeaderActions from './layout-header/HeaderActions.vue';
 import SubMenu from '@/components/SubMenu/sub-menu.vue';
 

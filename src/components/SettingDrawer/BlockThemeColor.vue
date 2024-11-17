@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { CheckOutlined } from '@ant-design/icons-vue';
 
-defineOptions({
-  name: 'BlockThemeColor',
-});
+defineOptions({ name: 'BlockThemeColor' });
 
 defineProps<{
   colorList: { key: string; color: string }[];
