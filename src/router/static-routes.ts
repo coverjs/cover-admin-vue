@@ -5,9 +5,9 @@ const Layout = () => import('@/layouts/default.vue')
 
 export const rootRoute: RouteRecordRaw = {
   path: '/',
-  name: 'index',
+  name: '/',
   component: Layout,
-  redirect: '/system/menu',
+  redirect: '/index',
   children: [],
 };
 
@@ -25,6 +25,6 @@ export default [
     meta: {
       title: '找不到页面',
     },
-    component: () => import('@/pages/exception/error.vue'),
+    component: () => import('@/pages/[...path].vue'),
   },
 ] as RouteRecordRaw[];

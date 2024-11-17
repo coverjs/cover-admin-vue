@@ -2,8 +2,8 @@ import { RouteRecordRaw } from 'vue-router';
 import { MenuData, MenuDataItem } from '@/router/types.ts';
 
 export const basicRouteMap = {
-  // 空页面
-  ComponentError: () => import('@/pages/exception/error.vue'),
+  // 空页面 跳转 404
+  ComponentError: () => import('@/pages/[...path].vue'),
 };
 
 const routerModules = import.meta.glob([
@@ -27,36 +27,41 @@ export function getRouterModule(path?: string): any {
   // 组装数据格式
   const fullPath = `/src/pages/${path}.vue`;
   const fullPathIndex = `/src/pages/${path}/index.vue`;
-  if (fullPathIndex in routerModules){
+
+  if (fullPathIndex in routerModules) {
     return checkEager(routerModules[fullPathIndex]);
   }
+
   return checkEager(routerModules[fullPath]);
 }
 
-export function formatRoute(menu: MenuDataItem) {
+export function formatRoute(menu: MenuDataItem, parent?: MenuDataItem) {
   return {
     ...menu,
     component: getRouterModule(menu.path!),
     meta: {
       id: menu?.id,
       title: menu?.name,
+      originPath: parent?.path,
     },
   } as RouteRecordRaw;
 }
 
 
-export function genRoutes(menus: MenuDataItem[]) {
+export function genRoutes(menus: MenuDataItem[], parent?: MenuDataItem): RouteRecordRaw[] {
   const routesData: RouteRecordRaw[] = [];
   menus.forEach((menu) => {
-    const item = formatRoute(menu);
+    const item = formatRoute(menu, parent);
     item.children = [];
     if (menu.children && menu.children.length) {
-      item.children = genRoutes(menu.children);
+      item.children = genRoutes(menu.children, menu);
       if (menu.children?.length > 0 && menu.children[0].type === 'ACTION') {
         item.meta!['actions'] = menu.children;
         delete item.children;
       }
     }
+    if (item.children?.length === 0)
+      delete item.children;
     routesData.push(item);
   });
   return routesData;
@@ -69,6 +74,7 @@ export function genRoutes(menus: MenuDataItem[]) {
 export function generateMenuAndRoutes(treeMenuData: any) {
   // 转变成路由
   const routeData = genRoutes(treeMenuData);
+
   const menuData = routeData as unknown as MenuData;
 
   return {

@@ -4,7 +4,10 @@ import { MenuDataItem } from '@/router/types.ts';
 defineOptions({
   name: 'SubMenu',
 });
-defineProps<{ item: MenuDataItem, link?: boolean }>();
+withDefaults(defineProps<{ item: MenuDataItem, link?: boolean }>(), {
+  link: true,
+});
+
 
 </script>
 
@@ -19,18 +22,20 @@ defineProps<{ item: MenuDataItem, link?: boolean }>();
           <sub-menu :key="menu.path" :item="menu" />
         </template>
         <template v-else>
-          <a-menu-item :key="menu.path" v-if="menu.type === 'MENU'" @click="$router.push(menu.path)">
-            {{ menu.name }}
+          <a-menu-item :key="menu.path" v-if="menu.type === 'MENU'">
+            <RouterLink v-if="link" :to="menu.path">
+              {{ menu.name }}
+            </RouterLink>
           </a-menu-item>
         </template>
       </template>
     </a-sub-menu>
   </template>
   <template v-else>
-    <a-menu-item :key="item.path" @click="$router.push(item.path)">
-      <template>
+    <a-menu-item :key="item.path">
+      <RouterLink v-if="link" :to="item.path">
         {{ item.name }}
-      </template>
+      </RouterLink>
     </a-menu-item>
   </template>
 </template>

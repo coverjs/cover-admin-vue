@@ -5,5 +5,6 @@ declare module 'vue-router'{
     title?: string
     id?: string | number
     actions?: any[]
+    originPath?: string
   }
 }

@@ -10,7 +10,8 @@ import SubMenu from '@/components/SubMenu/sub-menu.vue';
 
 defineOptions({ name: 'DefaultLayout' });
 
-const selectedKeys = ref<string[]>(['1']);
+const selectedKeys = ref<string[]>([]);
+const openKeys = ref<string[]>([]);
 const collapsed = ref<boolean>(false);
 
 const exception = ref(false);
@@ -39,6 +40,17 @@ watch(
 const appStore = useAppStore();
 const userStore = useUserStore();
 const { layoutSetting } = storeToRefs(appStore);
+
+onMounted(() => {
+  selectedKeys.value = [route.path];
+  const originPath = route.meta?.originPath;
+  openKeys.value = originPath ? [originPath] : [];
+});
+
+function handleSelectedKeys(keys: string[]) {
+  selectedKeys.value = keys;
+}
+
 </script>
 
 <template>
@@ -54,7 +66,8 @@ const { layoutSetting } = storeToRefs(appStore);
           {{ env.VITE_APP_TITLE ?? 'Cover Admin' }}
         </span>
       </div>
-      <a-menu v-model:selectedKeys="selectedKeys" mode="inline">
+      <a-menu v-model:openKeys="openKeys" :selectedKeys="selectedKeys" mode="inline"
+              @update:selected-keys="handleSelectedKeys">
         <template v-for="menu in userStore.menuData" :key="menu.path">
           <sub-menu :item="menu" />
         </template>

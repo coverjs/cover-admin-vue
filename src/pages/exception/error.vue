@@ -1,7 +1,0 @@
-<script setup lang="ts">
-
-</script>
-
-<template>
-  <a-result status="404" title="找不到页面" sub-title="动态配置页面不存在，请检查配置项" />
-</template>
