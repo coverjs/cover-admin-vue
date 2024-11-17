@@ -1,5 +1,5 @@
 import type { Context, Middleware } from 'onion-interceptor';
-import type { RequestParams, ErrorMessageMode } from '@/types';
+import type { ErrorMessageMode } from '@/types';
 import { AxiosError } from 'axios';
 
 import { tap } from '@onion-interceptor/pipes';
@@ -40,13 +40,15 @@ statusHandlers.set(
   (msg?: string) => msg || t('fallback.http.internalServerError'),
 );
 
+/**
+ * 错误拦截器中间件
+ *
+ * @param ctx 上下文对象，包含请求和响应信息
+ * @param next 中间件执行函数
+ */
 export const errorInterceptor: Middleware = async function (ctx, next) {
-  const [requestParams] = ctx.args! as [RequestParams];
-
   // 禁用error拦截器
-  if (!getReqOptItem(requestParams, 'errorInterceptorEnabled')) {
-    return await next();
-  }
+  if (!getReqOptItem(ctx, 'errorInterceptorEnabled')) return await next();
 
   await next(
     tap(
@@ -60,14 +62,10 @@ export const errorInterceptor: Middleware = async function (ctx, next) {
         if (isCancel(err)) return err;
 
         try {
-          const errorMessageMode: ErrorMessageMode =
-            requestParams.customOptions?.errorMessageMode ??
-            ctx!.cfg?.customOptions.errorMessageMode;
-
           const userStore = useUserStore();
           logout = () => userStore?.logout();
 
-          return handleError(ctx, err as Error, errorMessageMode);
+          return handleError(ctx, err as Error);
         } catch (_e) {
           return _e;
         }
@@ -76,12 +74,16 @@ export const errorInterceptor: Middleware = async function (ctx, next) {
   );
 };
 
-function handleError(
-  ctx: Context,
-  error: AxiosError | Error,
-  errorMessageMode: ErrorMessageMode,
-) {
+/**
+ * 处理请求错误
+ *
+ * @param ctx 上下文对象，包含请求和响应信息
+ * @param error 错误对象，可能是AxiosError或普通Error类型
+ * @returns 返回错误对象
+ */
+function handleError(ctx: Context, error: Error) {
   const code = get(error, 'code');
+  const errorMessageMode = getReqOptItem(ctx, 'errorMessageMode');
 
   if (isAxiosError(error) && isEqual(code, AxiosError.ECONNABORTED)) {
     callMsg(t('fallback.http.requestTimeout'), errorMessageMode);
@@ -104,6 +106,13 @@ function handleError(
   return error;
 }
 
+/**
+ * 检查并处理HTTP请求状态
+ *
+ * @param status HTTP状态码，用于判断请求的结果
+ * @param msg 伴随状态码一起返回的消息，可能包含具体的错误信息
+ * @param errorMessageMode 错误消息的显示模式，默认为'message'，支持不同的显示方式
+ */
 function checkStatus(
   status: number,
   msg: string,
@@ -119,6 +128,12 @@ function checkStatus(
   );
 }
 
+/**
+ * 根据错误消息和错误消息模式，显示错误信息
+ *
+ * @param errMsg 错误消息文本，用于在界面上展示错误信息
+ * @param errorMessageMode 错误消息模式，决定使用哪种方式展示错误信息，可选值为'modal'或'message'
+ */
 function callMsg(errMsg: string, errorMessageMode: ErrorMessageMode) {
   const { createMessage, createErrorModal } = useMessage();
 
