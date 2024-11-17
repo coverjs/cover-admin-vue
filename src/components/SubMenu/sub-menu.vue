@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MenuDataItem } from '@/store';
+import { MenuDataItem } from '@/router/types.ts';
 
 defineOptions({
   name: 'SubMenu',

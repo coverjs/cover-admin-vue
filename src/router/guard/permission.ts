@@ -19,10 +19,11 @@ export function createPermissionGuard(router: Router) {
       if (isEmpty(userStore.userInfo) && !allowList.includes(to.path)) {
         await userStore.getUserInfoAction();
         const currentRoute = await userStore.generateDynamicRoutes();
-
-        console.log(currentRoute);
-        router.addRoute( currentRoute);
-        next({ ...to, replace: true });
+        router.addRoute(currentRoute);
+        next({
+          ...to,
+          replace: true,
+        })
         return;
       }
 

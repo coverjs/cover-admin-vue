@@ -22,7 +22,6 @@ export default [
   },
   {
     path: '/:pathMatch(.*)*',
-    name: 'error',
     meta: {
       title: '找不到页面',
     },
