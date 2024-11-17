@@ -27,6 +27,7 @@ declare module 'vue' {
     AResult: typeof import('ant-design-vue/es')['Result']
     ARow: typeof import('ant-design-vue/es')['Row']
     ASpace: typeof import('ant-design-vue/es')['Space']
+    ASubMenu: typeof import('ant-design-vue/es')['SubMenu']
     ATooltip: typeof import('ant-design-vue/es')['Tooltip']
     ATypography: typeof import('ant-design-vue/es')['Typography']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
@@ -40,5 +41,6 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SettingBlock: typeof import('./src/components/SettingDrawer/SettingBlock.vue')['default']
     SettingDrawer: typeof import('./src/components/SettingDrawer/index.vue')['default']
+    SubMenu: typeof import('./src/components/SubMenu/sub-menu.vue')['default']
   }
 }

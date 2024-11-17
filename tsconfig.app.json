@@ -39,6 +39,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
+    "src/**/*.d.ts",
     "config/*.ts",
     "./typed-router.d.ts",
     "./auto-imports.d.ts"

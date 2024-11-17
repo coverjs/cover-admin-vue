@@ -27,21 +27,6 @@ export interface AccountLoginDto {
   password: string;
 }
 
-export interface CreateUserDto {
-  /** 用户账号 */
-  username: string;
-  /** 密码 */
-  password: string;
-  /** 昵称 */
-  nickname: string;
-  /** 邮箱 */
-  email: string;
-  /** 角色id */
-  roleId: number;
-  /** 是否启用 */
-  enable: boolean;
-}
-
 export interface RoleVo {
   /**
    * 角色id
@@ -62,6 +47,38 @@ export interface RoleVo {
   createdAt: string;
   /** 更新日期 */
   updatedAt: string;
+}
+
+export interface ProfileVo {
+  /** 账号 */
+  username: string;
+  /** 昵称 */
+  nickname: string;
+  /** 邮箱 */
+  email: string;
+  /** 角色 */
+  role: RoleVo;
+  /** 是否启用 */
+  enable: boolean;
+  /** 创建时间 */
+  createdAt: string;
+  /** 更新日期 */
+  updatedAt: string;
+}
+
+export interface CreateUserDto {
+  /** 用户账号 */
+  username: string;
+  /** 密码 */
+  password: string;
+  /** 昵称 */
+  nickname: string;
+  /** 邮箱 */
+  email: string;
+  /** 角色id */
+  roleId: number;
+  /** 是否启用 */
+  enable: boolean;
 }
 
 export interface UserInfoVo {
@@ -86,22 +103,76 @@ export interface CreateRoleDto {
   name: string;
   /** 角色描述 */
   description: string;
+  /** 为该角色赋予权限的菜单id列表 */
+  menuIds: number[];
 }
 
-export interface ProfileVo {
-  /** 账号 */
-  username: string;
-  /** 昵称 */
-  nickname: string;
-  /** 邮箱 */
-  email: string;
-  /** 角色 */
-  role: RoleVo;
-  /** 是否启用 */
-  enable: boolean;
+export interface CreateMenuDto {
+  /**
+   * 名称
+   * @example "首页"
+   */
+  name: string;
+  /**
+   * 权限码
+   * @example "home"
+   */
+  code: string;
+  /**
+   * 父级菜单id
+   * @example 1
+   */
+  parentId?: number;
+  /**
+   * 排序
+   * @example 1
+   */
+  sort: number;
+  /**
+   * 页面路径
+   * @example "/home"
+   */
+  path?: string;
+  /**
+   * 节点类型, "DIRECTORY": 目录; "MENU": 菜单; "ACTION": 操作
+   * @default "DIRECTORY"
+   * @example "DIRECTORY"
+   */
+  type: 'DIRECTORY' | 'MENU' | 'ACTION';
+}
+
+export interface MenuVo {
+  /**
+   * id
+   * @example 1
+   */
+  id: number;
+  /**
+   * 名称
+   * @example "首页"
+   */
+  name: string;
+  /** 权限编码 */
+  code: string;
+  /**
+   * 父级id
+   * @example 1
+   */
+  parentId?: number;
+  /** 子菜单 */
+  children?: MenuVo[];
+  /**
+   * 排序
+   * @example 1
+   */
+  sort: number;
+  /** 页面路径 */
+  path: string;
+  /** 节点类型 */
+  type: 'DIRECTORY' | 'MENU' | 'ACTION';
   /** 创建时间 */
   createdAt: string;
-  /** 更新日期 */
+  /** 更新时间 */
   updatedAt: string;
 }
 
@@ -266,6 +337,230 @@ export class HttpClient<SecurityDataType = unknown> {
  * Coverjs后台服务端接口文档
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  auth = {
+    /**
+     * No description
+     *
+     * @tags 授权
+     * @name AuthControllerLogin
+     * @summary 用户登录
+     * @request POST:/auth
+     */
+    authControllerLogin: (data: AccountLoginDto, params: RequestParams = {}) =>
+      this.request<
+        any,
+        CommonResponseVo & {
+          data?: AccountLoginVo;
+        }
+      >({
+        path: `/auth`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+  };
+  profile = {
+    /**
+     * No description
+     *
+     * @tags 个人信息
+     * @name ProfileControllerFindUserInfo
+     * @summary 获取个人信息
+     * @request GET:/profile
+     * @secure
+     */
+    profileControllerFindUserInfo: (params: RequestParams = {}) =>
+      this.request<
+        any,
+        CommonResponseVo & {
+          data?: ProfileVo;
+        }
+      >({
+        path: `/profile`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
+  };
+  system = {
+    /**
+     * No description
+     *
+     * @tags 系统管理-用户管理
+     * @name UserControllerCreate
+     * @summary 新建用户
+     * @request POST:/system/user
+     * @secure
+     */
+    userControllerCreate: (data: CreateUserDto, params: RequestParams = {}) =>
+      this.request<any, CommonResponseVo>({
+        path: `/system/user`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 系统管理-用户管理
+     * @name UserControllerFindList
+     * @summary 获取用户列表
+     * @request GET:/system/user
+     * @secure
+     */
+    userControllerFindList: (
+      query?: {
+        /**
+         * 当前页码
+         * @min 1
+         * @example 1
+         */
+        pageNum?: number;
+        /**
+         * 每页条数
+         * @min 1
+         * @example 10
+         */
+        pageSize?: number;
+        /** 用户账号 */
+        username?: string;
+        /** 昵称 */
+        nickname?: string;
+        /** 邮箱 */
+        email?: string;
+        /** 角色id */
+        roleId?: number;
+        /** 是否启用 */
+        enable?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        any,
+        CommonResponseVo & {
+          data?: {
+            list: UserInfoVo[];
+            /** @default 0 */
+            total: number;
+          };
+        }
+      >({
+        path: `/system/user`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 系统管理-角色管理
+     * @name RoleControllerCreate
+     * @summary 新建角色
+     * @request POST:/system/role
+     * @secure
+     */
+    roleControllerCreate: (data: CreateRoleDto, params: RequestParams = {}) =>
+      this.request<any, CommonResponseVo>({
+        path: `/system/role`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 系统管理-角色管理
+     * @name RoleControllerFineList
+     * @summary 获取角色列表
+     * @request GET:/system/role
+     * @secure
+     */
+    roleControllerFineList: (
+      query?: {
+        /**
+         * 当前页码
+         * @min 1
+         * @example 1
+         */
+        pageNum?: number;
+        /**
+         * 每页条数
+         * @min 1
+         * @example 10
+         */
+        pageSize?: number;
+        /** 角色名 */
+        name?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        any,
+        CommonResponseVo & {
+          data?: {
+            list: RoleVo[];
+            /** @default 0 */
+            total: number;
+          };
+        }
+      >({
+        path: `/system/role`,
+        method: 'GET',
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description 创建菜单 [ 权限码：system:menu:add ]
+     *
+     * @tags 系统管理-菜单管理
+     * @name MenuControllerCreate
+     * @summary 新建菜单
+     * @request POST:/system/menu
+     * @secure
+     */
+    menuControllerCreate: (data: CreateMenuDto, params: RequestParams = {}) =>
+      this.request<any, CommonResponseVo>({
+        path: `/system/menu`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description 获取菜单列表数据 [ 权限码：system:menu:list ]
+     *
+     * @tags 系统管理-菜单管理
+     * @name MenuControllerFindList
+     * @summary 查询菜单列表
+     * @request GET:/system/menu
+     * @secure
+     */
+    menuControllerFindList: (params: RequestParams = {}) =>
+      this.request<
+        any,
+        CommonResponseVo & {
+          data?: MenuVo[];
+        }
+      >({
+        path: `/system/menu`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
+  };
   upload = {
     /**
      * No description
@@ -355,190 +650,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.FormData,
-        ...params,
-      }),
-  };
-  auth = {
-    /**
-     * No description
-     *
-     * @tags 授权
-     * @name AuthControllerLogin
-     * @summary 用户登录
-     * @request POST:/auth
-     */
-    authControllerLogin: (data: AccountLoginDto, params: RequestParams = {}) =>
-      this.request<
-        any,
-        CommonResponseVo & {
-          data?: AccountLoginVo;
-        }
-      >({
-        path: `/auth`,
-        method: 'POST',
-        body: data,
-        type: ContentType.Json,
-        ...params,
-      }),
-  };
-  user = {
-    /**
-     * No description
-     *
-     * @tags 用户管理
-     * @name UserControllerCreate
-     * @summary 新建用户
-     * @request POST:/user
-     * @secure
-     */
-    userControllerCreate: (data: CreateUserDto, params: RequestParams = {}) =>
-      this.request<any, CommonResponseVo>({
-        path: `/user`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags 用户管理
-     * @name UserControllerFindList
-     * @summary 获取用户列表
-     * @request GET:/user
-     * @secure
-     */
-    userControllerFindList: (
-      query?: {
-        /**
-         * 当前页码
-         * @min 1
-         * @example 1
-         */
-        pageNum?: number;
-        /**
-         * 每页条数
-         * @min 1
-         * @example 10
-         */
-        pageSize?: number;
-        /** 用户账号 */
-        username?: string;
-        /** 昵称 */
-        nickname?: string;
-        /** 邮箱 */
-        email?: string;
-        /** 角色id */
-        roleId?: number;
-        /** 是否启用 */
-        enable?: boolean;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<
-        any,
-        CommonResponseVo & {
-          data?: {
-            list: UserInfoVo[];
-            /** @default 0 */
-            total: number;
-          };
-        }
-      >({
-        path: `/user`,
-        method: 'GET',
-        query: query,
-        secure: true,
-        ...params,
-      }),
-  };
-  role = {
-    /**
-     * No description
-     *
-     * @tags 角色管理
-     * @name RoleControllerCreate
-     * @summary 新建角色
-     * @request POST:/role
-     * @secure
-     */
-    roleControllerCreate: (data: CreateRoleDto, params: RequestParams = {}) =>
-      this.request<any, CommonResponseVo>({
-        path: `/role`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags 角色管理
-     * @name RoleControllerFineList
-     * @summary 获取角色列表
-     * @request GET:/role
-     * @secure
-     */
-    roleControllerFineList: (
-      query?: {
-        /**
-         * 当前页码
-         * @min 1
-         * @example 1
-         */
-        pageNum?: number;
-        /**
-         * 每页条数
-         * @min 1
-         * @example 10
-         */
-        pageSize?: number;
-        /** 角色名 */
-        name?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<
-        any,
-        CommonResponseVo & {
-          data?: {
-            list: RoleVo[];
-            /** @default 0 */
-            total: number;
-          };
-        }
-      >({
-        path: `/role`,
-        method: 'GET',
-        query: query,
-        secure: true,
-        ...params,
-      }),
-  };
-  profile = {
-    /**
-     * No description
-     *
-     * @tags 个人信息
-     * @name ProfileControllerFindUserInfo
-     * @summary 获取个人信息
-     * @request GET:/profile
-     * @secure
-     */
-    profileControllerFindUserInfo: (params: RequestParams = {}) =>
-      this.request<
-        any,
-        CommonResponseVo & {
-          data?: ProfileVo;
-        }
-      >({
-        path: `/profile`,
-        method: 'GET',
-        secure: true,
         ...params,
       }),
   };

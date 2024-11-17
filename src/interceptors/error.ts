@@ -47,7 +47,13 @@ export const errorInterceptor: Middleware = async function (ctx, next) {
       ctx => {
         const code = ctx.res?.data.code;
         if (code === 0) return;
-
+        if (!isNil(code) && code >= 400 && code <= 500) {
+          checkStatus(
+            code,
+            ctx.res?.data?.msg ?? ctx.res?.statusText,
+            errorMessageMode,
+          );
+        }
         const errMsg = ctx.res?.data.msg;
         callMsg(errMsg, errorMessageMode);
         throw new Error(errMsg ?? ctx.res!.statusText);

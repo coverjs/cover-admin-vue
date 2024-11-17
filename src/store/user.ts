@@ -1,19 +1,19 @@
-import { api, type AccountLoginDto } from '@/services';
+import { type AccountLoginDto, api } from '@/services';
 import { router } from '@/router';
 import { PageEnum } from '@/enums';
 import { store } from '.';
 import { each, get, set } from 'lodash-es';
+import { rootRoute } from '@/router/static-routes.ts';
+import { generateMenuAndRoutes } from '@/router/dynamic-routes.ts';
+import { MenuData } from '@/router/types.ts';
 
 export const useUserStore = defineStore(
   'user',
   () => {
     const token = ref<string | void>('');
-    const userInfo = reactive({
-      username: '',
-      nickname: '',
-      email: '',
-      role: {},
-    });
+    const userInfo = reactive({});
+    const routerData = shallowRef();
+    const menuData = shallowRef<MenuData>([]);
 
     const getToken = computed(() => token.value);
 
@@ -43,6 +43,8 @@ export const useUserStore = defineStore(
       if (!getToken.value) return;
 
       await getUserInfoAction();
+      const routes = await generateDynamicRoutes();
+      router.addRoute(routes);
 
       goHome && (await router.replace(PageEnum.BASE_HOME));
     }
@@ -59,6 +61,21 @@ export const useUserStore = defineStore(
       return userInfo;
     }
 
+    async function getMenuData() {
+      const { data: res } = await api.system.menuControllerFindList();
+      return generateMenuAndRoutes(res.data);
+    }
+
+    const generateDynamicRoutes = async () => {
+      const { menuData: treeMenuData, routeData: treeRouterData } = await getMenuData();
+      menuData.value = treeMenuData;
+      routerData.value = {
+        ...rootRoute,
+        children: treeRouterData,
+      };
+      return routerData.value;
+    };
+
     return {
       token,
       userInfo,
@@ -68,6 +85,9 @@ export const useUserStore = defineStore(
       logout,
       afterLoginAction,
       getUserInfoAction,
+      menuData,
+      routerData,
+      generateDynamicRoutes,
     };
   },
   { persist: { paths: ['token'] } },

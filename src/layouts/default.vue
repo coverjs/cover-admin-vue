@@ -1,17 +1,12 @@
 <script lang="ts" setup>
 import type { RouteMeta } from 'vue-router';
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from '@ant-design/icons-vue';
-import { useAppStore } from '@/store';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
+import { useAppStore, useUserStore } from '@/store';
 import { loadEnv } from '@/utils';
 import LayoutHeader from './layout-header/index.vue';
 import SettingDrawer from '@/components/SettingDrawer/index.vue';
 import HeaderActions from './layout-header/HeaderActions.vue';
+import SubMenu from '@/components/SubMenu/sub-menu.vue';
 
 defineOptions({ name: 'DefaultLayout' });
 
@@ -41,8 +36,8 @@ watch(
   },
   { immediate: true },
 );
-
 const appStore = useAppStore();
+const userStore = useUserStore();
 const { layoutSetting } = storeToRefs(appStore);
 </script>
 
@@ -60,18 +55,9 @@ const { layoutSetting } = storeToRefs(appStore);
         </span>
       </div>
       <a-menu v-model:selectedKeys="selectedKeys" mode="inline">
-        <a-menu-item key="1">
-          <user-outlined />
-          <span>nav 1</span>
-        </a-menu-item>
-        <a-menu-item key="2">
-          <video-camera-outlined />
-          <span>nav 2</span>
-        </a-menu-item>
-        <a-menu-item key="3">
-          <upload-outlined />
-          <span>nav 3</span>
-        </a-menu-item>
+        <template v-for="menu in userStore.menuData" :key="menu.path">
+          <sub-menu :item="menu" />
+        </template>
       </a-menu>
     </a-layout-sider>
     <a-layout>
