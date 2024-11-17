@@ -3,8 +3,8 @@ import { router } from '@/router';
 import { PageEnum } from '@/enums';
 import { store } from '.';
 import { each, get, set } from 'lodash-es';
-import { rootRoute } from '@/router/static-routes.ts';
-import { generateMenuAndRoutes } from '@/router/dynamic-routes.ts';
+import { rootRoute } from '@/router/staticRoutes.ts';
+import { generateMenuAndRoutes } from '@/router/dynamicRoutes.ts';
 import { MenuData } from '@/router/types.ts';
 
 export const useUserStore = defineStore(

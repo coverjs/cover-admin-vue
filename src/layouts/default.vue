@@ -7,8 +7,7 @@ import { loadEnv } from '@/utils';
 import SettingDrawer from '@/components/SettingDrawer/index.vue';
 import LayoutHeader from '@/components/LayoutHeader/index.vue';
 import HeaderActions from '@/components/HeaderActions.vue';
-import HeaderActions from './layout-header/HeaderActions.vue';
-import SubMenu from '@/components/SubMenu/sub-menu.vue';
+import SubMenu from '@/components/SubMenu/index.vue';
 
 defineOptions({ name: 'DefaultLayout' });
 
@@ -71,7 +70,7 @@ function handleSelectedKeys(keys: string[]) {
       <a-menu v-model:openKeys="openKeys" :selectedKeys="selectedKeys" mode="inline"
               @update:selected-keys="handleSelectedKeys">
         <template v-for="menu in userStore.menuData" :key="menu.path">
-          <sub-menu :item="menu" />
+          <SubMenu :item="menu" />
         </template>
       </a-menu>
     </a-layout-sider>

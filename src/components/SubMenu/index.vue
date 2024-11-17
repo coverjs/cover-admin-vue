@@ -19,7 +19,7 @@ withDefaults(defineProps<{ item: MenuDataItem, link?: boolean }>(), {
       </template>
       <template v-for="menu in item.children">
         <template v-if="menu.children">
-          <sub-menu :key="menu.path" :item="menu" />
+          <SubMenu :key="menu.path" :item="menu" />
         </template>
         <template v-else>
           <a-menu-item :key="menu.path" v-if="menu.type === 'MENU'">

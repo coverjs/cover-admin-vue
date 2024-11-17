@@ -1,7 +1,7 @@
 import type { App } from 'vue';
 
 import { createRouter, createWebHashHistory } from 'vue-router/auto';
-import  staticRoutes from './static-routes.ts';
+import  staticRoutes from './staticRoutes.ts';
 import { setupRouterGuards } from './guard';
 
 export const router = createRouter({
