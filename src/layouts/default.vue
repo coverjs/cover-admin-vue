@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { RouteMeta } from 'vue-router';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
-import { useAppStore, useUserStore } from '@/store';
+import { useAppStore } from '@/store';
 import { loadEnv } from '@/utils';
 
 import SettingDrawer from '@/components/SettingDrawer/index.vue';
@@ -39,7 +39,6 @@ watch(
   { immediate: true },
 );
 const appStore = useAppStore();
-const userStore = useUserStore();
 const { layoutSetting } = storeToRefs(appStore);
 
 onMounted(() => {
@@ -69,13 +68,13 @@ function handleSelectedKeys(keys: string[]) {
       </div>
       <a-menu v-model:openKeys="openKeys" :selectedKeys="selectedKeys" mode="inline"
               @update:selected-keys="handleSelectedKeys">
-        <template v-for="menu in userStore.menuData" :key="menu.path">
-          <SubMenu :item="menu" />
+        <template v-for="menu in appStore.menuData" :key="menu.path">
+          <sub-menu :item="menu" />
         </template>
       </a-menu>
     </a-layout-sider>
     <a-layout>
-      <LayoutHeader>
+      <layout-header>
         <template #headerContent>
           <menu-unfold-outlined
             v-if="collapsed"
@@ -91,7 +90,7 @@ function handleSelectedKeys(keys: string[]) {
         <template #headerActions>
           <header-actions />
         </template>
-      </LayoutHeader>
+      </layout-header>
       <a-layout-content
         :style="{
           margin: '24px 16px',

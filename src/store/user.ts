@@ -1,19 +1,15 @@
-import { type AccountLoginDto, api } from '@/services';
+import { type AccountLoginDto, api, UserInfoVo } from '@/services';
 import { router } from '@/router';
 import { PageEnum } from '@/enums';
-import { store } from '.';
+import { store, useAppStore } from '.';
 import { each, get, set } from 'lodash-es';
-import { rootRoute } from '@/router/staticRoutes.ts';
-import { generateMenuAndRoutes } from '@/router/dynamicRoutes.ts';
-import { MenuData } from '@/router/types.ts';
 
 export const useUserStore = defineStore(
   'user',
   () => {
     const token = ref<string | void>('');
-    const userInfo = reactive({});
-    const routerData = shallowRef();
-    const menuData = shallowRef<MenuData>([]);
+    const userInfo = reactive<Partial<UserInfoVo>>({});
+    const appStore = useAppStore();
 
     const getToken = computed(() => token.value);
 
@@ -43,7 +39,7 @@ export const useUserStore = defineStore(
       if (!getToken.value) return;
 
       await getUserInfoAction();
-      const routes = await generateDynamicRoutes();
+      const routes = await appStore.generateDynamicRoutes();
       router.addRoute(routes);
 
       goHome && (await router.replace(PageEnum.BASE_HOME));
@@ -61,21 +57,6 @@ export const useUserStore = defineStore(
       return userInfo;
     }
 
-    async function getMenuData() {
-      const { data: res } = await api.profile.getMenus();
-      return generateMenuAndRoutes(res.data);
-    }
-
-    const generateDynamicRoutes = async () => {
-      const { menuData: treeMenuData, routeData: treeRouterData } = await getMenuData();
-      menuData.value = treeMenuData;
-      routerData.value = {
-        ...rootRoute,
-        children: treeRouterData,
-      };
-      return routerData.value;
-    };
-
     return {
       token,
       userInfo,
@@ -85,9 +66,6 @@ export const useUserStore = defineStore(
       logout,
       afterLoginAction,
       getUserInfoAction,
-      menuData,
-      routerData,
-      generateDynamicRoutes,
     };
   },
   { persist: { paths: ['token'] } },

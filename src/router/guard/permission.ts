@@ -1,12 +1,13 @@
 import type { Router } from 'vue-router';
 
-import { useUserStore } from '@/store';
+import { useAppStore, useUserStore } from '@/store';
 import { isEmpty } from 'lodash-es';
 
 const allowList = ['/login', '/error', '/401', '/404', '/403'];
 
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStore();
+  const appStore = useAppStore();
 
   router.beforeEach(async (to, _from, next) => {
     const token = userStore.getToken;
@@ -24,7 +25,7 @@ export function createPermissionGuard(router: Router) {
 
     if (isEmpty(userStore.userInfo) && !allowList.includes(to.path)) {
       await userStore.getUserInfoAction();
-      const currentRoute = await userStore.generateDynamicRoutes();
+      const currentRoute = await appStore.generateDynamicRoutes();
       router.addRoute(currentRoute);
       next({
         ...to,

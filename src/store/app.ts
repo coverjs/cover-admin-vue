@@ -3,6 +3,10 @@ import type { LayoutSetting, ThemeType } from '@/types';
 import { ThemeConfig } from 'ant-design-vue/es/config-provider/context';
 import { theme as antdTheme } from 'ant-design-vue/es';
 import { defaultLayoutSetting } from '@config';
+import { api } from '@/services';
+import { generateMenuAndRoutes } from '@/router/dynamicRoutes.ts';
+import { rootRoute } from '@/router/staticRoutes.ts';
+import { MenuData } from '@/router/types.ts';
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
@@ -17,6 +21,9 @@ export const useAppStore = defineStore('app', () => {
       colorBgContainer: layoutSetting.theme === 'light' ? '#fff' : 'rgb(36, 37, 37)',
     },
   });
+
+  const routerData = shallowRef();
+  const menuData = shallowRef<MenuData>([]);
 
 
   isDark.value = false;
@@ -62,9 +69,28 @@ export const useAppStore = defineStore('app', () => {
     }
   }
 
+
+  async function getMenuData() {
+    const { data: res } = await api.profile.getMenus();
+    return generateMenuAndRoutes(res.data);
+  }
+
+  const generateDynamicRoutes = async () => {
+    const { menuData: treeMenuData, routeData: treeRouterData } = await getMenuData();
+    menuData.value = treeMenuData;
+    routerData.value = {
+      ...rootRoute,
+      children: treeRouterData,
+    };
+    return routerData.value;
+  };
+
   return {
     layoutSetting,
     theme: themeConfig,
+    menuData,
+    routerData,
     changeSettingLayout,
+    generateDynamicRoutes,
   };
 });
