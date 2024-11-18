@@ -9,6 +9,7 @@ const submitLoading = ref(false);
 const userStore = useUserStore();
 const { createNotify } = useMessage();
 const { t } = useI18n();
+
 async function onSubmit(formData: { username: string; password: string }) {
   const data = {
     ...formData,
@@ -18,7 +19,7 @@ async function onSubmit(formData: { username: string; password: string }) {
     const userInfo = await userStore.login(data);
     createNotify.success({
       message: t('authentication.loginSuccess'),
-      description: `${t('authentication.loginSuccessDesc')},${userInfo.nickname}`,
+      description: `${t('authentication.loginSuccessDesc')},${userInfo?.nickname ?? ''}`,
       duration: 3,
     });
   } finally {
@@ -31,8 +32,9 @@ async function onSubmit(formData: { username: string; password: string }) {
   <div class="login-form-container">
     <a-typography class="title-container">
       <a-typography-title class="title" :level="3">{{
-        t('authentication.loginTitle')
-      }}</a-typography-title>
+          t('authentication.loginTitle')
+        }}
+      </a-typography-title>
       <language-toggle />
     </a-typography>
     <login-form :loading="submitLoading" @submit="onSubmit" />
@@ -43,6 +45,7 @@ async function onSubmit(formData: { username: string; password: string }) {
 .login-form-container {
   width: 300px;
   margin: auto;
+
   .title-container {
     display: flex;
     align-items: center;
@@ -54,6 +57,6 @@ async function onSubmit(formData: { username: string; password: string }) {
 <route lang="yaml">
 name: login
 meta:
-  layout: login
-  ignoreAuth: true
+layout: login
+ignoreAuth: true
 </route>

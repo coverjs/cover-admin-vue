@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useUserStore, useAppStore } from '@/store';
-import { useRefreshPrompt, useAntdToken } from '@/hooks';
+import { useAppStore } from '@/store';
+import { useAntdToken, useRefreshPrompt } from '@/hooks';
 import { antdLocale } from '@/locales';
 import { theme } from 'ant-design-vue';
 
@@ -10,11 +10,6 @@ defineOptions({
 
 useRefreshPrompt();
 
-const userStore = useUserStore();
-
-onMounted(() => {
-  userStore.getUserInfoAction();
-});
 
 const appStore = useAppStore();
 const { theme: antdTheme } = storeToRefs(appStore);

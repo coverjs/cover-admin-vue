@@ -1,22 +1,18 @@
 <script lang="ts" setup>
 import type { RouteMeta } from 'vue-router';
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from '@ant-design/icons-vue';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import { useAppStore } from '@/store';
 import { loadEnv } from '@/utils';
 
 import SettingDrawer from '@/components/SettingDrawer/index.vue';
 import LayoutHeader from '@/components/LayoutHeader/index.vue';
 import HeaderActions from '@/components/HeaderActions.vue';
+import SubMenu from '@/components/SubMenu/index.vue';
 
 defineOptions({ name: 'DefaultLayout' });
 
-const selectedKeys = ref<string[]>(['1']);
+const selectedKeys = ref<string[]>([]);
+const openKeys = ref<string[]>([]);
 const collapsed = ref<boolean>(false);
 
 const exception = ref(false);
@@ -42,9 +38,19 @@ watch(
   },
   { immediate: true },
 );
-
 const appStore = useAppStore();
 const { layoutSetting } = storeToRefs(appStore);
+
+onMounted(() => {
+  selectedKeys.value = [route.path];
+  const originPath = route.meta?.originPath;
+  openKeys.value = originPath ? [originPath] : [];
+});
+
+function handleSelectedKeys(keys: string[]) {
+  selectedKeys.value = keys;
+}
+
 </script>
 
 <template>
@@ -60,19 +66,11 @@ const { layoutSetting } = storeToRefs(appStore);
           {{ env.VITE_APP_TITLE ?? 'Cover Admin' }}
         </span>
       </div>
-      <a-menu v-model:selectedKeys="selectedKeys" mode="inline">
-        <a-menu-item key="1">
-          <user-outlined />
-          <span>nav 1</span>
-        </a-menu-item>
-        <a-menu-item key="2">
-          <video-camera-outlined />
-          <span>nav 2</span>
-        </a-menu-item>
-        <a-menu-item key="3">
-          <upload-outlined />
-          <span>nav 3</span>
-        </a-menu-item>
+      <a-menu v-model:openKeys="openKeys" :selectedKeys="selectedKeys" mode="inline"
+              @update:selected-keys="handleSelectedKeys">
+        <template v-for="menu in appStore.menuData" :key="menu.path">
+          <sub-menu :item="menu" />
+        </template>
       </a-menu>
     </a-layout-sider>
     <a-layout>

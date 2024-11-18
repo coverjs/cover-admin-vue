@@ -27,21 +27,6 @@ export interface AccountLoginDto {
   password: string;
 }
 
-export interface CreateUserDto {
-  /** 用户账号 */
-  username: string;
-  /** 密码 */
-  password: string;
-  /** 昵称 */
-  nickname: string;
-  /** 邮箱 */
-  email: string;
-  /** 角色id */
-  roleId: number;
-  /** 是否启用 */
-  enable: boolean;
-}
-
 export interface RoleVo {
   /**
    * 角色id
@@ -62,6 +47,80 @@ export interface RoleVo {
   createdAt: string;
   /** 更新日期 */
   updatedAt: string;
+}
+
+export interface ProfileVo {
+  /** 账号 */
+  username: string;
+  /** 昵称 */
+  nickname: string;
+  /** 邮箱 */
+  email: string;
+  /** 角色 */
+  role: RoleVo;
+  /** 是否启用 */
+  enable: boolean;
+  /** 创建时间 */
+  createdAt: string;
+  /** 更新日期 */
+  updatedAt: string;
+}
+
+export interface MenuVo {
+  /**
+   * id
+   * @example 1
+   */
+  id: number;
+  /**
+   * 名称
+   * @example "首页"
+   */
+  name: string;
+  /** 国际化 */
+  locale?: string;
+  /**
+   * 图标
+   * @example "FileOutlined"
+   */
+  icon?: string;
+  /** 权限编码 */
+  code: string;
+  /**
+   * 父级id
+   * @example 1
+   */
+  parentId?: number;
+  /** 子菜单 */
+  children?: MenuVo[];
+  /**
+   * 排序
+   * @example 1
+   */
+  sort: number;
+  /** 页面路径 */
+  path: string;
+  /** 节点类型 */
+  type: 'DIRECTORY' | 'MENU' | 'ACTION';
+  /** 创建时间 */
+  createdAt: string;
+  /** 更新时间 */
+  updatedAt: string;
+}
+
+export interface CreateUserDto {
+  /** 用户账号 */
+  username: string;
+  /** 密码 */
+  password: string;
+  /** 昵称 */
+  nickname: string;
+  /** 邮箱 */
+  email: string;
+  /** 角色id */
+  roleId: number;
+  /** 是否启用 */
+  enable: boolean;
 }
 
 export interface UserInfoVo {
@@ -86,23 +145,49 @@ export interface CreateRoleDto {
   name: string;
   /** 角色描述 */
   description: string;
+  /** 为该角色赋予权限的菜单id列表 */
+  menuIds: number[];
 }
 
-export interface ProfileVo {
-  /** 账号 */
-  username: string;
-  /** 昵称 */
-  nickname: string;
-  /** 邮箱 */
-  email: string;
-  /** 角色 */
-  role: RoleVo;
-  /** 是否启用 */
-  enable: boolean;
-  /** 创建时间 */
-  createdAt: string;
-  /** 更新日期 */
-  updatedAt: string;
+export interface CreateMenuDto {
+  /**
+   * 名称
+   * @example "首页"
+   */
+  name: string;
+  /** 国际化 */
+  locale?: string;
+  /**
+   * 图标
+   * @example "FileOutlined"
+   */
+  icon?: string;
+  /**
+   * 权限码
+   * @example "home"
+   */
+  code: string;
+  /**
+   * 父级菜单id
+   * @example 1
+   */
+  parentId?: number;
+  /**
+   * 排序
+   * @example 1
+   */
+  sort: number;
+  /**
+   * 页面路径
+   * @example "/home"
+   */
+  path?: string;
+  /**
+   * 节点类型, "DIRECTORY": 目录; "MENU": 菜单; "ACTION": 操作
+   * @default "DIRECTORY"
+   * @example "DIRECTORY"
+   */
+  type: 'DIRECTORY' | 'MENU' | 'ACTION';
 }
 
 export interface CommonResponseVo {
@@ -118,13 +203,7 @@ export interface CommonResponseVo {
   msg: string;
 }
 
-import type {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-  HeadersDefaults,
-  ResponseType,
-} from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from 'axios';
 import axios from 'axios';
 import type { CustomRequestOptions } from '../types';
 
@@ -134,8 +213,7 @@ export interface CustromRequestParams {
   customOptions?: CustomRequestOptions;
 }
 
-export interface FullRequestParams
-  extends Omit<AxiosRequestConfig, 'data' | 'params' | 'url' | 'responseType'> {
+export interface FullRequestParams extends Omit<AxiosRequestConfig, 'data' | 'params' | 'url' | 'responseType'> {
   /** set parameter to `true` for call `securityWorker` for this request */
   secure?: boolean;
   /** request path */
@@ -150,14 +228,9 @@ export interface FullRequestParams
   body?: unknown;
 }
 
-export type RequestParams = Omit<
-  FullRequestParams,
-  'body' | 'method' | 'query' | 'path'
-> &
-  CustromRequestParams;
+export type RequestParams = Omit<FullRequestParams, 'body' | 'method' | 'query' | 'path'> & CustromRequestParams;
 
-export interface ApiConfig<SecurityDataType = unknown>
-  extends Omit<AxiosRequestConfig, 'data' | 'cancelToken'> {
+export interface ApiConfig<SecurityDataType = unknown> extends Omit<AxiosRequestConfig, 'data' | 'cancelToken'> {
   securityWorker?: (
     securityData: SecurityDataType | null,
   ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
@@ -180,16 +253,8 @@ export class HttpClient<SecurityDataType = unknown> {
   private secure?: boolean;
   private format?: ResponseType;
 
-  constructor({
-    securityWorker,
-    secure,
-    format,
-    ...axiosConfig
-  }: ApiConfig<SecurityDataType> = {}) {
-    this.instance = axios.create({
-      ...axiosConfig,
-      baseURL: axiosConfig.baseURL || '',
-    });
+  constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
+    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || '' });
     this.secure = secure;
     this.format = format;
     this.securityWorker = securityWorker;
@@ -199,10 +264,7 @@ export class HttpClient<SecurityDataType = unknown> {
     this.securityData = data;
   };
 
-  protected mergeRequestParams(
-    params1: AxiosRequestConfig,
-    params2?: AxiosRequestConfig,
-  ): AxiosRequestConfig {
+  protected mergeRequestParams(params1: AxiosRequestConfig, params2?: AxiosRequestConfig): AxiosRequestConfig {
     const method = params1.method || (params2 && params2.method);
 
     return {
@@ -210,11 +272,7 @@ export class HttpClient<SecurityDataType = unknown> {
       ...params1,
       ...(params2 || {}),
       headers: {
-        ...((method &&
-          this.instance.defaults.headers[
-            method.toLowerCase() as keyof HeadersDefaults
-          ]) ||
-          {}),
+        ...((method && this.instance.defaults.headers[method.toLowerCase() as keyof HeadersDefaults]) || {}),
         ...(params1.headers || {}),
         ...((params2 && params2.headers) || {}),
       },
@@ -235,15 +293,11 @@ export class HttpClient<SecurityDataType = unknown> {
     }
     return Object.keys(input || {}).reduce((formData, key) => {
       const property = input[key];
-      const propertyContent: any[] =
-        property instanceof Array ? property : [property];
+      const propertyContent: any[] = property instanceof Array ? property : [property];
 
       for (const formItem of propertyContent) {
         const isFileType = formItem instanceof Blob || formItem instanceof File;
-        formData.append(
-          key,
-          isFileType ? formItem : this.stringifyFormItem(formItem),
-        );
+        formData.append(key, isFileType ? formItem : this.stringifyFormItem(formItem));
       }
 
       return formData;
@@ -267,21 +321,11 @@ export class HttpClient<SecurityDataType = unknown> {
     const requestParams = this.mergeRequestParams(params, secureParams);
     const responseFormat = format || this.format || undefined;
 
-    if (
-      type === ContentType.FormData &&
-      body &&
-      body !== null &&
-      typeof body === 'object'
-    ) {
+    if (type === ContentType.FormData && body && body !== null && typeof body === 'object') {
       body = this.createFormData(body as Record<string, unknown>);
     }
 
-    if (
-      type === ContentType.Text &&
-      body &&
-      body !== null &&
-      typeof body !== 'string'
-    ) {
+    if (type === ContentType.Text && body && body !== null && typeof body !== 'string') {
       body = JSON.stringify(body);
     }
 
@@ -302,141 +346,112 @@ export class HttpClient<SecurityDataType = unknown> {
 /**
  * @title Cover Admin Service
  * @version 1.0.0
+ * @termsOfService https://github.com/coverjs
  * @contact
  *
  * Coverjs后台服务端接口文档
+ *
+ * 推荐使用<a href="https://apifox.com/apidoc/shared-aa58b273-f91f-4dd6-99f6-56e24d51461b">Apifox</a>查看更友好的接口文档
  */
-export class Api<
-  SecurityDataType extends unknown,
-> extends HttpClient<SecurityDataType> {
-  upload = {
-    /**
-     * No description
-     *
-     * @tags 文件上传
-     * @name UploadControllerUpload
-     * @summary 单个文件上传接口示例
-     * @request POST:/upload/file
-     * @secure
-     */
-    uploadControllerUpload: (
-      data: {
-        /** @format binary */
-        file?: File;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<
-        any,
-        CommonResponseVo & {
-          data?: string;
-        }
-      >({
-        path: `/upload/file`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.FormData,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags 文件上传
-     * @name UploadControllerUploads
-     * @summary 上传多个文件的示例
-     * @request POST:/upload/files
-     * @secure
-     */
-    uploadControllerUploads: (
-      data: {
-        files?: File[];
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<
-        any,
-        CommonResponseVo & {
-          data?: string;
-        }
-      >({
-        path: `/upload/files`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.FormData,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags 文件上传
-     * @name UploadControllerUploadMultipleFiles
-     * @summary 根据字段名上传文件示例
-     * @request POST:/upload/fields
-     * @secure
-     */
-    uploadControllerUploadMultipleFiles: (
-      data: {
-        /** @format binary */
-        avatar?: File;
-        /** @format binary */
-        background?: File;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<
-        any,
-        CommonResponseVo & {
-          data?: string;
-        }
-      >({
-        path: `/upload/fields`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.FormData,
-        ...params,
-      }),
-  };
+export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   auth = {
     /**
      * No description
      *
      * @tags 授权
-     * @name AuthControllerLogin
+     * @name AuthLogin
      * @summary 用户登录
-     * @request POST:/auth
+     * @request POST:/auth/login
      */
-    authControllerLogin: (data: AccountLoginDto, params: RequestParams = {}) =>
+    authLogin: (data: AccountLoginDto, params: RequestParams = {}) =>
       this.request<
         any,
         CommonResponseVo & {
           data?: AccountLoginVo;
         }
       >({
-        path: `/auth`,
+        path: `/auth/login`,
         method: 'POST',
         body: data,
         type: ContentType.Json,
         ...params,
       }),
-  };
-  user = {
+
     /**
      * No description
      *
-     * @tags 用户管理
-     * @name UserControllerCreate
-     * @summary 新建用户
-     * @request POST:/user
+     * @tags 授权
+     * @name AuthLogout
+     * @summary 退出登录
+     * @request POST:/auth/logout
      * @secure
      */
-    userControllerCreate: (data: CreateUserDto, params: RequestParams = {}) =>
+    authLogout: (params: RequestParams = {}) =>
       this.request<any, CommonResponseVo>({
-        path: `/user`,
+        path: `/auth/logout`,
+        method: 'POST',
+        secure: true,
+        ...params,
+      }),
+  };
+  profile = {
+    /**
+     * No description
+     *
+     * @tags 个人信息
+     * @name ProfileFindUserInfo
+     * @summary 获取当前用户信息
+     * @request GET:/profile
+     * @secure
+     */
+    profileFindUserInfo: (params: RequestParams = {}) =>
+      this.request<
+        any,
+        CommonResponseVo & {
+          data?: ProfileVo;
+        }
+      >({
+        path: `/profile`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 个人信息
+     * @name ProfileGetMenus
+     * @summary 获取当前用户菜单
+     * @request GET:/profile/menus
+     * @secure
+     */
+    profileGetMenus: (params: RequestParams = {}) =>
+      this.request<
+        any,
+        CommonResponseVo & {
+          data?: MenuVo[];
+        }
+      >({
+        path: `/profile/menus`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
+  };
+  system = {
+    /**
+     * @description [ 权限码：system:user:add ]
+     *
+     * @tags 系统管理-用户管理
+     * @name UserCreate
+     * @summary 新建用户
+     * @request POST:/system/user
+     * @secure
+     */
+    userCreate: (data: CreateUserDto, params: RequestParams = {}) =>
+      this.request<any, CommonResponseVo>({
+        path: `/system/user`,
         method: 'POST',
         body: data,
         secure: true,
@@ -445,15 +460,15 @@ export class Api<
       }),
 
     /**
-     * No description
+     * @description [ 权限码：system:user:list ]
      *
-     * @tags 用户管理
-     * @name UserControllerFindList
+     * @tags 系统管理-用户管理
+     * @name UserFindList
      * @summary 获取用户列表
-     * @request GET:/user
+     * @request GET:/system/user
      * @secure
      */
-    userControllerFindList: (
+    userFindList: (
       query?: {
         /**
          * 当前页码
@@ -490,26 +505,25 @@ export class Api<
           };
         }
       >({
-        path: `/user`,
+        path: `/system/user`,
         method: 'GET',
         query: query,
         secure: true,
         ...params,
       }),
-  };
-  role = {
+
     /**
-     * No description
+     * @description [ 权限码：system:role:add ]
      *
-     * @tags 角色管理
-     * @name RoleControllerCreate
-     * @summary 新建角色
-     * @request POST:/role
+     * @tags 系统管理-角色管理
+     * @name RoleCreate
+     * @summary 创建角色
+     * @request POST:/system/role
      * @secure
      */
-    roleControllerCreate: (data: CreateRoleDto, params: RequestParams = {}) =>
+    roleCreate: (data: CreateRoleDto, params: RequestParams = {}) =>
       this.request<any, CommonResponseVo>({
-        path: `/role`,
+        path: `/system/role`,
         method: 'POST',
         body: data,
         secure: true,
@@ -518,15 +532,15 @@ export class Api<
       }),
 
     /**
-     * No description
+     * @description [ 权限码：system:role:list ]
      *
-     * @tags 角色管理
-     * @name RoleControllerFineList
+     * @tags 系统管理-角色管理
+     * @name RoleFineList
      * @summary 获取角色列表
-     * @request GET:/role
+     * @request GET:/system/role
      * @secure
      */
-    roleControllerFineList: (
+    roleFineList: (
       query?: {
         /**
          * 当前页码
@@ -548,40 +562,165 @@ export class Api<
       this.request<
         any,
         CommonResponseVo & {
-          data?: {
-            list: RoleVo[];
-            /** @default 0 */
-            total: number;
-          };
+          data?: RoleVo[];
         }
       >({
-        path: `/role`,
+        path: `/system/role`,
         method: 'GET',
         query: query,
         secure: true,
         ...params,
       }),
-  };
-  profile = {
+
     /**
-     * No description
+     * @description 创建菜单 [ 权限码：system:menu:add ]
      *
-     * @tags 个人信息
-     * @name ProfileControllerFindUserInfo
-     * @summary 获取个人信息
-     * @request GET:/profile
+     * @tags 系统管理-菜单管理
+     * @name MenuCreate
+     * @summary 新建菜单
+     * @request POST:/system/menu
      * @secure
      */
-    profileControllerFindUserInfo: (params: RequestParams = {}) =>
+    menuCreate: (data: CreateMenuDto, params: RequestParams = {}) =>
+      this.request<any, CommonResponseVo>({
+        path: `/system/menu`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description 获取菜单列表数据 [ 权限码：system:menu:list ]
+     *
+     * @tags 系统管理-菜单管理
+     * @name MenuFindList
+     * @summary 查询菜单列表
+     * @request GET:/system/menu
+     * @secure
+     */
+    menuFindList: (params: RequestParams = {}) =>
       this.request<
         any,
         CommonResponseVo & {
-          data?: ProfileVo;
+          data?: MenuVo[];
         }
       >({
-        path: `/profile`,
+        path: `/system/menu`,
         method: 'GET',
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 系统管理-菜单管理
+     * @name MenuUpdate
+     * @summary 修改菜单
+     * @request PATCH:/system/menu/{id}
+     * @secure
+     */
+    menuUpdate: (id: string, data: CreateMenuDto, params: RequestParams = {}) =>
+      this.request<any, CommonResponseVo>({
+        path: `/system/menu/${id}`,
+        method: 'PATCH',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+  };
+  upload = {
+    /**
+     * No description
+     *
+     * @tags 文件上传
+     * @name UploadUpload
+     * @summary 单个文件上传接口示例
+     * @request POST:/upload/file
+     * @secure
+     */
+    uploadUpload: (
+      data: {
+        /** @format binary */
+        file?: File;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        any,
+        CommonResponseVo & {
+          data?: string;
+        }
+      >({
+        path: `/upload/file`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 文件上传
+     * @name UploadUploads
+     * @summary 上传多个文件的示例
+     * @request POST:/upload/files
+     * @secure
+     */
+    uploadUploads: (
+      data: {
+        files?: File[];
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        any,
+        CommonResponseVo & {
+          data?: string;
+        }
+      >({
+        path: `/upload/files`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 文件上传
+     * @name UploadUploadMultipleFiles
+     * @summary 根据字段名上传文件示例
+     * @request POST:/upload/fields
+     * @secure
+     */
+    uploadUploadMultipleFiles: (
+      data: {
+        /** @format binary */
+        avatar?: File;
+        /** @format binary */
+        background?: File;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        any,
+        CommonResponseVo & {
+          data?: string;
+        }
+      >({
+        path: `/upload/fields`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
         ...params,
       }),
   };

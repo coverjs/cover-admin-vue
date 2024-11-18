@@ -12,7 +12,7 @@ import './styles/index.css';
 function bootstrap() {
   const envVals = loadEnv();
   const env = envVals.PROD ? 'prod' : 'dev';
-  const namespace = `${envVals}-${env}`;
+  const namespace = `${envVals.VITE_APP_NAMESPACE}-${env}`;
 
   const app = createApp(App);
 
