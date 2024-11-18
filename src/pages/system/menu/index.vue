@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+defineOptions({ name: 'cover-menu' });
 
 
 </script>
