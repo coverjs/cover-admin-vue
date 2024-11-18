@@ -72,6 +72,20 @@ export function genRoutes(menus: MenuDataItem[], parent?: MenuDataItem): RouteRe
  * 请求后端的数据获取到的菜单的信息，默认数据是拉平的，需要对数据进行树结构的整理
  */
 export function generateMenuAndRoutes(treeMenuData: any) {
+
+  // 递归整理数据 根据 sort 排序
+  function sortTreeData(data: any) {
+    data.sort((a: any, b: any) => a.sort - b.sort);
+    data.forEach((item: any) => {
+      if (item.children && item.children.length) {
+        sortTreeData(item.children);
+      }
+    });
+  }
+
+  sortTreeData(treeMenuData);
+
+
   // 转变成路由
   const routeData = genRoutes(treeMenuData);
 

@@ -71,7 +71,7 @@ export const useAppStore = defineStore('app', () => {
 
 
   async function getMenuData() {
-    const { data: res } = await api.profile.getMenus();
+    const { data: res } = await api.profile.profileGetMenus();
     return generateMenuAndRoutes(res.data);
   }
 

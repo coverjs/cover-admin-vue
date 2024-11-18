@@ -77,6 +77,13 @@ export interface MenuVo {
    * @example "首页"
    */
   name: string;
+  /** 国际化 */
+  locale?: string;
+  /**
+   * 图标
+   * @example "FileOutlined"
+   */
+  icon?: string;
   /** 权限编码 */
   code: string;
   /**
@@ -148,6 +155,13 @@ export interface CreateMenuDto {
    * @example "首页"
    */
   name: string;
+  /** 国际化 */
+  locale?: string;
+  /**
+   * 图标
+   * @example "FileOutlined"
+   */
+  icon?: string;
   /**
    * 权限码
    * @example "home"
@@ -345,21 +359,38 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags 授权
-     * @name Login
+     * @name AuthLogin
      * @summary 用户登录
-     * @request POST:/auth
+     * @request POST:/auth/login
      */
-    login: (data: AccountLoginDto, params: RequestParams = {}) =>
+    authLogin: (data: AccountLoginDto, params: RequestParams = {}) =>
       this.request<
         any,
         CommonResponseVo & {
           data?: AccountLoginVo;
         }
       >({
-        path: `/auth`,
+        path: `/auth/login`,
         method: 'POST',
         body: data,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 授权
+     * @name AuthLogout
+     * @summary 退出登录
+     * @request POST:/auth/logout
+     * @secure
+     */
+    authLogout: (params: RequestParams = {}) =>
+      this.request<any, CommonResponseVo>({
+        path: `/auth/logout`,
+        method: 'POST',
+        secure: true,
         ...params,
       }),
   };
@@ -368,12 +399,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags 个人信息
-     * @name FindUserInfo
+     * @name ProfileFindUserInfo
      * @summary 获取当前用户信息
      * @request GET:/profile
      * @secure
      */
-    findUserInfo: (params: RequestParams = {}) =>
+    profileFindUserInfo: (params: RequestParams = {}) =>
       this.request<
         any,
         CommonResponseVo & {
@@ -390,12 +421,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags 个人信息
-     * @name GetMenus
-     * @summary 获取当前用户菜单权限
+     * @name ProfileGetMenus
+     * @summary 获取当前用户菜单
      * @request GET:/profile/menus
      * @secure
      */
-    getMenus: (params: RequestParams = {}) =>
+    profileGetMenus: (params: RequestParams = {}) =>
       this.request<
         any,
         CommonResponseVo & {
@@ -410,15 +441,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   };
   system = {
     /**
-     * No description
+     * @description [ 权限码：system:user:add ]
      *
      * @tags 系统管理-用户管理
-     * @name Create
+     * @name UserCreate
      * @summary 新建用户
      * @request POST:/system/user
      * @secure
      */
-    create: (data: CreateUserDto, params: RequestParams = {}) =>
+    userCreate: (data: CreateUserDto, params: RequestParams = {}) =>
       this.request<any, CommonResponseVo>({
         path: `/system/user`,
         method: 'POST',
@@ -429,15 +460,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * No description
+     * @description [ 权限码：system:user:list ]
      *
      * @tags 系统管理-用户管理
-     * @name FindList
+     * @name UserFindList
      * @summary 获取用户列表
      * @request GET:/system/user
      * @secure
      */
-    findList: (
+    userFindList: (
       query?: {
         /**
          * 当前页码
@@ -482,17 +513,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * No description
+     * @description [ 权限码：system:role:add ]
      *
      * @tags 系统管理-角色管理
-     * @name Create2
-     * @summary 新建角色
+     * @name RoleCreate
+     * @summary 创建角色
      * @request POST:/system/role
-     * @originalName create
-     * @duplicate
      * @secure
      */
-    create2: (data: CreateRoleDto, params: RequestParams = {}) =>
+    roleCreate: (data: CreateRoleDto, params: RequestParams = {}) =>
       this.request<any, CommonResponseVo>({
         path: `/system/role`,
         method: 'POST',
@@ -503,15 +532,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * No description
+     * @description [ 权限码：system:role:list ]
      *
      * @tags 系统管理-角色管理
-     * @name FineList
+     * @name RoleFineList
      * @summary 获取角色列表
      * @request GET:/system/role
      * @secure
      */
-    fineList: (
+    roleFineList: (
       query?: {
         /**
          * 当前页码
@@ -547,14 +576,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @description 创建菜单 [ 权限码：system:menu:add ]
      *
      * @tags 系统管理-菜单管理
-     * @name Create3
+     * @name MenuCreate
      * @summary 新建菜单
      * @request POST:/system/menu
-     * @originalName create
-     * @duplicate
      * @secure
      */
-    create3: (data: CreateMenuDto, params: RequestParams = {}) =>
+    menuCreate: (data: CreateMenuDto, params: RequestParams = {}) =>
       this.request<any, CommonResponseVo>({
         path: `/system/menu`,
         method: 'POST',
@@ -568,14 +595,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @description 获取菜单列表数据 [ 权限码：system:menu:list ]
      *
      * @tags 系统管理-菜单管理
-     * @name FindList2
+     * @name MenuFindList
      * @summary 查询菜单列表
      * @request GET:/system/menu
-     * @originalName findList
-     * @duplicate
      * @secure
      */
-    findList2: (params: RequestParams = {}) =>
+    menuFindList: (params: RequestParams = {}) =>
       this.request<
         any,
         CommonResponseVo & {
@@ -587,18 +612,37 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         secure: true,
         ...params,
       }),
+
+    /**
+     * No description
+     *
+     * @tags 系统管理-菜单管理
+     * @name MenuUpdate
+     * @summary 修改菜单
+     * @request PATCH:/system/menu/{id}
+     * @secure
+     */
+    menuUpdate: (id: string, data: CreateMenuDto, params: RequestParams = {}) =>
+      this.request<any, CommonResponseVo>({
+        path: `/system/menu/${id}`,
+        method: 'PATCH',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
   };
   upload = {
     /**
      * No description
      *
      * @tags 文件上传
-     * @name Upload
+     * @name UploadUpload
      * @summary 单个文件上传接口示例
      * @request POST:/upload/file
      * @secure
      */
-    upload: (
+    uploadUpload: (
       data: {
         /** @format binary */
         file?: File;
@@ -623,12 +667,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags 文件上传
-     * @name Uploads
+     * @name UploadUploads
      * @summary 上传多个文件的示例
      * @request POST:/upload/files
      * @secure
      */
-    uploads: (
+    uploadUploads: (
       data: {
         files?: File[];
       },
@@ -652,12 +696,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags 文件上传
-     * @name UploadMultipleFiles
+     * @name UploadUploadMultipleFiles
      * @summary 根据字段名上传文件示例
      * @request POST:/upload/fields
      * @secure
      */
-    uploadMultipleFiles: (
+    uploadUploadMultipleFiles: (
       data: {
         /** @format binary */
         avatar?: File;
