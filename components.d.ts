@@ -26,6 +26,7 @@ declare module 'vue' {
     AResult: typeof import('ant-design-vue/es')['Result']
     ASpace: typeof import('ant-design-vue/es')['Space']
     ASubMenu: typeof import('ant-design-vue/es')['SubMenu']
+    AsyncIcon: typeof import('./src/components/SubMenu/AsyncIcon.vue')['default']
     ATooltip: typeof import('ant-design-vue/es')['Tooltip']
     ATypography: typeof import('ant-design-vue/es')['Typography']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']

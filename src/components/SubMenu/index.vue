@@ -14,6 +14,9 @@ withDefaults(defineProps<{ item: MenuDataItem, link?: boolean }>(), {
 <template>
   <template v-if="item.children">
     <a-sub-menu :key="item.path">
+      <template v-if="item.icon" #icon>
+        <AsyncIcon :icon="item.icon" />
+      </template>
       <template #title>
         {{ item.name }}
       </template>
@@ -23,6 +26,9 @@ withDefaults(defineProps<{ item: MenuDataItem, link?: boolean }>(), {
         </template>
         <template v-else>
           <a-menu-item :key="menu.path" v-if="menu.type === 'MENU'">
+            <template v-if="menu.icon" #icon>
+                <AsyncIcon :icon="menu.icon" />
+              </template>
             <RouterLink v-if="link" :to="menu.path">
               {{ menu.name }}
             </RouterLink>
@@ -33,6 +39,9 @@ withDefaults(defineProps<{ item: MenuDataItem, link?: boolean }>(), {
   </template>
   <template v-else>
     <a-menu-item :key="item.path">
+      <template v-if="item.icon" #icon>
+        <AsyncIcon :icon="item.icon" />
+      </template>
       <RouterLink v-if="link" :to="item.path">
         {{ item.name }}
       </RouterLink>

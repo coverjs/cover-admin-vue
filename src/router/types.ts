@@ -5,6 +5,8 @@ export interface MenuDataItem {
   id?: string | number;
   // 标题
   title: string | (() => VNodeChild);
+  // 图标
+  icon?: string;
   // 地址
   path: string;
   // 绑定的哪个组件
