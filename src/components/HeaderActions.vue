@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/store';
 import { UserOutlined } from '@ant-design/icons-vue';
+import { useLogoutConfirm } from '@/hooks';
 
 defineOptions({ name: 'LayoutHeader' });
 
 const userStore = useUserStore();
+const logoutConfirm = useLogoutConfirm('manual');
 const { t } = useI18n();
 </script>
 
@@ -22,8 +24,8 @@ const { t } = useI18n();
           {{ userStore.userInfo.nickname }}
         </span>
         <template #overlay>
-          <a-menu @click="userStore.logout" theme="dark">
-            <a-menu-item>
+          <a-menu theme="dark">
+            <a-menu-item @click="logoutConfirm">
               {{ t('common.logout') }}
             </a-menu-item>
           </a-menu>

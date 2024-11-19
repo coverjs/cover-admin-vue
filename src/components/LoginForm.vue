@@ -1,20 +1,42 @@
 <script setup lang="ts">
-import type { FormInstance } from 'ant-design-vue/lib/form/Form';
+import type { FormInstance } from 'ant-design-vue/es/form/index';
+import type { InternalNamePath } from 'ant-design-vue/es/form/interface';
+
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import { CacheEnum } from '@/enums';
 import { loadEnv } from '@/utils';
+import { cloneDeep, isEqual } from 'lodash-es';
+
+import crypto from 'crypto-js';
+import objHash from 'object-hash';
+
+interface FormData {
+  username: string;
+  password: string;
+}
 
 defineOptions({ name: 'LoginForm' });
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     loading: boolean;
+    securePwd?: boolean;
+    hashType?:
+      | 'MD5'
+      | 'SHA1'
+      | 'SHA256'
+      | 'SHA224'
+      | 'SHA3'
+      | 'SHA384'
+      | 'SHA512'
+      | 'RIPEMD160';
+    initialUserHash?: string;
   }>(),
-  { loading: false },
+  { loading: false, securePassword: true, hashType: 'MD5' },
 );
 
 defineEmits<{
-  (e: 'submit', formData: { username: string; password: string }): void;
+  (e: 'submit', formData: FormData): void;
 }>();
 
 const env = loadEnv();
@@ -29,13 +51,27 @@ const usernameInStorage = useLocalStorage(
   '',
 );
 
-const formData = reactive({
+const formData: FormData = reactive({
   username: rememberMeInStorage.value ? usernameInStorage.value || '' : '',
   password: '',
 });
 
-const formRef = ref<FormInstance>();
+const formRef = useTemplateRef<FormInstance>('formRef');
 const rememberMe = ref(rememberMeInStorage.value ?? false);
+
+function getFieldsValue(nameList?: InternalNamePath[] | true) {
+  const result = cloneDeep(formRef.value?.getFieldsValue(nameList));
+  const shouldEncryptPwd =
+    !isEqual(objHash(formData), props.initialUserHash ?? '') &&
+    props.securePwd &&
+    result?.password;
+
+  if (shouldEncryptPwd) {
+    result.password = crypto[props.hashType]?.(result.password)?.toString();
+  }
+
+  return result as FormData;
+}
 
 watch(
   () => rememberMe.value,
@@ -52,6 +88,11 @@ watch(
     }
   },
 );
+
+defineExpose({
+  ...formRef.value,
+  getFieldsValue,
+});
 </script>
 
 <template>
@@ -59,7 +100,7 @@ watch(
     class="login-form"
     ref="formRef"
     :model="formData"
-    @finish="$emit('submit', formData)"
+    @finish="$emit('submit', getFieldsValue())"
   >
     <a-form-item
       name="username"

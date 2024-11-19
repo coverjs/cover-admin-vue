@@ -7,7 +7,7 @@ import { loadEnv } from './utils';
 import App from './App.vue';
 
 import 'ant-design-vue/dist/reset.css';
-import './styles/index.css';
+import './styles/index.scss';
 
 function bootstrap() {
   const envVals = loadEnv();

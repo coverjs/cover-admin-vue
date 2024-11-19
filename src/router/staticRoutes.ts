@@ -1,7 +1,16 @@
 import type { RouteRecordRaw } from 'vue-router';
 
+import { PageEnum } from '@/enums';
+import { routes } from 'vue-router/auto-routes';
+import { setupLayouts } from 'virtual:generated-layouts';
 
-const Layout = () => import('@/layouts/default.vue')
+const Layout = () => import('@/layouts/default.vue');
+
+const staticRoutesPaths = new Set<string>();
+staticRoutesPaths.add(PageEnum.BASE_ROOT);
+staticRoutesPaths.add(PageEnum.BASE_HOME);
+staticRoutesPaths.add(PageEnum.BASE_LOGIN);
+staticRoutesPaths.add('/:path(.*)*');
 
 export const rootRoute: RouteRecordRaw = {
   path: '/',
@@ -11,20 +20,10 @@ export const rootRoute: RouteRecordRaw = {
   children: [],
 };
 
-export default [
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import('@/pages/login.vue'),
-    meta: {
-      title: '登录',
-    },
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    meta: {
-      title: '找不到页面',
-    },
-    component: () => import('@/pages/[...path].vue'),
-  },
-] as RouteRecordRaw[];
+export function genRoutes() {
+  const result = setupLayouts(routes);
+  // 对静态路由的其他操作可以写在这里
+  return result.filter(route => staticRoutesPaths.has(route.path));
+}
+
+export default genRoutes();
