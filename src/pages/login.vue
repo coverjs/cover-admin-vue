@@ -1,43 +1,58 @@
 <script setup lang="ts">
+import type { AccountLoginDto, UserInfoVo } from '@/services';
+import type { FormInstance } from 'ant-design-vue/es/form/index';
+
+import { initialUserHash } from '@config';
 import { useUserStore } from '@/store';
 import { useMessage } from '@/hooks';
 
 defineOptions({ name: 'LoginPage' });
 
-const submitLoading = ref(false);
-
 const userStore = useUserStore();
+const loginFormRef = useTemplateRef<FormInstance>('loginForm');
 const { createNotify } = useMessage();
 const { t } = useI18n();
 
-async function onSubmit(formData: { username: string; password: string }) {
-  const data = {
-    ...formData,
-  };
-  try {
-    submitLoading.value = true;
-    const userInfo = await userStore.login(data);
-    createNotify.success({
-      message: t('authentication.loginSuccess'),
-      description: `${t('authentication.loginSuccessDesc')},${userInfo?.nickname ?? ''}`,
-      duration: 3,
-    });
-  } finally {
-    submitLoading.value = false;
-  }
+const {
+  isLoading: loginLoading,
+  error: loginError,
+  execute: logoinAction,
+  state: userInfo,
+} = useAsyncState<Partial<UserInfoVo>>(
+  () =>
+    userStore.login(loginFormRef.value?.getFieldsValue() as AccountLoginDto),
+  { nickname: '' },
+  { immediate: false },
+);
+
+async function login() {
+  await logoinAction();
+  if (loginError.value) return;
+
+  createNotify.success({
+    message: t('authentication.loginSuccess'),
+    description: `${t('authentication.loginSuccessDesc')},${userInfo.value?.nickname ?? ''}`,
+    duration: 3,
+  });
 }
 </script>
 
 <template>
   <div class="login-form-container">
     <a-typography class="title-container">
-      <a-typography-title class="title" :level="3">{{
-          t('authentication.loginTitle')
-        }}
+      <a-typography-title class="title" :level="3"
+        >{{ t('authentication.loginTitle') }}
       </a-typography-title>
       <language-toggle />
     </a-typography>
-    <login-form :loading="submitLoading" @submit="onSubmit" />
+    <login-form
+      ref="loginForm"
+      hash-type="RIPEMD160"
+      :loading="loginLoading"
+      :initial-user-hash="initialUserHash"
+      @submit="login"
+      secure-pwd
+    />
   </div>
 </template>
 
@@ -57,6 +72,6 @@ async function onSubmit(formData: { username: string; password: string }) {
 <route lang="yaml">
 name: login
 meta:
-layout: login
-ignoreAuth: true
+  layout: login
+  ignoreAuth: true
 </route>

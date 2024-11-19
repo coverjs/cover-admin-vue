@@ -1,27 +1,26 @@
 import type { Context, Middleware } from 'onion-interceptor';
 import type { ErrorMessageMode } from '@/types';
-import { AxiosError } from 'axios';
 
 import { tap } from '@onion-interceptor/pipes';
 import { getReqOptItem } from '@/utils';
-import { useMessage } from '@/hooks';
-import { useUserStore } from '@/store';
+import { useMessage, useLogoutConfirm } from '@/hooks';
 import { t } from '@/locales';
 import { StatusEnum } from '@/enums';
-import { isCancel, isAxiosError } from 'axios';
+import { isCancel, isAxiosError, AxiosError } from 'axios';
 import { isNil, get, isEqual } from 'lodash-es';
 
-let logout: () => void | void; // 拦截器周期外取不到  store 中的值
-
-const statusHandlers = new Map<number, (msg?: string) => string | void>();
+const statusHandlers = new Map<
+  number,
+  (msg?: string) => string | false | void
+>();
 statusHandlers.set(
   StatusEnum.BAD_REQUEST,
   (msg?: string) => msg || t('fallback.http.badRequest'),
 );
-statusHandlers.set(StatusEnum.UNAUTHORIZED, (msg?: string) => {
-  const result = msg || t('fallback.http.unauthorized');
-  logout?.();
-  return result;
+statusHandlers.set(StatusEnum.UNAUTHORIZED, () => {
+  const logoutConfirm = useLogoutConfirm('auto');
+  logoutConfirm();
+  return false;
 });
 statusHandlers.set(
   StatusEnum.FORBIDDEN,
@@ -39,6 +38,9 @@ statusHandlers.set(
   StatusEnum.INTERNAL_SERVER_ERRO,
   (msg?: string) => msg || t('fallback.http.internalServerError'),
 );
+const _getCode = (ctx: Context) => get(ctx, ['res', 'data', 'code']);
+const _getErrMsg = (ctx: Context) =>
+  get(ctx, ['res', 'data', 'msg']) ?? get(ctx, ['res', 'statusText']);
 
 /**
  * 错误拦截器中间件
@@ -53,22 +55,13 @@ export const errorInterceptor: Middleware = async function (ctx, next) {
   await next(
     tap(
       ctx => {
-        const code = ctx.res?.data.code;
-        if (code === 0) return;
+        if (isEqual(_getCode(ctx), 0)) return;
 
-        throw new Error(ctx.res?.data?.msg ?? ctx.res?.statusText);
+        throw new Error(_getErrMsg(ctx));
       },
       err => {
         if (isCancel(err)) return err;
-
-        try {
-          const userStore = useUserStore();
-          logout = () => userStore?.logout();
-
-          return handleError(ctx, err as Error);
-        } catch (_e) {
-          return _e;
-        }
+        return handleError(ctx, err as Error);
       },
     ),
   );
@@ -95,14 +88,14 @@ function handleError(ctx: Context, error: Error) {
     return error;
   }
 
-  const status = ctx?.res?.status ?? (error as AxiosError)?.response?.status;
-  const errMsg = ctx.res?.data?.msg ?? ctx.res?.statusText;
+  const status =
+    get(ctx, ['res', 'status']) ?? get(error, ['response', 'status']);
 
   const _status = isEqual(status, StatusEnum.SUCCESS) // 兼容 http status 200 ,但是后端传错误码的情况
-    ? get(ctx, ['res', 'data', 'code'], StatusEnum.SUCCESS)
+    ? (_getCode(ctx) ?? StatusEnum.SUCCESS)
     : status;
 
-  !isNil(_status) && checkStatus(_status, errMsg, errorMessageMode);
+  !isNil(_status) && checkStatus(_status, _getErrMsg(ctx), errorMessageMode);
   return error;
 }
 
@@ -118,12 +111,11 @@ function checkStatus(
   msg: string,
   errorMessageMode: ErrorMessageMode = 'message',
 ) {
-  if (isEqual(status, StatusEnum.SUCCESS)) return;
+  const handleRes = statusHandlers.get(status)?.(msg);
+  if (isEqual(status, StatusEnum.SUCCESS) || handleRes === false) return;
 
   callMsg(
-    statusHandlers.get(status)?.(msg) ??
-      msg ??
-      t('fallback.http.internalServerError'),
+    handleRes ?? msg ?? t('fallback.http.internalServerError'),
     errorMessageMode,
   );
 }

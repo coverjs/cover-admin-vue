@@ -1,6 +1,6 @@
 import { type AccountLoginDto, api, UserInfoVo } from '@/services';
 import { router } from '@/router';
-import { PageEnum } from '@/enums';
+import { PageEnum, TimeEnum } from '@/enums';
 import { store, useAppStore } from '.';
 import { each, get, set } from 'lodash-es';
 
@@ -12,6 +12,21 @@ export const useUserStore = defineStore(
     const appStore = useAppStore();
 
     const getToken = computed(() => token.value);
+
+    const {
+      pause: stopGetUserInfoPoll,
+      resume: startGetUserInfoPoll,
+      isActive: isPollActive,
+    } = useTimeoutPoll(
+      async () => {
+        const { data: res } = await api.profile.profileFindUserInfo();
+
+        if (res.code === 0)
+          each(get(res, 'data'), (value, key) => set(userInfo, key, value));
+      },
+      TimeEnum.LONG_POLLING_INTERVAL,
+      { immediate: false },
+    );
 
     function setToken(value: string | void) {
       token.value = value;
@@ -30,9 +45,12 @@ export const useUserStore = defineStore(
       return userInfo;
     }
 
-    function logout() {
+    async function logout(callApi: boolean = true) {
+      if (callApi) await api.auth.authLogout();
+
       setToken(void 0);
       router.replace(PageEnum.BASE_LOGIN);
+      isPollActive.value && stopGetUserInfoPoll();
     }
 
     async function afterLoginAction(goHome?: boolean) {
@@ -48,12 +66,9 @@ export const useUserStore = defineStore(
     async function getUserInfoAction() {
       if (!getToken.value) return;
 
-      const { data: res } = await api.profile.profileFindUserInfo();
-      if (res.code === 0) {
-        each(get(res, 'data'), (value, key) => {
-          set(userInfo, key, value);
-        });
-      }
+      // 轮询用户信息 检查token是否过期
+      !isPollActive.value && startGetUserInfoPoll();
+
       return userInfo;
     }
 

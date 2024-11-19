@@ -1,9 +1,12 @@
 import { useRegisterSW } from 'virtual:pwa-register/vue';
 import { Button } from 'ant-design-vue';
+import { TimeEnum } from '@/enums';
 
 import useMessage from './useMessage';
 
-export function useRefreshPrompt(pollingInterval: number = 10 * 1000) {
+export function useRefreshPrompt(
+  pollingInterval: number = TimeEnum.LONG_POLLING_INTERVAL,
+) {
   const { createNotify } = useMessage();
   const { t } = useI18n();
   const { updateServiceWorker } = useRegisterSW({

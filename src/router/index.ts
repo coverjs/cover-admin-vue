@@ -1,8 +1,8 @@
 import type { App } from 'vue';
 
 import { createRouter, createWebHashHistory } from 'vue-router/auto';
-import  staticRoutes from './staticRoutes.ts';
 import { setupRouterGuards } from './guard';
+import staticRoutes from './staticRoutes.ts';
 
 export const router = createRouter({
   history: createWebHashHistory(),
@@ -13,4 +13,3 @@ export function setupRouter(app: App) {
   setupRouterGuards(router);
   app.use(router);
 }
-
