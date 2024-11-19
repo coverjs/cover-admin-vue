@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { AccountLoginDto, UserInfoVo } from '@/services';
-import type { FormInstance } from 'ant-design-vue/es/form/index';
 
 import { initialUserHash } from '@config';
 import { useUserStore } from '@/store';
@@ -9,7 +8,9 @@ import { useMessage } from '@/hooks';
 defineOptions({ name: 'LoginPage' });
 
 const userStore = useUserStore();
-const loginFormRef = useTemplateRef<FormInstance>('loginForm');
+const loginFormRef = useTemplateRef<{ getFieldsValue: () => AccountLoginDto }>(
+  'loginForm',
+);
 const { createNotify } = useMessage();
 const { t } = useI18n();
 
