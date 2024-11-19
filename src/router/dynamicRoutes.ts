@@ -6,24 +6,18 @@ export const basicRouteMap = {
   ComponentError: () => import('@/pages/[...path].vue'),
 };
 
-const routerModules = import.meta.glob([
-  '@/pages/**/*.vue',
-]);
-
+const routerModules = import.meta.glob(['@/pages/**/*.vue']);
 
 function checkEager(module: any) {
-  if (typeof module === 'object' && 'default' in module)
-    return module.default;
+  if (typeof module === 'object' && 'default' in module) return module.default;
 
   return module;
 }
 
 export function getRouterModule(path?: string): any {
-  if (!path)
-    return basicRouteMap.ComponentError;
+  if (!path) return basicRouteMap.ComponentError;
   // 判断开头是不是/
-  if (path.startsWith('/'))
-    path = path.slice(1);
+  if (path.startsWith('/')) path = path.slice(1);
   // 组装数据格式
   const fullPath = `/src/pages/${path}.vue`;
   const fullPathIndex = `/src/pages/${path}/index.vue`;
@@ -47,10 +41,12 @@ export function formatRoute(menu: MenuDataItem, parent?: MenuDataItem) {
   } as RouteRecordRaw;
 }
 
-
-export function genRoutes(menus: MenuDataItem[], parent?: MenuDataItem): RouteRecordRaw[] {
+export function genRoutes(
+  menus: MenuDataItem[],
+  parent?: MenuDataItem,
+): RouteRecordRaw[] {
   const routesData: RouteRecordRaw[] = [];
-  menus.forEach((menu) => {
+  menus.forEach(menu => {
     const item = formatRoute(menu, parent);
     item.children = [];
     if (menu.children && menu.children.length) {
@@ -60,37 +56,20 @@ export function genRoutes(menus: MenuDataItem[], parent?: MenuDataItem): RouteRe
         delete item.children;
       }
     }
-    if (item.children?.length === 0)
-      delete item.children;
+    if (item.children?.length === 0) delete item.children;
     routesData.push(item);
   });
   return routesData;
 }
 
-
 /**
  * 请求后端的数据获取到的菜单的信息，默认数据是拉平的，需要对数据进行树结构的整理
  */
 export function generateMenuAndRoutes(treeMenuData: any) {
-
-  // 递归整理数据 根据 sort 排序
-  function sortTreeData(data: any) {
-    data.sort((a: any, b: any) => a.sort - b.sort);
-    data.forEach((item: any) => {
-      if (item.children && item.children.length) {
-        sortTreeData(item.children);
-      }
-    });
-  }
-
-  sortTreeData(treeMenuData);
-
-
   // 转变成路由
   const routeData = genRoutes(treeMenuData);
 
-  const menuData = routeData as unknown as MenuData;
-
+  const menuData = routeData as MenuData;
   return {
     routeData,
     menuData,
