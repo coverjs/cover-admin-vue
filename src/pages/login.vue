@@ -44,7 +44,10 @@ async function login() {
       <a-typography-title class="title" :level="3"
         >{{ t('authentication.loginTitle') }}
       </a-typography-title>
-      <language-toggle />
+      <span class="title-extra">
+        <language-toggle />
+        <dark-mode-switch />
+      </span>
     </a-typography>
     <login-form
       ref="loginForm"
@@ -66,6 +69,13 @@ async function login() {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .title-extra {
+      display: flex;
+      align-items: center;
+      .dark-mode-switch {
+        margin-left: 8px;
+      }
+    }
   }
 }
 </style>
