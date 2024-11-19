@@ -48,4 +48,7 @@ export async function setupLocale(
 
 export const t = i18n.global.t as (key: string, ...args: unknown[]) => string;
 
+// 当前语言
+export const lang = i18n.global.locale as Ref<LanguagesType>;
+
 export default setupLocale;

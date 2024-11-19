@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { AccountLoginDto, UserInfoVo } from '@/services';
-import type { FormInstance } from 'ant-design-vue/es/form/index';
 
 import { initialUserHash } from '@config';
 import { useUserStore } from '@/store';
@@ -9,7 +8,9 @@ import { useMessage } from '@/hooks';
 defineOptions({ name: 'LoginPage' });
 
 const userStore = useUserStore();
-const loginFormRef = useTemplateRef<FormInstance>('loginForm');
+const loginFormRef = useTemplateRef<{ getFieldsValue: () => AccountLoginDto }>(
+  'loginForm',
+);
 const { createNotify } = useMessage();
 const { t } = useI18n();
 
@@ -43,7 +44,10 @@ async function login() {
       <a-typography-title class="title" :level="3"
         >{{ t('authentication.loginTitle') }}
       </a-typography-title>
-      <language-toggle />
+      <span class="title-extra">
+        <language-toggle />
+        <dark-mode-switch />
+      </span>
     </a-typography>
     <login-form
       ref="loginForm"
@@ -65,6 +69,13 @@ async function login() {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .title-extra {
+      display: flex;
+      align-items: center;
+      .dark-mode-switch {
+        margin-left: 8px;
+      }
+    }
   }
 }
 </style>

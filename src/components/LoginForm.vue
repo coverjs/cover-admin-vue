@@ -56,7 +56,7 @@ const formData: FormData = reactive({
   password: '',
 });
 
-const formRef = useTemplateRef<FormInstance>('formRef');
+const formRef = ref<FormInstance>();
 const rememberMe = ref(rememberMeInStorage.value ?? false);
 
 function getFieldsValue(nameList?: InternalNamePath[] | true) {
@@ -90,7 +90,6 @@ watch(
 );
 
 defineExpose({
-  ...formRef.value,
   getFieldsValue,
 });
 </script>

@@ -1,7 +1,7 @@
 import type { Router } from 'vue-router';
 
 import { useAppStore, useUserStore } from '@/store';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, omit } from 'lodash-es';
 
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStore();
@@ -38,7 +38,7 @@ export function createPermissionGuard(router: Router) {
       }
 
       next({
-        ...to,
+        ...omit(to, 'name'),
         replace: true,
       });
       return;
