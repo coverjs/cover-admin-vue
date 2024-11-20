@@ -98,9 +98,7 @@ function handleSelectedKeys(keys: string[]) {
           <header-actions />
         </template>
       </layout-header>
-      <a-layout-content
-        class="my-[24px] mx-[16px] p-[24px] border-[1px] border-solid overflow-auto overscroll-none"
-      >
+      <a-layout-content class="my-[24px] mx-[16px] p-[24px] overflow-auto">
         <fallback-page v-if="exception" :status="Number(exceptionCode)" />
         <router-view v-else />
       </a-layout-content>
