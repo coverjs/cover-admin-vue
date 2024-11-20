@@ -4,11 +4,9 @@ import { MenuDataItem } from '@/router/types.ts';
 defineOptions({
   name: 'SubMenu',
 });
-withDefaults(defineProps<{ item: MenuDataItem, link?: boolean }>(), {
+withDefaults(defineProps<{ item: MenuDataItem; link?: boolean }>(), {
   link: true,
 });
-
-
 </script>
 
 <template>
@@ -27,8 +25,8 @@ withDefaults(defineProps<{ item: MenuDataItem, link?: boolean }>(), {
         <template v-else>
           <a-menu-item :key="menu.path" v-if="menu.type === 'MENU'">
             <template v-if="menu.icon" #icon>
-                <AsyncIcon :icon="menu.icon" />
-              </template>
+              <AsyncIcon :icon="menu.icon" />
+            </template>
             <RouterLink v-if="link" :to="menu.path">
               {{ menu.name }}
             </RouterLink>
@@ -49,6 +47,4 @@ withDefaults(defineProps<{ item: MenuDataItem, link?: boolean }>(), {
   </template>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

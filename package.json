@@ -11,7 +11,18 @@
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit --skipLibCheck",
     "lint": "eslint --ignore-pattern .gitignore .",
-    "format": "npx prettier -c -w --config .prettierrc.json src"
+    "format": "npx prettier -c -w --config .prettierrc.json src",
+    "postinstall": "simple-git-hooks"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged",
+    "commit-msg": "node scripts/verifyCommit.js"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,vue}": [
+      "pnpm lint",
+      "pnpm format"
+    ]
   },
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
@@ -46,7 +57,10 @@
     "eslint-plugin-vue": "^9.30.0",
     "glob": "^11.0.0",
     "globals": "^15.12.0",
+    "lint-staged": "^15.2.10",
+    "picocolors": "^1.1.1",
     "sass": "^1.80.6",
+    "simple-git-hooks": "^2.11.1",
     "swagger-typescript-api": "^13.0.22",
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3",

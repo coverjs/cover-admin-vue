@@ -45,10 +45,7 @@
           </a-form-item>
         </a-col>
         <a-col :lg="12" :md="24">
-          <a-form-item
-            label="上级菜单"
-            name="parentId"
-          >
+          <a-form-item label="上级菜单" name="parentId">
             <a-tree-select
               v-model:value="formState.parentId"
               :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
@@ -113,7 +110,6 @@
             <a-input v-model:value="formState.code" />
           </a-form-item>
         </a-col>
-
       </a-row>
     </a-form>
 
@@ -134,7 +130,7 @@ defineOptions({
 
 const open = defineModel('open');
 const emit = defineEmits<{
-  (e: 'refresh'): void
+  (e: 'refresh'): void;
 }>();
 
 interface Props {
@@ -149,11 +145,14 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const formState = ref<CreateMenuDtoWithId>(toRaw(props.formData));
-watch(() => props.formData, (value) => {
-  formState.value = toRaw(value);
-}, { immediate: true });
+watch(
+  () => props.formData,
+  value => {
+    formState.value = toRaw(value);
+  },
+  { immediate: true },
+);
 const { createNotify } = useMessage();
-
 
 const onClose = () => {
   open.value = false;
@@ -180,7 +179,6 @@ const onSubmit = async () => {
   }
 };
 
-
 function handleResponse(res: any, successMessage: string) {
   if (res.code === 0) {
     createNotify.success({
@@ -191,6 +189,4 @@ function handleResponse(res: any, successMessage: string) {
     emit('refresh');
   }
 }
-
 </script>
-

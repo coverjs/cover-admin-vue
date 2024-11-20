@@ -54,7 +54,6 @@ onMounted(() => {
 function handleSelectedKeys(keys: string[]) {
   selectedKeys.value = keys;
 }
-
 </script>
 
 <template>
@@ -71,8 +70,12 @@ function handleSelectedKeys(keys: string[]) {
         </span>
         <img v-else :src="Logo" alt="logo" style="height: 45px; width: 45px" />
       </div>
-      <a-menu v-model:openKeys="openKeys" :selectedKeys="selectedKeys" mode="inline"
-              @update:selected-keys="handleSelectedKeys">
+      <a-menu
+        v-model:openKeys="openKeys"
+        :selectedKeys="selectedKeys"
+        mode="inline"
+        @update:selected-keys="handleSelectedKeys"
+      >
         <template v-for="menu in appStore.menuData" :key="menu.path">
           <sub-menu :item="menu" />
         </template>
@@ -96,7 +99,9 @@ function handleSelectedKeys(keys: string[]) {
           <header-actions />
         </template>
       </layout-header>
-      <a-layout-content class="my-[24px] mx-[16px] p-[24px] border-[1px] border-solid overflow-auto overscroll-none">
+      <a-layout-content
+        class="my-[24px] mx-[16px] p-[24px] border-[1px] border-solid overflow-auto overscroll-none"
+      >
         <fallback-page v-if="exception" :status="Number(exceptionCode)" />
         <router-view v-else />
       </a-layout-content>

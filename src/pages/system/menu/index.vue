@@ -53,7 +53,6 @@ const columns = [
   },
 ];
 
-
 const open = ref<boolean>(false);
 const tableData = shallowRef<MenuVo[]>([]);
 const defaultFormData: CreateMenuDto = {
@@ -72,7 +71,6 @@ const type = ref<boolean>(false); // 编辑 | 新增
 type MenuVoWithKey = MenuVo & { key: number };
 export type CreateMenuDtoWithId = CreateMenuDto & { id?: number };
 
-
 onMounted(() => {
   fetchData();
 });
@@ -82,7 +80,9 @@ function generateTreeDataWithKey(data: MenuVo[]): MenuVoWithKey[] {
     return {
       ...item,
       key: item.id,
-      children: item.children ? generateTreeDataWithKey(item.children) : undefined,
+      children: item.children
+        ? generateTreeDataWithKey(item.children)
+        : undefined,
     };
   });
 }
@@ -122,12 +122,9 @@ function handleAdd() {
 function refresh() {
   fetchData();
 }
-
 </script>
 
-
 <template>
-
   <a-card title="菜单查询" class="mb-[24px]">
     <!--TODO 查询-->
   </a-card>
@@ -144,13 +141,21 @@ function refresh() {
         <template v-if="column.dataIndex === 'operation'">
           <div class="editable-row-operations">
             <a-space>
-              <a-button type="link" @click="handleEdit(record)" :icon="h(EditOutlined)"></a-button>
+              <a-button
+                type="link"
+                @click="handleEdit(record)"
+                :icon="h(EditOutlined)"
+              ></a-button>
               <a-popconfirm
                 v-if="tableData.length"
                 title="确定删除?"
                 @confirm="onDelete(record.id)"
               >
-                <a-button type="link" danger :icon="h(DeleteOutlined)"></a-button>
+                <a-button
+                  type="link"
+                  danger
+                  :icon="h(DeleteOutlined)"
+                ></a-button>
               </a-popconfirm>
             </a-space>
           </div>
@@ -158,6 +163,11 @@ function refresh() {
       </template>
     </a-table>
   </a-card>
-  <MenuDrawer v-model:open="open" :type :formData :treeData="tableData" @refresh="refresh" />
+  <MenuDrawer
+    v-model:open="open"
+    :type
+    :formData
+    :treeData="tableData"
+    @refresh="refresh"
+  />
 </template>
-

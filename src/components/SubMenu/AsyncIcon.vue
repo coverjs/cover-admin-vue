@@ -8,14 +8,13 @@ defineOptions({
 });
 
 const props = defineProps<{
-  icon: string | ((...args: any[]) => VNodeChild) | undefined
+  icon: string | ((...args: any[]) => VNodeChild) | undefined;
 }>();
 const Comp = computed(() => {
   if (!props.icon) return undefined;
   if (isFunction(props.icon)) {
     const node = props.icon();
-    if (node)
-      return node;
+    if (node) return node;
   } else {
     return (icons as any)[props.icon];
   }

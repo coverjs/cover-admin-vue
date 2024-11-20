@@ -19,4 +19,4 @@ export interface MenuDataItem {
   type?: 'DIRECTORY' | 'MENU' | 'ACTION';
 }
 
-export type MenuData = MenuDataItem[]
+export type MenuData = MenuDataItem[];
