@@ -5,6 +5,10 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import AsyncIcon from '@/components/SubMenu/AsyncIcon.vue';
 import MenuDrawer from '@/pages/system/menu/MenuDrawer.vue';
 
+defineOptions({
+  name: 'MenuPage',
+});
+
 const columns = [
   {
     title: '菜单名称',
@@ -118,10 +122,16 @@ function handleAdd() {
 function refresh() {
   fetchData();
 }
+
 </script>
 
 
 <template>
+
+  <a-card title="菜单查询" class="mb-[24px]">
+    <!--TODO 查询-->
+  </a-card>
+
   <a-card title="菜单列表">
     <template #extra>
       <a-button type="primary" @click="handleAdd">新增菜单</a-button>

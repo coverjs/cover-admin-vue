@@ -128,6 +128,10 @@ import { api, MenuVo } from '@/services';
 import { CreateMenuDtoWithId } from '@/pages/system/menu/index.vue';
 import { useMessage } from '@/hooks';
 
+defineOptions({
+  name: 'MenuDrawer',
+});
+
 const open = defineModel('open');
 const emit = defineEmits<{
   (e: 'refresh'): void
@@ -160,7 +164,6 @@ const onSubmit = async () => {
   try {
     await formRef.value?.validate();
     const formData = toRaw(formState.value);
-    delete formData.key;
     if (formData.parentId === undefined) {
       formData.parentId = null as unknown as number; // 现在先这样 等后端改了再改
     }
@@ -168,7 +171,7 @@ const onSubmit = async () => {
       const { data: res } = await api.system.menuCreate(formData);
       handleResponse(res, '新增成功');
     } else {
-      const id = validateId(formData.id);
+      const id = formData.id!;
       const { data: res } = await api.system.menuUpdate(id, formData);
       handleResponse(res, '修改成功');
     }
@@ -177,11 +180,6 @@ const onSubmit = async () => {
   }
 };
 
-function validateId(id: unknown): string {
-  if (typeof id === 'number' || typeof id === 'string') {
-    return id.toString();
-  }
-}
 
 function handleResponse(res: any, successMessage: string) {
   if (res.code === 0) {

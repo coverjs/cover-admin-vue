@@ -96,12 +96,7 @@ function handleSelectedKeys(keys: string[]) {
           <header-actions />
         </template>
       </layout-header>
-      <a-layout-content
-        :style="{
-          margin: '24px 16px',
-          padding: '24px',
-        }"
-      >
+      <a-layout-content class="my-[24px] mx-[16px] p-[24px] border-[1px] border-solid overflow-auto overscroll-none">
         <fallback-page v-if="exception" :status="Number(exceptionCode)" />
         <router-view v-else />
       </a-layout-content>
@@ -133,11 +128,11 @@ function handleSelectedKeys(keys: string[]) {
     align-items: center;
     justify-content: center;
 
-    >span{
+    > span {
       text-wrap: nowrap;
     }
 
-    >img{
+    > img {
       margin: 0 auto;
       width: 45px;
       height: 45px;

@@ -66,6 +66,20 @@ export interface ProfileVo {
   updatedAt: string;
 }
 
+export interface UpdateProfileDto {
+  /** 昵称 */
+  nickname?: string;
+  /** 邮箱 */
+  email?: string;
+}
+
+export interface UpdatePasswordDto {
+  /** 旧密码 */
+  oldPassword: string;
+  /** 新密码 */
+  newPassword: string;
+}
+
 export interface MenuVo {
   /**
    * id
@@ -169,6 +183,47 @@ export interface CreateMenuDto {
   code: string;
   /**
    * 父级菜单id
+   * @example 1
+   */
+  parentId?: number;
+  /**
+   * 排序
+   * @example 1
+   */
+  sort: number;
+  /**
+   * 页面路径
+   * @example "/home"
+   */
+  path?: string;
+  /**
+   * 节点类型, "DIRECTORY": 目录; "MENU": 菜单; "ACTION": 操作
+   * @default "DIRECTORY"
+   * @example "DIRECTORY"
+   */
+  type: 'DIRECTORY' | 'MENU' | 'ACTION';
+}
+
+export interface UpdateMenuDto {
+  /**
+   * 名称
+   * @example "首页"
+   */
+  name: string;
+  /** 国际化 */
+  locale?: string;
+  /**
+   * 图标
+   * @example "FileOutlined"
+   */
+  icon?: string;
+  /**
+   * 权限码
+   * @example "home"
+   */
+  code: string;
+  /**
+   * 父级菜单id, 需要移除时传null
    * @example 1
    */
   parentId?: number;
@@ -351,7 +406,7 @@ export class HttpClient<SecurityDataType = unknown> {
  *
  * Coverjs后台服务端接口文档
  *
- * 推荐使用<a href="https://apifox.com/apidoc/shared-aa58b273-f91f-4dd6-99f6-56e24d51461b">Apifox</a>查看更友好的接口文档
+ * 推荐使用<a href="https://apifox.com/apidoc/shared-0995dfb9-d5c1-49d1-a153-4bc5574445bc/">Apifox</a>查看更友好的接口文档
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   auth = {
@@ -414,6 +469,44 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/profile`,
         method: 'GET',
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 个人信息
+     * @name ProfileUpdateUserInfo
+     * @summary 修改当前登录用户信息
+     * @request PATCH:/profile/update
+     * @secure
+     */
+    profileUpdateUserInfo: (data: UpdateProfileDto, params: RequestParams = {}) =>
+      this.request<any, CommonResponseVo>({
+        path: `/profile/update`,
+        method: 'PATCH',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 个人信息
+     * @name ProfileUpdatePassword
+     * @summary 修改密码
+     * @request PATCH:/profile/updatePassword
+     * @secure
+     */
+    profileUpdatePassword: (data: UpdatePasswordDto, params: RequestParams = {}) =>
+      this.request<any, CommonResponseVo>({
+        path: `/profile/updatePassword`,
+        method: 'PATCH',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
 
@@ -622,7 +715,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PATCH:/system/menu/{id}
      * @secure
      */
-    menuUpdate: (id: string, data: CreateMenuDto, params: RequestParams = {}) =>
+    menuUpdate: (id: number, data: UpdateMenuDto, params: RequestParams = {}) =>
       this.request<any, CommonResponseVo>({
         path: `/system/menu/${id}`,
         method: 'PATCH',
@@ -640,7 +733,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UploadUpload
      * @summary 单个文件上传接口示例
      * @request POST:/upload/file
-     * @secure
      */
     uploadUpload: (
       data: {
@@ -658,7 +750,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/upload/file`,
         method: 'POST',
         body: data,
-        secure: true,
         type: ContentType.FormData,
         ...params,
       }),
@@ -670,7 +761,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UploadUploads
      * @summary 上传多个文件的示例
      * @request POST:/upload/files
-     * @secure
      */
     uploadUploads: (
       data: {
@@ -687,7 +777,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/upload/files`,
         method: 'POST',
         body: data,
-        secure: true,
         type: ContentType.FormData,
         ...params,
       }),
@@ -699,7 +788,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UploadUploadMultipleFiles
      * @summary 根据字段名上传文件示例
      * @request POST:/upload/fields
-     * @secure
      */
     uploadUploadMultipleFiles: (
       data: {
@@ -719,7 +807,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/upload/fields`,
         method: 'POST',
         body: data,
-        secure: true,
         type: ContentType.FormData,
         ...params,
       }),
