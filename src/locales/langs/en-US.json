@@ -25,6 +25,7 @@
     "comingSoon": "Coming Soon",
     "operationSuccess": "Operation Success",
     "operationFailed": "Operation failed",
+    "sureDelete": "Are you sure you want to delete?",
     "http": {
       "requestTimeout": "The request timed out. Please try again later.",
       "networkError": "A network error occurred. Please check your internet connection and try again.",
@@ -124,6 +125,23 @@
         "geekBlue": "Geek Glue",
         "purple": "Golden Purple"
       }
+    }
+  },
+  "pages": {
+    "system": {
+      "menu": {
+        "menuList": "Menu List",
+        "editMenu": "Edit Menu",
+        "createMenu": "Create Menu"
+      }
+    }
+  },
+  "menu": {
+    "system": {
+      "systemAdmin": "System Admin",
+      "userAdmin": "User Admin",
+      "roleAdmin": "Role Admin",
+      "menuAdmin": "Menu Admin"
     }
   }
 }

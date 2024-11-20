@@ -1,15 +1,18 @@
 <script lang="ts" setup>
-import type { RouteMeta } from 'vue-router';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import { useAppStore } from '@/store';
 import { loadEnv } from '@/utils';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
+import type { RouteMeta } from 'vue-router';
 
-import SettingDrawer from '@/components/SettingDrawer/index.vue';
-import LayoutHeader from '@/components/LayoutHeader/index.vue';
 import HeaderActions from '@/components/HeaderActions.vue';
+import LayoutHeader from '@/components/LayoutHeader/index.vue';
+import SettingDrawer from '@/components/SettingDrawer/index.vue';
 import SubMenu from '@/components/SubMenu/index.vue';
 
+import Logo from '@/assets/logo.png';
+
 defineOptions({ name: 'DefaultLayout' });
+const prefixCls = shallowRef('cover-layout-app');
 
 const selectedKeys = ref<string[]>([]);
 const openKeys = ref<string[]>([]);
@@ -50,24 +53,28 @@ onMounted(() => {
 function handleSelectedKeys(keys: string[]) {
   selectedKeys.value = keys;
 }
-
 </script>
 
 <template>
-  <a-layout class="app-wrapper">
+  <a-layout :class="`${prefixCls}`">
     <a-layout-sider
       v-model:collapsed="collapsed"
       theme="light"
       :trigger="null"
       collapsible
     >
-      <div class="title">
+      <div :class="`${prefixCls}-title`">
         <span v-if="!collapsed">
           {{ env.VITE_APP_TITLE ?? 'Cover Admin' }}
         </span>
+        <img v-else :src="Logo" alt="logo" style="height: 45px; width: 45px" />
       </div>
-      <a-menu v-model:openKeys="openKeys" :selectedKeys="selectedKeys" mode="inline"
-              @update:selected-keys="handleSelectedKeys">
+      <a-menu
+        v-model:openKeys="openKeys"
+        :selectedKeys="selectedKeys"
+        mode="inline"
+        @update:selected-keys="handleSelectedKeys"
+      >
         <template v-for="menu in appStore.menuData" :key="menu.path">
           <sub-menu :item="menu" />
         </template>
@@ -91,12 +98,7 @@ function handleSelectedKeys(keys: string[]) {
           <header-actions />
         </template>
       </layout-header>
-      <a-layout-content
-        :style="{
-          margin: '24px 16px',
-          padding: '24px',
-        }"
-      >
+      <a-layout-content class="my-[24px] mx-[16px] p-[24px] overflow-auto">
         <fallback-page v-if="exception" :status="Number(exceptionCode)" />
         <router-view v-else />
       </a-layout-content>
@@ -111,20 +113,32 @@ function handleSelectedKeys(keys: string[]) {
   />
 </template>
 
-<style scoped>
-.app-wrapper {
+<style scoped lang="scss">
+.cover-layout-app {
   position: relative;
   height: 100%;
   width: 100%;
 
-  .title {
+  &-title {
     border-inline-end: 1px solid rgba(5, 5, 5, 0.06);
     height: 65px;
     font-size: 20px;
     line-height: 24px;
     padding: 10px;
-    text-align: center;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    > span {
+      text-wrap: nowrap;
+    }
+
+    > img {
+      margin: 0 auto;
+      width: 45px;
+      height: 45px;
+    }
   }
 }
 </style>

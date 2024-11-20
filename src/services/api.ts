@@ -66,6 +66,20 @@ export interface ProfileVo {
   updatedAt: string;
 }
 
+export interface UpdateProfileDto {
+  /** 昵称 */
+  nickname?: string;
+  /** 邮箱 */
+  email?: string;
+}
+
+export interface UpdatePasswordDto {
+  /** 旧密码 */
+  oldPassword: string;
+  /** 新密码 */
+  newPassword: string;
+}
+
 export interface MenuVo {
   /**
    * id
@@ -190,6 +204,47 @@ export interface CreateMenuDto {
   type: 'DIRECTORY' | 'MENU' | 'ACTION';
 }
 
+export interface UpdateMenuDto {
+  /**
+   * 名称
+   * @example "首页"
+   */
+  name: string;
+  /** 国际化 */
+  locale?: string;
+  /**
+   * 图标
+   * @example "FileOutlined"
+   */
+  icon?: string;
+  /**
+   * 权限码
+   * @example "home"
+   */
+  code: string;
+  /**
+   * 父级菜单id, 需要移除时传null
+   * @example 1
+   */
+  parentId?: number;
+  /**
+   * 排序
+   * @example 1
+   */
+  sort: number;
+  /**
+   * 页面路径
+   * @example "/home"
+   */
+  path?: string;
+  /**
+   * 节点类型, "DIRECTORY": 目录; "MENU": 菜单; "ACTION": 操作
+   * @default "DIRECTORY"
+   * @example "DIRECTORY"
+   */
+  type: 'DIRECTORY' | 'MENU' | 'ACTION';
+}
+
 export interface CommonResponseVo {
   /**
    * 响应状态码
@@ -203,7 +258,13 @@ export interface CommonResponseVo {
   msg: string;
 }
 
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from 'axios';
+import type {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  HeadersDefaults,
+  ResponseType,
+} from 'axios';
 import axios from 'axios';
 import type { CustomRequestOptions } from '../types';
 
@@ -213,7 +274,8 @@ export interface CustromRequestParams {
   customOptions?: CustomRequestOptions;
 }
 
-export interface FullRequestParams extends Omit<AxiosRequestConfig, 'data' | 'params' | 'url' | 'responseType'> {
+export interface FullRequestParams
+  extends Omit<AxiosRequestConfig, 'data' | 'params' | 'url' | 'responseType'> {
   /** set parameter to `true` for call `securityWorker` for this request */
   secure?: boolean;
   /** request path */
@@ -228,9 +290,14 @@ export interface FullRequestParams extends Omit<AxiosRequestConfig, 'data' | 'pa
   body?: unknown;
 }
 
-export type RequestParams = Omit<FullRequestParams, 'body' | 'method' | 'query' | 'path'> & CustromRequestParams;
+export type RequestParams = Omit<
+  FullRequestParams,
+  'body' | 'method' | 'query' | 'path'
+> &
+  CustromRequestParams;
 
-export interface ApiConfig<SecurityDataType = unknown> extends Omit<AxiosRequestConfig, 'data' | 'cancelToken'> {
+export interface ApiConfig<SecurityDataType = unknown>
+  extends Omit<AxiosRequestConfig, 'data' | 'cancelToken'> {
   securityWorker?: (
     securityData: SecurityDataType | null,
   ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
@@ -253,8 +320,16 @@ export class HttpClient<SecurityDataType = unknown> {
   private secure?: boolean;
   private format?: ResponseType;
 
-  constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
-    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || '' });
+  constructor({
+    securityWorker,
+    secure,
+    format,
+    ...axiosConfig
+  }: ApiConfig<SecurityDataType> = {}) {
+    this.instance = axios.create({
+      ...axiosConfig,
+      baseURL: axiosConfig.baseURL || '',
+    });
     this.secure = secure;
     this.format = format;
     this.securityWorker = securityWorker;
@@ -264,7 +339,10 @@ export class HttpClient<SecurityDataType = unknown> {
     this.securityData = data;
   };
 
-  protected mergeRequestParams(params1: AxiosRequestConfig, params2?: AxiosRequestConfig): AxiosRequestConfig {
+  protected mergeRequestParams(
+    params1: AxiosRequestConfig,
+    params2?: AxiosRequestConfig,
+  ): AxiosRequestConfig {
     const method = params1.method || (params2 && params2.method);
 
     return {
@@ -272,7 +350,11 @@ export class HttpClient<SecurityDataType = unknown> {
       ...params1,
       ...(params2 || {}),
       headers: {
-        ...((method && this.instance.defaults.headers[method.toLowerCase() as keyof HeadersDefaults]) || {}),
+        ...((method &&
+          this.instance.defaults.headers[
+            method.toLowerCase() as keyof HeadersDefaults
+          ]) ||
+          {}),
         ...(params1.headers || {}),
         ...((params2 && params2.headers) || {}),
       },
@@ -293,11 +375,15 @@ export class HttpClient<SecurityDataType = unknown> {
     }
     return Object.keys(input || {}).reduce((formData, key) => {
       const property = input[key];
-      const propertyContent: any[] = property instanceof Array ? property : [property];
+      const propertyContent: any[] =
+        property instanceof Array ? property : [property];
 
       for (const formItem of propertyContent) {
         const isFileType = formItem instanceof Blob || formItem instanceof File;
-        formData.append(key, isFileType ? formItem : this.stringifyFormItem(formItem));
+        formData.append(
+          key,
+          isFileType ? formItem : this.stringifyFormItem(formItem),
+        );
       }
 
       return formData;
@@ -321,11 +407,21 @@ export class HttpClient<SecurityDataType = unknown> {
     const requestParams = this.mergeRequestParams(params, secureParams);
     const responseFormat = format || this.format || undefined;
 
-    if (type === ContentType.FormData && body && body !== null && typeof body === 'object') {
+    if (
+      type === ContentType.FormData &&
+      body &&
+      body !== null &&
+      typeof body === 'object'
+    ) {
       body = this.createFormData(body as Record<string, unknown>);
     }
 
-    if (type === ContentType.Text && body && body !== null && typeof body !== 'string') {
+    if (
+      type === ContentType.Text &&
+      body &&
+      body !== null &&
+      typeof body !== 'string'
+    ) {
       body = JSON.stringify(body);
     }
 
@@ -351,9 +447,11 @@ export class HttpClient<SecurityDataType = unknown> {
  *
  * Coverjs后台服务端接口文档
  *
- * 推荐使用<a href="https://apifox.com/apidoc/shared-aa58b273-f91f-4dd6-99f6-56e24d51461b">Apifox</a>查看更友好的接口文档
+ * 推荐使用<a href="https://apifox.com/apidoc/shared-0995dfb9-d5c1-49d1-a153-4bc5574445bc/">Apifox</a>查看更友好的接口文档
  */
-export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+export class Api<
+  SecurityDataType extends unknown,
+> extends HttpClient<SecurityDataType> {
   auth = {
     /**
      * No description
@@ -414,6 +512,50 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/profile`,
         method: 'GET',
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 个人信息
+     * @name ProfileUpdateUserInfo
+     * @summary 修改当前登录用户信息
+     * @request PATCH:/profile/update
+     * @secure
+     */
+    profileUpdateUserInfo: (
+      data: UpdateProfileDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, CommonResponseVo>({
+        path: `/profile/update`,
+        method: 'PATCH',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 个人信息
+     * @name ProfileUpdatePassword
+     * @summary 修改密码
+     * @request PATCH:/profile/updatePassword
+     * @secure
+     */
+    profileUpdatePassword: (
+      data: UpdatePasswordDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, CommonResponseVo>({
+        path: `/profile/updatePassword`,
+        method: 'PATCH',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
 
@@ -622,7 +764,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PATCH:/system/menu/{id}
      * @secure
      */
-    menuUpdate: (id: string, data: CreateMenuDto, params: RequestParams = {}) =>
+    menuUpdate: (id: number, data: UpdateMenuDto, params: RequestParams = {}) =>
       this.request<any, CommonResponseVo>({
         path: `/system/menu/${id}`,
         method: 'PATCH',
@@ -640,7 +782,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UploadUpload
      * @summary 单个文件上传接口示例
      * @request POST:/upload/file
-     * @secure
      */
     uploadUpload: (
       data: {
@@ -658,7 +799,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/upload/file`,
         method: 'POST',
         body: data,
-        secure: true,
         type: ContentType.FormData,
         ...params,
       }),
@@ -670,7 +810,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UploadUploads
      * @summary 上传多个文件的示例
      * @request POST:/upload/files
-     * @secure
      */
     uploadUploads: (
       data: {
@@ -687,7 +826,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/upload/files`,
         method: 'POST',
         body: data,
-        secure: true,
         type: ContentType.FormData,
         ...params,
       }),
@@ -699,7 +837,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UploadUploadMultipleFiles
      * @summary 根据字段名上传文件示例
      * @request POST:/upload/fields
-     * @secure
      */
     uploadUploadMultipleFiles: (
       data: {
@@ -719,7 +856,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/upload/fields`,
         method: 'POST',
         body: data,
-        secure: true,
         type: ContentType.FormData,
         ...params,
       }),

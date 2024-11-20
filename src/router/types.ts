@@ -5,6 +5,8 @@ export interface MenuDataItem {
   id?: string | number;
   // 标题
   title: string | (() => VNodeChild);
+  // 图标
+  icon?: string;
   // 地址
   path: string;
   // 绑定的哪个组件
@@ -15,6 +17,8 @@ export interface MenuDataItem {
   name?: string;
   // 菜单类型
   type?: 'DIRECTORY' | 'MENU' | 'ACTION';
+  // 国际化
+  locale?: string;
 }
 
-export type MenuData = MenuDataItem[]
+export type MenuData = MenuDataItem[];

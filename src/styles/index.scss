@@ -3,13 +3,13 @@
 @import 'tailwindcss/utilities.css';
 
 html {
-  --text-color: rgba(0, 0, 0, .85);
-  --text-color-1: rgba(0, 0, 0, .45);
-  --text-color-2: rgba(0, 0, 0, .2);
+  --text-color: rgba(0, 0, 0, 0.85);
+  --text-color-1: rgba(0, 0, 0, 0.45);
+  --text-color-2: rgba(0, 0, 0, 0.2);
   --bg-color: #fff;
-  --hover-color: rgba(0, 0, 0, .025);
+  --hover-color: rgba(0, 0, 0, 0.025);
   --bg-color-container: #f0f2f5;
-  --c-shadow: 2px 0 8px 0 rgba(29, 35, 41, .05);
+  --c-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
 }
 
 html.dark {
@@ -28,7 +28,6 @@ body {
   text-rendering: optimizeLegibility;
   overflow: hidden;
 }
-
 
 html,
 body {
@@ -54,4 +53,27 @@ body {
     opacity: 0.75;
     background-color: #1677ff;
   }
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #0000000d;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background-color: #9093994d;
+  box-shadow: inset 0 0 6px #0003;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #b6b7b9;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
 }

@@ -25,6 +25,7 @@
     "comingSoon": "即将推出",
     "operationSuccess": "操作成功",
     "operationFailed": "操作失败",
+    "sureDelete": "您确定要删除吗？",
     "http": {
       "requestTimeout": "请求超时，请稍后再试。",
       "networkError": "网络异常，请检查您的网络连接后重试。",
@@ -124,6 +125,23 @@
         "geekBlue": "极客蓝",
         "purple": "酱紫"
       }
+    }
+  },
+  "pages": {
+    "system": {
+      "menu": {
+        "menuList": "菜单列表",
+        "editMenu": "编辑菜单",
+        "createMenu": "创建菜单"
+      }
+    }
+  },
+  "menu": {
+    "system": {
+      "systemAdmin": "系统管理",
+      "userAdmin": "用户管理",
+      "roleAdmin": "角色管理",
+      "menuAdmin": "菜单管理"
     }
   }
 }

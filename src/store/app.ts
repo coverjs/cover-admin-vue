@@ -15,20 +15,20 @@ export const useAppStore = defineStore('app', () => {
   const { darkAlgorithm, defaultAlgorithm } = antdTheme;
   const layoutSetting = reactive<LayoutSetting>(defaultLayoutSetting);
   const themeConfig: ThemeConfig = reactive<ThemeConfig>({
-    algorithm: layoutSetting.theme === 'light' ? [defaultAlgorithm] : [darkAlgorithm],
+    algorithm:
+      layoutSetting.theme === 'light' ? [defaultAlgorithm] : [darkAlgorithm],
     token: {
       colorPrimary: layoutSetting.colorPrimary,
-      colorBgContainer: layoutSetting.theme === 'light' ? '#fff' : 'rgb(36, 37, 37)',
+      colorBgContainer:
+        layoutSetting.theme === 'light' ? '#fff' : 'rgb(36, 37, 37)',
     },
   });
 
   const routerData = shallowRef();
   const menuData = shallowRef<MenuData>([]);
 
-
   isDark.value = false;
-  if (isDark.value || layoutSetting.theme === 'dark')
-    toggleTheme('dark');
+  if (isDark.value || layoutSetting.theme === 'dark') toggleTheme('dark');
 
   // 监听isDark的变化
   watch(isDark, () => {
@@ -69,14 +69,14 @@ export const useAppStore = defineStore('app', () => {
     }
   }
 
-
   async function getMenuData() {
     const { data: res } = await api.profile.profileGetMenus();
     return generateMenuAndRoutes(res.data);
   }
 
   const generateDynamicRoutes = async () => {
-    const { menuData: treeMenuData, routeData: treeRouterData } = await getMenuData();
+    const { menuData: treeMenuData, routeData: treeRouterData } =
+      await getMenuData();
     menuData.value = treeMenuData;
     routerData.value = {
       ...rootRoute,

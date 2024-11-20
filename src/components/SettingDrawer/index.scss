@@ -20,7 +20,7 @@
   }
 
   &-icon-dark {
-    color: #e5e0d8
+    color: #e5e0d8;
   }
 }
 
@@ -28,11 +28,10 @@
 
 // }
 
-
 .cover-setting-drawer-block {
   margin-bottom: 24px;
 
-  >h3 {
+  > h3 {
     font-weight: 500;
     margin-bottom: 12px;
     font-size: 14px;
@@ -49,7 +48,7 @@
       bottom: 4px;
       font-weight: 700;
       font-size: 14px;
-      pointer-events: none
+      pointer-events: none;
     }
 
     &-item {
@@ -60,7 +59,7 @@
       overflow: hidden;
       background-color: #f0f2f5;
       border-radius: 4px;
-      box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, .18);
+      box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, 0.18);
       cursor: pointer;
 
       &::before {
@@ -70,7 +69,7 @@
         width: 33%;
         height: 100%;
         background-color: #fff;
-        content: "";
+        content: '';
       }
 
       &::after {
@@ -80,30 +79,30 @@
         width: 100%;
         height: 25%;
         background-color: #fff;
-        content: ""
+        content: '';
       }
 
       &-dark {
-        background-color: rgba(0, 21, 41, .85);
+        background-color: rgba(0, 21, 41, 0.85);
 
         &::before {
-          background-color: rgba(0, 21, 41, .65);
-          content: "";
+          background-color: rgba(0, 21, 41, 0.65);
+          content: '';
         }
 
         &::after {
-          background-color: rgba(0, 21, 41, .85);
+          background-color: rgba(0, 21, 41, 0.85);
         }
       }
 
       &-light {
         &::before {
           background-color: #fff;
-          content: "";
+          content: '';
         }
 
         &::after {
-          background-color: #fff
+          background-color: #fff;
         }
       }
 
@@ -112,7 +111,6 @@
         box-shadow: rgba(13, 13, 13, 0.18) 0 1px 2.5px 0;
 
         &-light {
-
           &::before,
           &::after {
             background-color: rgb(36, 37, 37);
@@ -120,7 +118,6 @@
         }
 
         &-dark {
-
           &::before,
           &::after {
             background-color: rgba(15, 28, 41, 0.65);
@@ -128,9 +125,7 @@
         }
       }
     }
-
   }
-
 
   .cover-setting-drawer-block-theme-color {
     overflow: hidden;
@@ -147,7 +142,7 @@
       align-items: center;
       justify-content: center;
       border-radius: 2px;
-      cursor: pointer
+      cursor: pointer;
     }
   }
 }
