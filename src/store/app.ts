@@ -27,7 +27,6 @@ export const useAppStore = defineStore('app', () => {
   const routerData = shallowRef();
   const menuData = shallowRef<MenuData>([]);
 
-  isDark.value = false;
   if (isDark.value || layoutSetting.theme === 'dark') toggleTheme('dark');
 
   // 监听isDark的变化

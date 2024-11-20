@@ -121,9 +121,9 @@
         "cyan": "明青",
         "green": "极光绿",
         "daybreak": "拂晓",
-        "techBlue": "科技（默认）",
+        "techBlue": "科技",
         "geekBlue": "极客蓝",
-        "purple": "酱紫"
+        "purple": "酱紫（默认）"
       }
     }
   },
