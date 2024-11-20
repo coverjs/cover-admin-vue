@@ -24,6 +24,7 @@ withDefaults(
   {
     theme: 'light',
     colorList: () => [
+      { key: 'purple', color: '#722ED1' },
       { key: 'techBlue', color: '#1677FF' },
       { key: 'daybreak', color: '#1890ff' },
       { key: 'dust', color: '#F5222D' },
@@ -32,7 +33,6 @@ withDefaults(
       { key: 'cyan', color: '#13C2C2' },
       { key: 'green', color: '#52C41A' },
       { key: 'geekBlue', color: '#2F54EB' },
-      { key: 'purple', color: '#722ED1' },
     ],
   },
 );

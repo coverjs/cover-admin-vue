@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+import type { RouteMeta } from 'vue-router';
 import { useAppStore } from '@/store';
 import { loadEnv } from '@/utils';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
-import type { RouteMeta } from 'vue-router';
 
 import HeaderActions from '@/components/HeaderActions.vue';
 import LayoutHeader from '@/components/LayoutHeader/index.vue';
@@ -64,10 +64,12 @@ function handleSelectedKeys(keys: string[]) {
       collapsible
     >
       <div :class="`${prefixCls}-title`">
-        <span v-if="!collapsed">
-          {{ env.VITE_APP_TITLE ?? 'Cover Admin' }}
+        <span>
+          <img class="title-logo" :src="Logo" alt="logo" />
+          <template v-if="!collapsed">
+            {{ env.VITE_APP_TITLE ?? 'Cover Admin' }}
+          </template>
         </span>
-        <img v-else :src="Logo" alt="logo" style="height: 45px; width: 45px" />
       </div>
       <a-menu
         v-model:openKeys="openKeys"
@@ -93,6 +95,7 @@ function handleSelectedKeys(keys: string[]) {
             class="trigger"
             @click="() => (collapsed = !collapsed)"
           />
+          <header-breadcrumb />
         </template>
         <template #headerActions>
           <header-actions />
@@ -129,7 +132,11 @@ function handleSelectedKeys(keys: string[]) {
     display: flex;
     align-items: center;
     justify-content: center;
-
+    .title-logo {
+      display: inline-block;
+      width: 45px;
+      height: 45px;
+    }
     > span {
       text-wrap: nowrap;
     }

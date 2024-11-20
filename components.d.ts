@@ -8,6 +8,8 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AAvatar: typeof import('ant-design-vue/es')['Avatar']
+    ABreadcrumb: typeof import('ant-design-vue/es')['Breadcrumb']
+    ABreadcrumbItem: typeof import('ant-design-vue/es')['BreadcrumbItem']
     AButton: typeof import('ant-design-vue/es')['Button']
     ACard: typeof import('ant-design-vue/es')['Card']
     ACheckbox: typeof import('ant-design-vue/es')['Checkbox']
@@ -38,13 +40,13 @@ declare module 'vue' {
     ATooltip: typeof import('ant-design-vue/es')['Tooltip']
     ATreeSelect: typeof import('ant-design-vue/es')['TreeSelect']
     ATypography: typeof import('ant-design-vue/es')['Typography']
-    ATypographyLink: typeof import('ant-design-vue/es')['TypographyLink']
     ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
     BlockCheckbox: typeof import('./src/components/SettingDrawer/BlockCheckbox.vue')['default']
     BlockThemeColor: typeof import('./src/components/SettingDrawer/BlockThemeColor.vue')['default']
     DarkModeSwitch: typeof import('./src/components/DarkModeSwitch.vue')['default']
     FallbackPage: typeof import('./src/components/FallbackPage.vue')['default']
     HeaderActions: typeof import('./src/components/HeaderActions.vue')['default']
+    HeaderBreadcrumb: typeof import('./src/components/HeaderBreadcrumb.vue')['default']
     LanguageToggle: typeof import('./src/components/LanguageToggle.vue')['default']
     LayoutHeader: typeof import('./src/components/LayoutHeader/index.vue')['default']
     LoginForm: typeof import('./src/components/LoginForm.vue')['default']

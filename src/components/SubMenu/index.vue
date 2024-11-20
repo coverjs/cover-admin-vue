@@ -24,7 +24,7 @@ const { t } = useI18n();
         <async-icon :icon="item.icon" />
       </template>
       <template #title>
-        {{ t(item.locale!) ?? item.name }}
+        {{ t(item.locale!) || item.name }}
       </template>
       <template v-for="menu in item.children">
         <template v-if="menu.children">
@@ -36,7 +36,7 @@ const { t } = useI18n();
               <async-icon :icon="menu.icon" />
             </template>
             <RouterLink v-if="link" :to="menu.path">
-              {{ t(menu.locale!) ?? menu.name }}
+              {{ t(menu.locale!) || menu.name }}
             </RouterLink>
           </a-menu-item>
         </template>

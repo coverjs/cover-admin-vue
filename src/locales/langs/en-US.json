@@ -121,9 +121,9 @@
         "cyan": "Cyan",
         "green": "Polar Green",
         "daybreak": "Daybreak Blue",
-        "techBlue": "Technology (default)",
+        "techBlue": "Technology",
         "geekBlue": "Geek Glue",
-        "purple": "Golden Purple"
+        "purple": "Golden Purple(default)"
       }
     }
   },

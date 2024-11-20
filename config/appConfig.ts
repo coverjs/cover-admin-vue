@@ -2,7 +2,7 @@ import type { LayoutSetting } from '@/types';
 
 export const defaultLayoutSetting: LayoutSetting = {
   theme: 'light',
-  colorPrimary: '#1677FF',
+  colorPrimary: '#722ED1',
   headerHeight: 64,
 } as const;
 

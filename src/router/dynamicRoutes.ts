@@ -1,5 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 import { MenuData, MenuDataItem } from '@/router/types.ts';
+import { t } from '@/locales';
 
 export const basicRouteMap = {
   // 空页面 跳转 404
@@ -35,7 +36,7 @@ export function formatRoute(menu: MenuDataItem, parent?: MenuDataItem) {
     component: getRouterModule(menu.path!),
     meta: {
       id: menu?.id,
-      title: menu?.name,
+      title: t(menu.locale!) || menu?.name,
       originPath: parent?.path,
     },
   } as RouteRecordRaw;
