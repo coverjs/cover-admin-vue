@@ -5,6 +5,8 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import AsyncIcon from '@/components/SubMenu/AsyncIcon.vue';
 import MenuDrawer from '@/pages/system/menu/MenuDrawer.vue';
 
+const { t } = useI18n();
+
 defineOptions({
   name: 'MenuPage',
 });
@@ -129,9 +131,11 @@ function refresh() {
     <!--TODO 查询-->
   </a-card>
 
-  <a-card title="菜单列表">
+  <a-card :title="t?.('pages.system.menu.menuList')">
     <template #extra>
-      <a-button type="primary" @click="handleAdd">新增菜单</a-button>
+      <a-button type="primary" @click="handleAdd">{{
+        t?.('pages.system.menu.editMenu')
+      }}</a-button>
     </template>
     <a-table :columns="columns" :data-source="treeTableData">
       <template #bodyCell="{ column, text, record }">
@@ -148,7 +152,7 @@ function refresh() {
               ></a-button>
               <a-popconfirm
                 v-if="tableData.length"
-                title="确定删除?"
+                :title="t('fallback.sureDelete')"
                 @confirm="onDelete(record.id)"
               >
                 <a-button
@@ -164,6 +168,7 @@ function refresh() {
     </a-table>
   </a-card>
   <MenuDrawer
+    :t
     v-model:open="open"
     :type
     :formData

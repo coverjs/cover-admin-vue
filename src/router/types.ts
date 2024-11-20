@@ -17,6 +17,8 @@ export interface MenuDataItem {
   name?: string;
   // 菜单类型
   type?: 'DIRECTORY' | 'MENU' | 'ACTION';
+  // 国际化
+  locale?: string;
 }
 
 export type MenuData = MenuDataItem[];

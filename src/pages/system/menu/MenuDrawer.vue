@@ -1,3 +1,76 @@
+<script lang="ts" setup>
+import { api, MenuVo } from '@/services';
+import { CreateMenuDtoWithId } from '@/pages/system/menu/index.vue';
+import { useMessage } from '@/hooks';
+
+defineOptions({
+  name: 'MenuDrawer',
+});
+
+const open = defineModel('open');
+const emit = defineEmits<{
+  (e: 'refresh'): void;
+}>();
+
+interface Props {
+  type: boolean;
+  formData: CreateMenuDtoWithId;
+  treeData: MenuVo[];
+  t?: (key: string, ...args: any[]) => string;
+}
+
+const formRef = ref();
+const props = withDefaults(defineProps<Props>(), {
+  type: false,
+});
+
+const formState = ref<CreateMenuDtoWithId>(toRaw(props.formData));
+watch(
+  () => props.formData,
+  value => {
+    formState.value = toRaw(value);
+  },
+  { immediate: true },
+);
+const { createNotify } = useMessage();
+
+const onClose = () => {
+  open.value = false;
+  formRef.value.resetFields();
+};
+
+const onSubmit = async () => {
+  try {
+    await formRef.value?.validate();
+    const formData = toRaw(formState.value);
+    if (formData.parentId === undefined) {
+      formData.parentId = null as unknown as number; // 现在先这样 等后端改了再改
+    }
+    if (props.type) {
+      const { data: res } = await api.system.menuCreate(formData);
+      handleResponse(res, '新增成功');
+    } else {
+      const id = formData.id!;
+      const { data: res } = await api.system.menuUpdate(id, formData);
+      handleResponse(res, '修改成功');
+    }
+  } catch (error: any) {
+    console.error(error);
+  }
+};
+
+function handleResponse(res: any, successMessage: string) {
+  if (res.code === 0) {
+    createNotify.success({
+      message: successMessage,
+      duration: 3,
+    });
+    open.value = false;
+    emit('refresh');
+  }
+}
+</script>
+
 <template>
   <a-drawer
     v-model:open="open"
@@ -5,7 +78,11 @@
     class="custom-class"
     root-class-name="root-class-name"
     :root-style="{ color: 'blue' }"
-    :title="type ? '新增菜单' : '编辑菜单'"
+    :title="
+      type
+        ? t?.('pages.system.menu.createMenu')
+        : t?.('pages.system.menu.createMenu')
+    "
     placement="right"
     destroy-on-close
     @close="onClose"
@@ -114,79 +191,12 @@
     </a-form>
 
     <template #footer>
-      <a-button style="margin-right: 8px" @click="onClose">取消</a-button>
-      <a-button type="primary" @click="onSubmit">提交</a-button>
+      <a-button style="margin-right: 8px" @click="onClose">{{
+        t?.('common.cancel')
+      }}</a-button>
+      <a-button type="primary" @click="onSubmit">{{
+        t?.('common.confirm')
+      }}</a-button>
     </template>
   </a-drawer>
 </template>
-<script lang="ts" setup>
-import { api, MenuVo } from '@/services';
-import { CreateMenuDtoWithId } from '@/pages/system/menu/index.vue';
-import { useMessage } from '@/hooks';
-
-defineOptions({
-  name: 'MenuDrawer',
-});
-
-const open = defineModel('open');
-const emit = defineEmits<{
-  (e: 'refresh'): void;
-}>();
-
-interface Props {
-  type: boolean;
-  formData: CreateMenuDtoWithId;
-  treeData: MenuVo[];
-}
-
-const formRef = ref();
-const props = withDefaults(defineProps<Props>(), {
-  type: false,
-});
-
-const formState = ref<CreateMenuDtoWithId>(toRaw(props.formData));
-watch(
-  () => props.formData,
-  value => {
-    formState.value = toRaw(value);
-  },
-  { immediate: true },
-);
-const { createNotify } = useMessage();
-
-const onClose = () => {
-  open.value = false;
-  formRef.value.resetFields();
-};
-
-const onSubmit = async () => {
-  try {
-    await formRef.value?.validate();
-    const formData = toRaw(formState.value);
-    if (formData.parentId === undefined) {
-      formData.parentId = null as unknown as number; // 现在先这样 等后端改了再改
-    }
-    if (props.type) {
-      const { data: res } = await api.system.menuCreate(formData);
-      handleResponse(res, '新增成功');
-    } else {
-      const id = formData.id!;
-      const { data: res } = await api.system.menuUpdate(id, formData);
-      handleResponse(res, '修改成功');
-    }
-  } catch (error: any) {
-    console.error(error);
-  }
-};
-
-function handleResponse(res: any, successMessage: string) {
-  if (res.code === 0) {
-    createNotify.success({
-      message: successMessage,
-      duration: 3,
-    });
-    open.value = false;
-    emit('refresh');
-  }
-}
-</script>

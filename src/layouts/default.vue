@@ -12,7 +12,6 @@ import SubMenu from '@/components/SubMenu/index.vue';
 import Logo from '@/assets/logo.png';
 
 defineOptions({ name: 'DefaultLayout' });
-
 const prefixCls = shallowRef('cover-layout-app');
 
 const selectedKeys = ref<string[]>([]);
