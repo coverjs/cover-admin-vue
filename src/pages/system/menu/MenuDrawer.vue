@@ -97,7 +97,7 @@ function handleResponse(res: any, successMessage: string) {
       autocomplete="off"
     >
       <a-row>
-        <a-col :lg="24" :md="24">
+        <a-col :lg="12" :md="24">
           <a-form-item
             label="菜单类型"
             name="type"
@@ -143,37 +143,25 @@ function handleResponse(res: any, successMessage: string) {
           <a-form-item
             label="排序"
             name="sort"
-            :rules="[{ required: true, message: '输入菜单名称!' }]"
+            :rules="[{ required: true, message: '输入排序!' }]"
           >
             <a-input v-model:value="formState.sort" />
           </a-form-item>
         </a-col>
 
         <a-col :lg="12" :md="24" v-if="formState.type !== 'ACTION'">
-          <a-form-item
-            label="多语言"
-            name="locale"
-            :rules="[{ required: true, message: '输入多语言!' }]"
-          >
+          <a-form-item label="多语言" name="locale">
             <a-input v-model:value="formState.locale" />
           </a-form-item>
         </a-col>
 
         <a-col :lg="12" :md="24" v-if="formState.type !== 'ACTION'">
-          <a-form-item
-            label="图标"
-            name="icon"
-            :rules="[{ required: true, message: '请选择图标' }]"
-          >
+          <a-form-item label="图标" name="icon">
             <a-input v-model:value="formState.icon" />
           </a-form-item>
         </a-col>
         <a-col :lg="12" :md="24" v-if="formState.type !== 'ACTION'">
-          <a-form-item
-            label="路由地址"
-            name="path"
-            :rules="[{ required: true, message: '输入菜单名称!' }]"
-          >
+          <a-form-item label="路由地址" name="path">
             <a-input v-model:value="formState.path" />
           </a-form-item>
         </a-col>
@@ -182,7 +170,7 @@ function handleResponse(res: any, successMessage: string) {
           <a-form-item
             label="权限标识"
             name="code"
-            :rules="[{ required: true, message: '输入菜单名称!' }]"
+            :rules="[{ required: true, message: '输入权限标识!' }]"
           >
             <a-input v-model:value="formState.code" />
           </a-form-item>

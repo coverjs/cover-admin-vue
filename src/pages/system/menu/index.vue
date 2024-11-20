@@ -65,7 +65,7 @@ const defaultFormData: CreateMenuDto = {
   code: '',
   sort: 0,
   parentId: undefined,
-  type: 'MENU',
+  type: 'DIRECTORY',
 };
 const formData = ref<CreateMenuDtoWithId>(defaultFormData);
 const type = ref<boolean>(false); // 编辑 | 新增
