@@ -2,6 +2,7 @@
 import type { RouteMeta } from 'vue-router';
 import { useAppStore } from '@/store';
 import { loadEnv } from '@/utils';
+import { useAntdToken } from '@/hooks';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 
 import HeaderActions from '@/components/HeaderActions.vue';
@@ -14,7 +15,6 @@ import Logo from '@/assets/logo.png';
 defineOptions({ name: 'DefaultLayout' });
 const prefixCls = shallowRef('cover-layout-app');
 
-const selectedKeys = ref<string[]>([]);
 const openKeys = ref<string[]>([]);
 const collapsed = ref<boolean>(false);
 
@@ -24,6 +24,8 @@ const exceptionCode = ref(403);
 const env = loadEnv();
 
 const route = useRoute();
+
+const { token } = useAntdToken();
 
 function checkedException(meta: RouteMeta) {
   if (meta.exception) {
@@ -45,14 +47,9 @@ const appStore = useAppStore();
 const { layoutSetting } = storeToRefs(appStore);
 
 onMounted(() => {
-  selectedKeys.value = [route.path];
   const originPath = route.meta?.originPath;
   openKeys.value = originPath ? [originPath] : [];
 });
-
-function handleSelectedKeys(keys: string[]) {
-  selectedKeys.value = keys;
-}
 </script>
 
 <template>
@@ -73,16 +70,15 @@ function handleSelectedKeys(keys: string[]) {
       </div>
       <a-menu
         v-model:openKeys="openKeys"
-        :selectedKeys="selectedKeys"
+        :selectedKeys="[$route.path]"
         mode="inline"
-        @update:selected-keys="handleSelectedKeys"
       >
         <template v-for="menu in appStore.menuData" :key="menu.path">
           <sub-menu :item="menu" />
         </template>
       </a-menu>
     </a-layout-sider>
-    <a-layout>
+    <a-layout :style="{ borderLeft: `1px solid ${token.colorBorder}` }">
       <layout-header>
         <template #headerContent>
           <menu-unfold-outlined
@@ -101,9 +97,19 @@ function handleSelectedKeys(keys: string[]) {
           <header-actions />
         </template>
       </layout-header>
-      <a-layout-content class="my-[24px] mx-[16px] p-[24px] overflow-auto">
-        <fallback-page v-if="exception" :status="Number(exceptionCode)" />
-        <router-view v-else />
+      <a-layout-content>
+        <page-tags />
+        <div class="my-[24px] mx-[16px] p-[24px] overflow-auto page-container">
+          <fallback-page v-if="exception" :status="Number(exceptionCode)" />
+
+          <router-view v-else v-slot="{ Component, route }">
+            <transition name="fade-transform" mode="out-in">
+              <keep-alive>
+                <component :is="Component" :key="route.path" />
+              </keep-alive>
+            </transition>
+          </router-view>
+        </div>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -147,5 +153,22 @@ function handleSelectedKeys(keys: string[]) {
       height: 45px;
     }
   }
+  .page-container {
+    overflow-x: hidden;
+  }
+}
+
+.fade-transform-enter-active,
+.fade-transform-leave-active {
+  transition: all 0.5s;
+}
+
+.fade-transform-enter-from {
+  opacity: 0;
+  transform: translateX(50px);
+}
+.fade-transform-leave-to {
+  opacity: 0;
+  transform: translateX(-50px);
 }
 </style>
