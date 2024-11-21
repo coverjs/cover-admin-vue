@@ -42,7 +42,7 @@ jobs:
       - name: 执行远程脚本命令
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
+          host: ${{ secrets.TEST_SSH_HOST }}
           username: ${{ secrets.TEST_SSH_USERNAME }}
           password: ${{ secrets.TEST_SSH_PASSWORD }}
           script: |
