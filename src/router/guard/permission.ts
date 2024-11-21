@@ -17,7 +17,7 @@ export function createPermissionGuard(router: Router) {
     }
 
     if (to.name === 'login' && token) {
-      next('/');
+      next('/home');
       return;
     }
 
@@ -30,6 +30,7 @@ export function createPermissionGuard(router: Router) {
         await userStore.getUserInfoAction();
         const currentRoute = await appStore.generateDynamicRoutes();
         router.addRoute(currentRoute);
+        console.log(router.options.routes);
       } catch (e) {
         to.meta.exception = !!e;
         to.meta.exceptionCode = 500;

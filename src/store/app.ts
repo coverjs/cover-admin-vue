@@ -5,8 +5,8 @@ import { theme as antdTheme } from 'ant-design-vue/es';
 import { defaultLayoutSetting } from '@config';
 import { api } from '@/services';
 import { generateMenuAndRoutes } from '@/router/dynamicRoutes.ts';
-import { rootRoute } from '@/router/staticRoutes.ts';
-import { MenuData } from '@/router/types.ts';
+import staticRoutes from '@/router/staticRoutes.ts';
+import { MenuData, MenuDataItem } from '@/router/types.ts';
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
@@ -76,12 +76,18 @@ export const useAppStore = defineStore('app', () => {
   const generateDynamicRoutes = async () => {
     const { menuData: treeMenuData, routeData: treeRouterData } =
       await getMenuData();
-    menuData.value = treeMenuData;
-    routerData.value = {
-      ...rootRoute,
-      children: treeRouterData,
-    };
-    return routerData.value;
+    const root = staticRoutes.find(item => item.path === '/');
+    root?.children?.push(...treeRouterData);
+    const home = staticRoutes.find(item => item.path === '/home');
+    const homePage = {
+      ...home?.children![0],
+      path: '/home',
+      name: '首页',
+      locale: 'menu.home.home',
+    } as MenuDataItem;
+    menuData.value = [homePage, ...treeMenuData];
+    routerData.value = treeRouterData;
+    return root!;
   };
 
   return {

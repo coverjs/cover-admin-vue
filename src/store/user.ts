@@ -49,7 +49,7 @@ export const useUserStore = defineStore(
       if (callApi) await api.auth.authLogout();
 
       setToken(void 0);
-      router.replace(PageEnum.BASE_LOGIN);
+      await router.replace(PageEnum.BASE_LOGIN);
       isPollActive.value && stopGetUserInfoPoll();
     }
 
@@ -60,7 +60,7 @@ export const useUserStore = defineStore(
       const routes = await appStore.generateDynamicRoutes();
       router.addRoute(routes);
 
-      goHome && (await router.replace(PageEnum.BASE_HOME));
+      goHome && (await router.replace(PageEnum.BASE_INDEX));
     }
 
     async function getUserInfoAction() {

@@ -112,7 +112,6 @@
         "pageStyle": "Page Style",
         "light": "Light",
         "dark": "Dark",
-
         "light-short": "Light",
         "dark-short": "Dark",
         "auto-match": "Auto"
@@ -146,6 +145,9 @@
       "userAdmin": "User Admin",
       "roleAdmin": "Role Admin",
       "menuAdmin": "Menu Admin"
+    },
+    "home": {
+      "home": "Home"
     }
   }
 }

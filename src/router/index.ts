@@ -10,6 +10,6 @@ export const router = createRouter({
 });
 
 export function setupRouter(app: App) {
-  setupRouterGuards(router);
   app.use(router);
+  setupRouterGuards(router);
 }
