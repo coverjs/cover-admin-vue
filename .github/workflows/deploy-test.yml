@@ -1,7 +1,7 @@
 name: DeployProd
 on:
   push: # 监听调用时机为push事件
-    branches: ['main']
+    branches: ['test']
 jobs:
   deploy:
     runs-on: ubuntu-latest # runs-on 指定job任务运行所需要的虚拟机环境(必填字段)
@@ -26,16 +26,16 @@ jobs:
       - name: 项目打包构建
         env:
           NODE_OPTIONS: --max_old_space_size=4096
-        run: pnpm build
+        run: pnpm build:test
 
       - name: 部署产物到服务器
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          host: ${{ secrets.TEST_SSH_HOST }}
+          username: ${{ secrets.TEST_SSH_USERNAME }}
+          password: ${{ secrets.TEST_SSH_PASSWORD }}
           source: 'dist/'
-          target: '/${{secrets.SSH_USERNAME}}/Projects/.cover-admin-vue_temp/'
+          target: '/${{secrets.TEST_SSH_USERNAME}}/Projects/.cover-admin-vue_temp/'
           rm: true
           strip_components: 1
 
@@ -43,11 +43,11 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          username: ${{ secrets.TEST_SSH_USERNAME }}
+          password: ${{ secrets.TEST_SSH_PASSWORD }}
           script: |
-            mkdir -p /${{secrets.SSH_USERNAME}}/Projects/cover-admin-vue
-            rm -rf /${{secrets.SSH_USERNAME}}/Projects/cover-admin-vue/*
-            cp -rf /${{secrets.SSH_USERNAME}}/Projects/.cover-admin-vue_temp/*  /${{secrets.SSH_USERNAME}}/Projects/cover-admin-vue/
-            rm -rf /${{secrets.SSH_USERNAME}}/Projects/.cover-admin-vue_temp/
+            mkdir -p /${{secrets.TEST_SSH_USERNAME}}/Projects/cover-admin-vue
+            rm -rf /${{secrets.TEST_SSH_USERNAME}}/Projects/cover-admin-vue/*
+            cp -rf /${{secrets.TEST_SSH_USERNAME}}/Projects/.cover-admin-vue_temp/*  /${{secrets.TEST_SSH_USERNAME}}/Projects/cover-admin-vue/
+            rm -rf /${{secrets.TEST_SSH_USERNAME}}/Projects/.cover-admin-vue_temp/
       - run: echo "部署完成！"
