@@ -12,7 +12,12 @@ const isDark = useDark();
 const toggleDark = useToggle(isDark);
 
 export const useAppStore = defineStore('app', () => {
+  /**
+   * ----------------------------- theme&layout start-----------------------------
+   * --------------------------主题以及布局相关----------------------------------
+   */
   const { darkAlgorithm, defaultAlgorithm } = antdTheme;
+
   const layoutSetting = reactive<LayoutSetting>(defaultLayoutSetting);
   const themeConfig: ThemeConfig = reactive<ThemeConfig>({
     algorithm:
@@ -24,19 +29,18 @@ export const useAppStore = defineStore('app', () => {
     },
   });
 
-  const routerData = shallowRef();
-  const menuData = shallowRef<MenuData>([]);
-
   if (isDark.value || layoutSetting.theme === 'dark') toggleTheme('dark');
 
-  // 监听isDark的变化
   watch(isDark, () => {
     if (isDark.value) toggleTheme('dark');
     else toggleTheme('light');
   });
 
+  /**
+   * 切换主题配置
+   * @param theme 当前选择的主题类型，可以是 'light' 或 'dark'
+   */
   function toggleTheme(theme: ThemeType) {
-    // if (layoutSetting.theme === theme) return;
     layoutSetting.theme = theme;
     if (theme === 'light') {
       toggleDark(false);
@@ -50,6 +54,11 @@ export const useAppStore = defineStore('app', () => {
     }
   }
 
+  /**
+   * 切换主颜色设置
+   * 此函数用于更新布局设置中的主颜色，并同步更新主题配置中的主颜色
+   * @param color 新的主颜色值
+   */
   function toggleColorPrimary(color: string) {
     layoutSetting.colorPrimary = color;
     if (themeConfig.token) {
@@ -57,6 +66,14 @@ export const useAppStore = defineStore('app', () => {
     }
   }
 
+  /**
+   * 更改设置布局
+   * 此函数根据传入的key和value参数，更新特定的布局设置
+   * 它通过switch语句来决定调用哪个相应的函数以更改设置
+   *
+   * @param key - 要更改的设置键，必须是LayoutSetting类型的一个键
+   * @param value - 要设置的新值
+   */
   function changeSettingLayout(key: keyof LayoutSetting, value: any) {
     switch (key) {
       case 'colorPrimary':
@@ -67,13 +84,41 @@ export const useAppStore = defineStore('app', () => {
         return;
     }
   }
+  /**
+   * ----------------------------- theme&layout end-----------------------------
+   */
 
+  /**
+   * ----------------------------- menu&router start-----------------------------
+   * --------------------------菜单以及动态路由相关-----------------------------
+   */
+
+  const routerData = shallowRef();
+  const menuData = shallowRef<MenuData>([]);
+
+  /**
+   * 异步获取菜单数据并生成对应的路由和菜单
+   *
+   * 本函数通过调用API获取当前用户的菜单信息，然后根据这些信息生成应用中的菜单和路由
+   * 使用async/await语法糖来处理异步操作，使得代码更加简洁易读
+   *
+   * @returns {Promise<any>} 返回生成的菜单和路由数据
+   */
   async function getMenuData() {
     const { data: res } = await api.profile.profileGetMenus();
     return generateMenuAndRoutes(res.data);
   }
 
-  const generateDynamicRoutes = async () => {
+  /**
+   * 异步生成动态路由
+   *
+   * 此函数的作用是获取菜单数据和路由数据，并将它们应用到应用中的菜单和路由配置中
+   * 它首先调用getMenuData函数来获取经过处理的菜单数据和路由数据，然后将这些数据更新到应用的相应状态中
+   * 这有助于在应用启动时或按需时动态地生成和更新应用的路由配置
+   *
+   * @returns {Promise<Object>} 返回更新后的路由数据对象，包括根路由和子路由
+   */
+  async function generateDynamicRoutes() {
     const { menuData: treeMenuData, routeData: treeRouterData } =
       await getMenuData();
     menuData.value = treeMenuData;
@@ -82,7 +127,16 @@ export const useAppStore = defineStore('app', () => {
       children: treeRouterData,
     };
     return routerData.value;
-  };
+  }
+
+  /**
+   * ----------------------------- menu&router end-----------------------------
+   */
+
+  /**
+   * ----------------------------- tags start---------------------------------
+   * --------------------------标签页相关------------------------------------
+   */
 
   return {
     layoutSetting,
