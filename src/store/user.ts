@@ -1,8 +1,9 @@
 import { type AccountLoginDto, api, UserInfoVo } from '@/services';
 import { router } from '@/router';
 import { PageEnum, TimeEnum } from '@/enums';
+import { waittingFor } from '@/utils';
 import { store, useAppStore } from '.';
-import { each, get, set } from 'lodash-es';
+import { each, get, set, bind, isEmpty } from 'lodash-es';
 
 export const useUserStore = defineStore(
   'user',
@@ -63,13 +64,15 @@ export const useUserStore = defineStore(
       goHome && (await router.replace(PageEnum.BASE_HOME));
     }
 
-    async function getUserInfoAction() {
+    function getUserInfoAction() {
       if (!getToken.value) return;
 
       // 轮询用户信息 检查token是否过期
       !isPollActive.value && startGetUserInfoPoll();
 
-      return userInfo;
+      return new Promise(resolve => {
+        waittingFor(() => !isEmpty(userInfo), bind(resolve, void 0, userInfo));
+      });
     }
 
     return {
