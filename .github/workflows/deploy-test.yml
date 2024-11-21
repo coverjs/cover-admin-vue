@@ -1,4 +1,4 @@
-name: DeployProd
+name: DeployTest
 on:
   push: # 监听调用时机为push事件
     branches: ['test']
