@@ -1,9 +1,11 @@
-import type { LayoutSetting, ThemeType } from '@/types';
+import type { LayoutSetting, ThemeType, PageTagItem } from '@/types';
 
 import { ThemeConfig } from 'ant-design-vue/es/config-provider/context';
 import { theme as antdTheme } from 'ant-design-vue/es';
 import { defaultLayoutSetting } from '@config';
 import { api } from '@/services';
+import { CacheEnum } from '@/enums';
+import { genStorageKey } from '@/utils';
 import { generateMenuAndRoutes } from '@/router/dynamicRoutes.ts';
 import { rootRoute } from '@/router/staticRoutes.ts';
 import { MenuData } from '@/router/types.ts';
@@ -138,12 +140,36 @@ export const useAppStore = defineStore('app', () => {
    * --------------------------标签页相关------------------------------------
    */
 
+  const tags: Ref<Array<PageTagItem>> = useLocalStorage(
+    genStorageKey(CacheEnum.PAGE_TAGS_KEY),
+    [] as PageTagItem[],
+  );
+
+  function addTag(tag: PageTagItem) {
+    const isExist = tags.value.some(item => item.path === tag.path);
+    if (!isExist) {
+      tags.value.push(tag);
+    }
+  }
+
+  function removeTag(tag: PageTagItem) {
+    tags.value = tags.value.filter(item => item.path !== tag.path);
+  }
+
+  function removeTags(target: PageTagItem[]) {
+    tags.value = tags.value.filter(item => !target.includes(item));
+  }
+
   return {
     layoutSetting,
     theme: themeConfig,
-    menuData,
-    routerData,
     changeSettingLayout,
     generateDynamicRoutes,
+    menuData,
+    routerData,
+    tags,
+    addTag,
+    removeTag,
+    removeTags,
   };
 });

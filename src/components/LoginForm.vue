@@ -4,7 +4,7 @@ import type { InternalNamePath } from 'ant-design-vue/es/form/interface';
 
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import { CacheEnum } from '@/enums';
-import { loadEnv } from '@/utils';
+import { genStorageKey } from '@/utils';
 import { cloneDeep, isEqual } from 'lodash-es';
 
 import crypto from 'crypto-js';
@@ -39,15 +39,14 @@ defineEmits<{
   (e: 'submit', formData: FormData): void;
 }>();
 
-const env = loadEnv();
 const { t } = useI18n();
 
 const rememberMeInStorage = useLocalStorage(
-  `${env.VITE_APP_NAMESPACE}_${CacheEnum.LOGIN_REMEMBER_ME}`,
+  genStorageKey(CacheEnum.LOGIN_REMEMBER_ME),
   false,
 );
 const usernameInStorage = useLocalStorage(
-  `${env.VITE_APP_NAMESPACE}_${CacheEnum.LOGIN_USERNAME}`,
+  genStorageKey(CacheEnum.LOGIN_USERNAME),
   '',
 );
 
