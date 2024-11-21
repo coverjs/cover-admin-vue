@@ -27,7 +27,7 @@ const title = computed(() => titleMap.get(props.status)?.() ?? 'Error');
 const subTitle = computed(() => descMap.get(props.status)?.() ?? '');
 
 function backHome() {
-  router.replace(PageEnum.BASE_INDEX);
+  router.replace(PageEnum.BASE_HOME);
 }
 </script>
 

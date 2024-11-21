@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import welcomImg from '@/assets/welcome.png';
+import welcomeImg from '@/assets/welcome.png';
 defineOptions({
   name: 'HomePage',
 });
@@ -7,12 +7,12 @@ defineOptions({
 
 <template>
   <div>
-    <img class="welcom-img" :src="welcomImg" alt="welcomImg" />
+    <img class="welcome-img" :src="welcomeImg" alt="welcomeImg" />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.welcom-img {
+.welcome-img {
   width: 100%;
 }
 </style>

@@ -60,7 +60,7 @@ export const useUserStore = defineStore(
       const routes = await appStore.generateDynamicRoutes();
       router.addRoute(routes);
 
-      goHome && (await router.replace(PageEnum.BASE_INDEX));
+      goHome && (await router.replace(PageEnum.BASE_HOME));
     }
 
     async function getUserInfoAction() {
