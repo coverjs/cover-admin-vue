@@ -23,7 +23,7 @@ const columns = [
     key: 'icon',
   },
   {
-    title: '组件',
+    title: '路由',
     dataIndex: 'path',
     key: 'path',
   },

@@ -49,7 +49,7 @@ const { t } = useI18n();
         <async-icon :icon="item.icon" />
       </template>
       <RouterLink v-if="link" :to="item.path">
-        {{ t(item.locale!) ?? item.name }}
+        {{ t(item.locale!) || item.name }}
       </RouterLink>
     </a-menu-item>
   </template>

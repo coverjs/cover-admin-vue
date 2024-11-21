@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import welcomeImg from '@/assets/welcome.png';
 defineOptions({
-  name: 'PageIndex',
+  name: 'HomePage',
 });
 </script>
 

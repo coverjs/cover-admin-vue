@@ -4,11 +4,11 @@ import { ThemeConfig } from 'ant-design-vue/es/config-provider/context';
 import { theme as antdTheme } from 'ant-design-vue/es';
 import { defaultLayoutSetting } from '@config';
 import { api } from '@/services';
-import { CacheEnum } from '@/enums';
+import { CacheEnum, PageEnum } from '@/enums';
 import { genStorageKey } from '@/utils';
 import { generateMenuAndRoutes } from '@/router/dynamicRoutes.ts';
-import { rootRoute } from '@/router/staticRoutes.ts';
-import { MenuData } from '@/router/types.ts';
+import staticRoutes from '@/router/staticRoutes.ts';
+import { MenuData, MenuDataItem } from '@/router/types.ts';
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
@@ -86,6 +86,7 @@ export const useAppStore = defineStore('app', () => {
         return;
     }
   }
+
   /**
    * ----------------------------- theme&layout end-----------------------------
    */
@@ -123,12 +124,19 @@ export const useAppStore = defineStore('app', () => {
   async function generateDynamicRoutes() {
     const { menuData: treeMenuData, routeData: treeRouterData } =
       await getMenuData();
-    menuData.value = treeMenuData;
-    routerData.value = {
-      ...rootRoute,
-      children: treeRouterData,
-    };
-    return routerData.value;
+    const root = staticRoutes.find(item => item.path === '/');
+    root?.children?.push(...treeRouterData);
+    const home = staticRoutes.find(item => item.path === PageEnum.BASE_HOME);
+    const homePage = {
+      ...home?.children![0],
+      path: '/home',
+      name: '首页',
+      locale: 'menu.home.home',
+      icon: 'FileOutlined',
+    } as MenuDataItem;
+    menuData.value = [homePage, ...treeMenuData];
+    routerData.value = treeRouterData;
+    return root!;
   }
 
   /**

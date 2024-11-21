@@ -1,4 +1,5 @@
 export enum PageEnum {
   BASE_LOGIN = '/login',
-  BASE_HOME = '/',
+  BASE_INDEX = '/',
+  BASE_HOME = '/home',
 }
