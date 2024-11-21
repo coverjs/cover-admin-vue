@@ -4,7 +4,7 @@ import { ThemeConfig } from 'ant-design-vue/es/config-provider/context';
 import { theme as antdTheme } from 'ant-design-vue/es';
 import { defaultLayoutSetting } from '@config';
 import { api } from '@/services';
-import { CacheEnum } from '@/enums';
+import { CacheEnum, PageEnum } from '@/enums';
 import { genStorageKey } from '@/utils';
 import { generateMenuAndRoutes } from '@/router/dynamicRoutes.ts';
 import staticRoutes from '@/router/staticRoutes.ts';
@@ -86,6 +86,7 @@ export const useAppStore = defineStore('app', () => {
         return;
     }
   }
+
   /**
    * ----------------------------- theme&layout end-----------------------------
    */
@@ -125,7 +126,7 @@ export const useAppStore = defineStore('app', () => {
       await getMenuData();
     const root = staticRoutes.find(item => item.path === '/');
     root?.children?.push(...treeRouterData);
-    const home = staticRoutes.find(item => item.path === '/home');
+    const home = staticRoutes.find(item => item.path === PageEnum.BASE_HOME);
     const homePage = {
       ...home?.children![0],
       path: '/home',

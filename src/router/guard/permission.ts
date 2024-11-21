@@ -2,6 +2,7 @@ import type { Router } from 'vue-router';
 
 import { useAppStore, useUserStore } from '@/store';
 import { isEmpty, omit } from 'lodash-es';
+import { PageEnum } from '@/enums';
 
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStore();
@@ -17,7 +18,7 @@ export function createPermissionGuard(router: Router) {
     }
 
     if (to.name === 'login' && token) {
-      next('/home');
+      next(PageEnum.BASE_HOME);
       return;
     }
 
