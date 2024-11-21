@@ -1,4 +1,5 @@
 export enum CacheEnum {
   LOGIN_REMEMBER_ME = 'LOGIN_REMEMBER_ME__',
   LOGIN_USERNAME = 'LOGIN_USERNAME__',
+  LOCALE_KEY = 'LOCALE_KEY__',
 }
