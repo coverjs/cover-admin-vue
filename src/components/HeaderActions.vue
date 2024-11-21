@@ -12,8 +12,13 @@ const { t } = useI18n();
 
 <template>
   <div class="header-action-container">
-    <dark-mode-switch />
     <a-menu mode="horizontal" :selectable="false" class="header-menu">
+      <a-menu-item>
+        <screenfull-toggle />
+      </a-menu-item>
+      <a-menu-item>
+        <color-mode-toggle />
+      </a-menu-item>
       <a-menu-item>
         <language-toggle />
       </a-menu-item>

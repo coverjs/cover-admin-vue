@@ -111,7 +111,11 @@
       "pageStyle": {
         "pageStyle": "Page Style",
         "light": "Light",
-        "dark": "Dark"
+        "dark": "Dark",
+
+        "light-short": "Light",
+        "dark-short": "Dark",
+        "auto-match": "Auto"
       },
       "themeColor": {
         "themeColor": "Theme Color",

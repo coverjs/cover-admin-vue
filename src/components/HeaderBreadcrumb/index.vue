@@ -1,6 +1,15 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import type { RouteRecordRaw } from 'vue-router';
-import { computed } from 'vue';
+
+import { loadEnv } from '@/utils';
+
+// antd 的面包屑 在 <a-breadcrumb> 中加动画会报 warn
+// a-breadcrumb 给 children 加的属性这里的使用场景用不到,所以正式环境可以加上动画 忽略 warn (坏笑~)
+import BreadcrumbTransition from './BreadcrumbTransition.vue';
+
+defineOptions({
+  name: 'HeaderBreadcrumb',
+});
 
 const route = useRoute();
 
@@ -18,7 +27,7 @@ function genMenuItems(children: RouteRecordRaw[]) {
 
 <template>
   <a-breadcrumb class="header-breadcrumb">
-    <transition-group name="breadcrumb">
+    <breadcrumb-transition :use-transition="loadEnv().PROD">
       <template v-for="(item, index) in breadcrumbList" :key="item.path">
         <a-breadcrumb-item v-if="index === breadcrumbList.length - 1">{{
           item.meta?.title
@@ -38,7 +47,7 @@ function genMenuItems(children: RouteRecordRaw[]) {
           </template>
         </a-breadcrumb-item>
       </template>
-    </transition-group>
+    </breadcrumb-transition>
   </a-breadcrumb>
 </template>
 
@@ -46,19 +55,5 @@ function genMenuItems(children: RouteRecordRaw[]) {
 .header-breadcrumb {
   display: inline-block;
   margin-left: 20px;
-}
-
-.breadcrumb-enter-active,
-.breadcrumb-leave-active {
-  transition: all 0.5s;
-}
-
-.breadcrumb-enter-from {
-  transform: translateX(20px);
-}
-
-.breadcrumb-leave-active {
-  position: absolute;
-  display: none;
 }
 </style>

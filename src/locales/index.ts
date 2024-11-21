@@ -1,7 +1,10 @@
 import type { App } from 'vue';
 import type { Locale } from 'ant-design-vue/es/locale';
 import type { LanguagesType } from './types';
+
 import { i18n, loadI18nMsgs } from './i18n';
+import { loadEnv } from '@/utils';
+import { CacheEnum } from '@/enums';
 
 import antdEnLocale from 'ant-design-vue/es/locale/en_US';
 import antdZhLocale from 'ant-design-vue/es/locale/zh_CN';
@@ -43,7 +46,12 @@ export async function setupLocale(
   defaultLang: LanguagesType = 'zh-CN',
 ) {
   app.use(i18n);
-  await loadMessages(defaultLang);
+
+  const localeStorage = useLocalStorage(
+    `${loadEnv().VITE_APP_NAMESPACE}_${CacheEnum.LOCALE_KEY}`,
+    defaultLang,
+  );
+  await loadMessages(localeStorage.value as LanguagesType);
 }
 
 export const t = i18n.global.t as (key: string, ...args: unknown[]) => string;

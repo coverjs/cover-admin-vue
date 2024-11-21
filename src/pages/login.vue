@@ -45,8 +45,10 @@ async function login() {
         >{{ t('authentication.loginTitle') }}
       </a-typography-title>
       <span class="title-extra">
-        <language-toggle />
-        <dark-mode-switch />
+        <a-space>
+          <color-mode-toggle />
+          <language-toggle />
+        </a-space>
       </span>
     </a-typography>
     <login-form

@@ -111,7 +111,10 @@
       "pageStyle": {
         "pageStyle": "整体风格设置",
         "light": "亮色菜单风格",
-        "dark": "暗色菜单风格"
+        "dark": "暗色菜单风格",
+        "light-short": "亮色",
+        "dark-short": "暗色",
+        "auto-match": "跟随系统"
       },
       "themeColor": {
         "themeColor": "主题色",
