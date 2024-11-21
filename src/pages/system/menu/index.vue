@@ -127,52 +127,54 @@ function refresh() {
 </script>
 
 <template>
-  <a-card title="菜单查询" class="mb-[24px]">
-    <!--TODO 查询-->
-  </a-card>
+  <div>
+    <a-card title="菜单查询" class="mb-[24px]">
+      <!--TODO 查询-->
+    </a-card>
 
-  <a-card :title="t?.('pages.system.menu.menuList')">
-    <template #extra>
-      <a-button type="primary" @click="handleAdd">{{
-        t?.('pages.system.menu.editMenu')
-      }}</a-button>
-    </template>
-    <a-table :columns="columns" :data-source="treeTableData">
-      <template #bodyCell="{ column, text, record }">
-        <template v-if="column.dataIndex === 'icon'">
-          <async-icon :icon="text" />
-        </template>
-        <template v-if="column.dataIndex === 'operation'">
-          <div class="editable-row-operations">
-            <a-space>
-              <a-button
-                type="link"
-                @click="handleEdit(record)"
-                :icon="h(EditOutlined)"
-              ></a-button>
-              <a-popconfirm
-                v-if="tableData.length"
-                :title="t('fallback.sureDelete')"
-                @confirm="onDelete(record.id)"
-              >
+    <a-card :title="t?.('pages.system.menu.menuList')">
+      <template #extra>
+        <a-button type="primary" @click="handleAdd">{{
+          t?.('pages.system.menu.editMenu')
+        }}</a-button>
+      </template>
+      <a-table :columns="columns" :data-source="treeTableData">
+        <template #bodyCell="{ column, text, record }">
+          <template v-if="column.dataIndex === 'icon'">
+            <async-icon :icon="text" />
+          </template>
+          <template v-if="column.dataIndex === 'operation'">
+            <div class="editable-row-operations">
+              <a-space>
                 <a-button
                   type="link"
-                  danger
-                  :icon="h(DeleteOutlined)"
+                  @click="handleEdit(record)"
+                  :icon="h(EditOutlined)"
                 ></a-button>
-              </a-popconfirm>
-            </a-space>
-          </div>
+                <a-popconfirm
+                  v-if="tableData.length"
+                  :title="t('fallback.sureDelete')"
+                  @confirm="onDelete(record.id)"
+                >
+                  <a-button
+                    type="link"
+                    danger
+                    :icon="h(DeleteOutlined)"
+                  ></a-button>
+                </a-popconfirm>
+              </a-space>
+            </div>
+          </template>
         </template>
-      </template>
-    </a-table>
-  </a-card>
-  <MenuDrawer
-    :t
-    v-model:open="open"
-    :type
-    :formData
-    :treeData="tableData"
-    @refresh="refresh"
-  />
+      </a-table>
+    </a-card>
+    <MenuDrawer
+      :t
+      v-model:open="open"
+      :type
+      :formData
+      :treeData="tableData"
+      @refresh="refresh"
+    />
+  </div>
 </template>

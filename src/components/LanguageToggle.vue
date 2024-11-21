@@ -4,7 +4,7 @@ import type { LanguagesType } from '@/locales/types';
 import { TranslationOutlined } from '@ant-design/icons-vue';
 import { loadMessages } from '@/locales';
 import { CacheEnum } from '@/enums';
-import { loadEnv } from '@/utils';
+import { genStorageKey } from '@/utils';
 import { i18n } from '@/locales/i18n';
 
 defineOptions({ name: 'LanguageToggle' });
@@ -12,7 +12,7 @@ defineOptions({ name: 'LanguageToggle' });
 const selectedKeys = ref([i18n.global.locale.value]);
 
 const localeStorage = useLocalStorage(
-  `${loadEnv().VITE_APP_NAMESPACE}_${CacheEnum.LOCALE_KEY}`,
+  genStorageKey(CacheEnum.LOCALE_KEY),
   i18n.global.locale.value,
 );
 

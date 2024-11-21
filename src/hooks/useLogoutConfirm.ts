@@ -2,7 +2,6 @@ import type { ShallowReactive } from 'vue';
 import { useMessage } from '.';
 import { useUserStore } from '@/store';
 import { TimeEnum } from '@/enums';
-import { isNil, delay } from 'lodash-es';
 import { t } from '@/locales';
 
 const { createConfirm } = useMessage();
@@ -53,12 +52,10 @@ export function useLogoutConfirm(mode: 'auto' | 'manual' = 'manual') {
         modal.instance?.update({
           okText: `${t('common.confirm')}(${secondsToGo})`,
         });
-      }, TimeEnum.SECOND);
-
-      delay(() => {
+        if (secondsToGo > 0) return;
         modal.visible && onConfirm();
-        !isNil(interval) && clearInterval(interval);
-      }, secondsToGo * TimeEnum.SECOND);
+        clearInterval(interval);
+      }, TimeEnum.SECOND);
     },
     200,
     { immediate: false },

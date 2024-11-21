@@ -18,8 +18,8 @@ statusHandlers.set(
   (msg?: string) => msg || t('fallback.http.badRequest'),
 );
 statusHandlers.set(StatusEnum.UNAUTHORIZED, () => {
-  const logoutConfirm = useLogoutConfirm('auto');
-  logoutConfirm();
+  const logout = useLogoutConfirm('auto');
+  logout();
   return false;
 });
 statusHandlers.set(
