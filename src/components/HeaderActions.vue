@@ -6,7 +6,7 @@ import { useLogoutConfirm } from '@/hooks';
 defineOptions({ name: 'LayoutHeader' });
 
 const userStore = useUserStore();
-const logoutConfirm = useLogoutConfirm('manual');
+const logout = useLogoutConfirm('manual');
 const { t } = useI18n();
 </script>
 
@@ -32,7 +32,7 @@ const { t } = useI18n();
           </span>
           <template #overlay>
             <a-menu theme="dark">
-              <a-menu-item @click="logoutConfirm">
+              <a-menu-item @click="logout">
                 {{ t('common.logout') }}
               </a-menu-item>
             </a-menu>
