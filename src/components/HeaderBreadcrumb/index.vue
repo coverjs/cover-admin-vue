@@ -3,15 +3,14 @@ import type { RouteRecordRaw } from 'vue-router';
 
 import { loadEnv } from '@/utils';
 
-// antd 的面包屑 在 <a-breadcrumb> 中加动画会报 warn
-// a-breadcrumb 给 children 加的属性这里的使用场景用不到,所以正式环境可以加上动画 忽略 warn (坏笑~)
-import BreadcrumbTransition from './BreadcrumbTransition.vue';
+import { last, split, isEmpty } from 'lodash-es';
 
 defineOptions({
   name: 'HeaderBreadcrumb',
 });
 
 const route = useRoute();
+const { t } = useI18n();
 
 const breadcrumbList = computed(() =>
   route.matched.filter(item => item.meta?.title),
@@ -19,21 +18,32 @@ const breadcrumbList = computed(() =>
 
 function genMenuItems(children: RouteRecordRaw[]) {
   return children.map(item => ({
-    title: item.meta?.title,
+    title: genItemTitle(item),
+    locale: (item.meta?.locale as string) ?? '',
     key: item.path,
   }));
+}
+
+function genItemTitle(item: RouteRecordRaw) {
+  if (item.meta?.locale && !isEmpty(item.meta?.locale)) {
+    return t(item.meta.locale as string);
+  }
+  if (item.meta?.title && !isEmpty(item.meta.title)) {
+    return item.meta.title;
+  }
+  return last(split(item.path, '/'));
 }
 </script>
 
 <template>
   <a-breadcrumb class="header-breadcrumb">
-    <breadcrumb-transition :use-transition="loadEnv().PROD">
+    <transition-group name="breadcrumb" v-if="loadEnv().PROD">
       <template v-for="(item, index) in breadcrumbList" :key="item.path">
         <a-breadcrumb-item v-if="index === breadcrumbList.length - 1">{{
-          item.meta?.title
+          genItemTitle(item)
         }}</a-breadcrumb-item>
-        <a-breadcrumb-item :href="item.path" v-else
-          >{{ item.meta.title }}
+        <a-breadcrumb-item :href="item.path" v-else>
+          {{ genItemTitle(item) }}
           <template v-if="item.children.length > 1" #overlay>
             <a-menu :selected-keys="[$route.path]">
               <a-menu-item
@@ -47,7 +57,29 @@ function genMenuItems(children: RouteRecordRaw[]) {
           </template>
         </a-breadcrumb-item>
       </template>
-    </breadcrumb-transition>
+    </transition-group>
+    <!-- todo 自己实现一个面包屑 父级组件 -->
+    <template v-else>
+      <template v-for="(item, index) in breadcrumbList" :key="item.path">
+        <a-breadcrumb-item v-if="index === breadcrumbList.length - 1">{{
+          genItemTitle(item)
+        }}</a-breadcrumb-item>
+        <a-breadcrumb-item :href="item.path" v-else>
+          {{ genItemTitle(item) }}
+          <template v-if="item.children.length > 1" #overlay>
+            <a-menu :selected-keys="[$route.path]">
+              <a-menu-item
+                v-for="menuItem in genMenuItems(item.children)"
+                :key="menuItem.key"
+                @click="() => $router.push(menuItem.key)"
+              >
+                {{ menuItem.title }}
+              </a-menu-item>
+            </a-menu>
+          </template>
+        </a-breadcrumb-item>
+      </template>
+    </template>
   </a-breadcrumb>
 </template>
 
@@ -55,5 +87,19 @@ function genMenuItems(children: RouteRecordRaw[]) {
 .header-breadcrumb {
   display: inline-block;
   margin-left: 20px;
+}
+
+.breadcrumb-enter-active,
+.breadcrumb-leave-active {
+  transition: all 0.5s;
+}
+
+.breadcrumb-enter-from {
+  transform: translateX(20px);
+}
+
+.breadcrumb-leave-active {
+  position: absolute;
+  display: none;
 }
 </style>

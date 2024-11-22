@@ -37,6 +37,7 @@ export function formatRoute(menu: MenuDataItem, parent?: MenuDataItem) {
     meta: {
       id: menu?.id,
       title: t(menu.locale!) || menu?.name,
+      locale: menu.locale,
       originPath: parent?.path,
     },
   } as RouteRecordRaw;
