@@ -1,24 +1,24 @@
-import { VNodeChild } from 'vue';
+import type { VNodeChild } from 'vue'
 
 export interface MenuDataItem {
   // 唯一id
-  id?: string | number;
+  id?: string | number
   // 标题
-  title: string | (() => VNodeChild);
+  title: string | (() => VNodeChild)
   // 图标
-  icon?: string;
+  icon?: string
   // 地址
-  path: string;
+  path: string
   // 绑定的哪个组件
-  component?: string;
+  component?: string
   // 子集菜单
-  children?: MenuDataItem[];
+  children?: MenuDataItem[]
   // 同路由中的name
-  name?: string;
+  name?: string
   // 菜单类型
-  type?: 'DIRECTORY' | 'MENU' | 'ACTION';
+  type?: 'DIRECTORY' | 'MENU' | 'ACTION'
   // 国际化
-  locale?: string;
+  locale?: string
 }
 
-export type MenuData = MenuDataItem[];
+export type MenuData = MenuDataItem[]

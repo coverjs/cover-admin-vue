@@ -1,8 +1,8 @@
 <script setup lang="ts">
-defineOptions({ name: 'SettingBlock' });
+defineOptions({ name: 'SettingBlock' })
 defineProps<{
-  title?: string;
-}>();
+  title?: string
+}>()
 </script>
 
 <template>
@@ -10,6 +10,6 @@ defineProps<{
     <h3 class="">
       {{ title }}
     </h3>
-    <slot></slot>
+    <slot />
   </div>
 </template>

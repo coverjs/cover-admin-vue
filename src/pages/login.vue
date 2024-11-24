@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import type { AccountLoginDto, UserInfoVo } from '@/services';
+import type { AccountLoginDto, UserInfoVo } from '@/services'
 
-import { initialUserHash } from '@config';
-import { useUserStore } from '@/store';
-import { useMessage } from '@/hooks';
+import { useMessage } from '@/hooks'
+import { useUserStore } from '@/store'
+import { initialUserHash } from '@config'
 
-defineOptions({ name: 'LoginPage' });
+defineOptions({ name: 'LoginPage' })
 
-const userStore = useUserStore();
+const userStore = useUserStore()
 const loginFormRef = useTemplateRef<{ getFieldsValue: () => AccountLoginDto }>(
   'loginForm',
-);
-const { createNotify } = useMessage();
-const { t } = useI18n();
+)
+const { createNotify } = useMessage()
+const { t } = useI18n()
 
 const {
   isLoading: loginLoading,
@@ -24,25 +24,26 @@ const {
     userStore.login(loginFormRef.value?.getFieldsValue() as AccountLoginDto),
   { nickname: '' },
   { immediate: false },
-);
+)
 
 async function login() {
-  await logoinAction();
-  if (loginError.value) return;
+  await logoinAction()
+  if (loginError.value)
+    return
 
   createNotify.success({
     message: t('authentication.loginSuccess'),
     description: `${t('authentication.loginSuccessDesc')},${userInfo.value?.nickname ?? ''}`,
     duration: 3,
-  });
+  })
 }
 </script>
 
 <template>
   <div class="login-form-container">
     <a-typography class="title-container">
-      <a-typography-title class="title" :level="3"
-        >{{ t('authentication.loginTitle') }}
+      <a-typography-title class="title" :level="3">
+        {{ t('authentication.loginTitle') }}
       </a-typography-title>
       <span class="title-extra">
         <a-space>
@@ -56,8 +57,8 @@ async function login() {
       hash-type="RIPEMD160"
       :loading="loginLoading"
       :initial-user-hash="initialUserHash"
-      @submit="login"
       secure-pwd
+      @submit="login"
     />
   </div>
 </template>

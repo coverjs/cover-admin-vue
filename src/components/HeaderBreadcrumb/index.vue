@@ -1,39 +1,41 @@
 <script setup lang="tsx">
-import type { RouteRecordRaw } from 'vue-router';
+import type { RouteRecordRaw } from 'vue-router'
 
-import { loadEnv } from '@/utils';
+import { loadEnv } from '@/utils'
 
 // antd 的面包屑 在 <a-breadcrumb> 中加动画会报 warn
 // a-breadcrumb 给 children 加的属性这里的使用场景用不到,所以正式环境可以加上动画 忽略 warn (坏笑~)
-import BreadcrumbTransition from './BreadcrumbTransition.vue';
+import BreadcrumbTransition from './BreadcrumbTransition.vue'
 
 defineOptions({
   name: 'HeaderBreadcrumb',
-});
+})
 
-const route = useRoute();
+const route = useRoute()
 
 const breadcrumbList = computed(() =>
   route.matched.filter(item => item.meta?.title),
-);
+)
 
 function genMenuItems(children: RouteRecordRaw[]) {
   return children.map(item => ({
     title: item.meta?.title,
     key: item.path,
-  }));
+  }))
 }
 </script>
 
 <template>
   <a-breadcrumb class="header-breadcrumb">
-    <breadcrumb-transition :use-transition="loadEnv().PROD">
+    <BreadcrumbTransition :use-transition="loadEnv().PROD">
       <template v-for="(item, index) in breadcrumbList" :key="item.path">
-        <a-breadcrumb-item v-if="index === breadcrumbList.length - 1">{{
-          item.meta?.title
-        }}</a-breadcrumb-item>
-        <a-breadcrumb-item :href="item.path" v-else
-          >{{ item.meta.title }}
+        <a-breadcrumb-item v-if="index === breadcrumbList.length - 1">
+          {{
+            item.meta?.title
+          }}
+        </a-breadcrumb-item>
+        <a-breadcrumb-item v-else :href="item.path">
+          {{ item.meta.title }}
           <template v-if="item.children.length > 1" #overlay>
             <a-menu :selected-keys="[$route.path]">
               <a-menu-item
@@ -47,7 +49,7 @@ function genMenuItems(children: RouteRecordRaw[]) {
           </template>
         </a-breadcrumb-item>
       </template>
-    </breadcrumb-transition>
+    </BreadcrumbTransition>
   </a-breadcrumb>
 </template>
 

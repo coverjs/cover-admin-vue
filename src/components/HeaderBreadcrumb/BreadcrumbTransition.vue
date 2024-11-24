@@ -1,15 +1,15 @@
 <script setup lang="ts">
-defineOptions({ name: 'BreadcrumbItems' });
+defineOptions({ name: 'BreadcrumbItems' })
 defineProps<{
-  useTransition: boolean;
-}>();
+  useTransition: boolean
+}>()
 </script>
 
 <template>
-  <transition-group name="breadcrumb" v-if="useTransition">
-    <slot></slot>
+  <transition-group v-if="useTransition" name="breadcrumb">
+    <slot />
   </transition-group>
-  <slot v-else></slot>
+  <slot v-else />
 </template>
 
 <style lang="scss">

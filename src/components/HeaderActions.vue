@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { useUserStore } from '@/store';
-import { UserOutlined } from '@ant-design/icons-vue';
-import { useLogoutConfirm } from '@/hooks';
+import { useLogoutConfirm } from '@/hooks'
+import { useUserStore } from '@/store'
+import { UserOutlined } from '@ant-design/icons-vue'
 
-defineOptions({ name: 'LayoutHeader' });
+defineOptions({ name: 'LayoutHeader' })
 
-const userStore = useUserStore();
-const logout = useLogoutConfirm('manual');
-const { t } = useI18n();
+const userStore = useUserStore()
+const logout = useLogoutConfirm('manual')
+const { t } = useI18n()
 </script>
 
 <template>
@@ -26,7 +26,7 @@ const { t } = useI18n();
         <a-dropdown placement="bottom" trigger="click">
           <span class="user-info">
             <a-avatar class="user-avatar" size="small">
-              <template #icon><user-outlined /></template>
+              <template #icon><UserOutlined /></template>
             </a-avatar>
             {{ userStore.userInfo.nickname }}
           </span>

@@ -1,46 +1,47 @@
-import type { Context, Middleware } from 'onion-interceptor';
-import type { ErrorMessageMode } from '@/types';
+import type { ErrorMessageMode } from '@/types'
+import type { Context, Middleware } from 'onion-interceptor'
 
-import { tap } from '@onion-interceptor/pipes';
-import { getReqOptItem } from '@/utils';
-import { useMessage, useLogoutConfirm } from '@/hooks';
-import { t } from '@/locales';
-import { StatusEnum } from '@/enums';
-import { isCancel, isAxiosError, AxiosError } from 'axios';
-import { isNil, get, isEqual } from 'lodash-es';
+import { StatusEnum } from '@/enums'
+import { useLogoutConfirm, useMessage } from '@/hooks'
+import { t } from '@/locales'
+import { getReqOptItem } from '@/utils'
+import { tap } from '@onion-interceptor/pipes'
+import { AxiosError, isAxiosError, isCancel } from 'axios'
+import { get, isEqual, isNil } from 'lodash-es'
 
 const statusHandlers = new Map<
   number,
   (msg?: string) => string | false | void
->();
+>()
 statusHandlers.set(
   StatusEnum.BAD_REQUEST,
   (msg?: string) => msg || t('fallback.http.badRequest'),
-);
+)
 statusHandlers.set(StatusEnum.UNAUTHORIZED, () => {
-  const logout = useLogoutConfirm('auto');
-  logout();
-  return false;
-});
+  const logout = useLogoutConfirm('auto')
+  logout()
+  return false
+})
 statusHandlers.set(
   StatusEnum.FORBIDDEN,
   (msg?: string) => msg || t('fallback.http.forbidden'),
-);
+)
 statusHandlers.set(
   StatusEnum.NOT_FOUND,
   (msg?: string) => msg || t('fallback.http.notFound'),
-);
+)
 statusHandlers.set(
   StatusEnum.TIMEOUT,
   (msg?: string) => msg || t('fallback.http.requestTimeout'),
-);
+)
 statusHandlers.set(
   StatusEnum.INTERNAL_SERVER_ERRO,
   (msg?: string) => msg || t('fallback.http.internalServerError'),
-);
-const _getCode = (ctx: Context) => get(ctx, ['res', 'data', 'code']);
-const _getErrMsg = (ctx: Context) =>
-  get(ctx, ['res', 'data', 'msg']) ?? get(ctx, ['res', 'statusText']);
+)
+const _getCode = (ctx: Context) => get(ctx, ['res', 'data', 'code'])
+function _getErrMsg(ctx: Context) {
+  return get(ctx, ['res', 'data', 'msg']) ?? get(ctx, ['res', 'statusText'])
+}
 
 /**
  * 错误拦截器中间件
@@ -50,22 +51,25 @@ const _getErrMsg = (ctx: Context) =>
  */
 export const errorInterceptor: Middleware = async function (ctx, next) {
   // 禁用error拦截器
-  if (!getReqOptItem(ctx, 'errorInterceptorEnabled')) return await next();
+  if (!getReqOptItem(ctx, 'errorInterceptorEnabled'))
+    return await next()
 
   await next(
     tap(
-      ctx => {
-        if (isEqual(_getCode(ctx), 0)) return;
+      (ctx) => {
+        if (isEqual(_getCode(ctx), 0))
+          return
 
-        throw new Error(_getErrMsg(ctx));
+        throw new Error(_getErrMsg(ctx))
       },
-      err => {
-        if (isCancel(err)) return err;
-        return handleError(ctx, err as Error);
+      (err) => {
+        if (isCancel(err))
+          return err
+        return handleError(ctx, err as Error)
       },
     ),
-  );
-};
+  )
+}
 
 /**
  * 处理请求错误
@@ -75,28 +79,28 @@ export const errorInterceptor: Middleware = async function (ctx, next) {
  * @returns 返回错误对象
  */
 function handleError(ctx: Context, error: Error) {
-  const code = get(error, 'code');
-  const errorMessageMode = getReqOptItem(ctx, 'errorMessageMode');
+  const code = get(error, 'code')
+  const errorMessageMode = getReqOptItem(ctx, 'errorMessageMode')
 
   if (isAxiosError(error) && isEqual(code, AxiosError.ECONNABORTED)) {
-    callMsg(t('fallback.http.requestTimeout'), errorMessageMode);
-    return error;
+    callMsg(t('fallback.http.requestTimeout'), errorMessageMode)
+    return error
   }
 
   if (isAxiosError(error) && isEqual(code, AxiosError.ERR_NETWORK)) {
-    callMsg(t('fallback.http.networkError'), errorMessageMode);
-    return error;
+    callMsg(t('fallback.http.networkError'), errorMessageMode)
+    return error
   }
 
-  const status =
-    get(ctx, ['res', 'status']) ?? get(error, ['response', 'status']);
+  const status
+    = get(ctx, ['res', 'status']) ?? get(error, ['response', 'status'])
 
   const _status = isEqual(status, StatusEnum.SUCCESS) // 兼容 http status 200 ,但是后端传错误码的情况
     ? (_getCode(ctx) ?? StatusEnum.SUCCESS)
-    : status;
+    : status
 
-  !isNil(_status) && checkStatus(_status, _getErrMsg(ctx), errorMessageMode);
-  return error;
+  !isNil(_status) && checkStatus(_status, _getErrMsg(ctx), errorMessageMode)
+  return error
 }
 
 /**
@@ -111,13 +115,14 @@ function checkStatus(
   msg: string,
   errorMessageMode: ErrorMessageMode = 'message',
 ) {
-  const handleRes = statusHandlers.get(status)?.(msg);
-  if (isEqual(status, StatusEnum.SUCCESS) || handleRes === false) return;
+  const handleRes = statusHandlers.get(status)?.(msg)
+  if (isEqual(status, StatusEnum.SUCCESS) || handleRes === false)
+    return
 
   callMsg(
     handleRes ?? msg ?? t('fallback.http.internalServerError'),
     errorMessageMode,
-  );
+  )
 }
 
 /**
@@ -127,17 +132,17 @@ function checkStatus(
  * @param errorMessageMode 错误消息模式，决定使用哪种方式展示错误信息，可选值为'modal'或'message'
  */
 function callMsg(errMsg: string, errorMessageMode: ErrorMessageMode) {
-  const { createMessage, createErrorModal } = useMessage();
+  const { createMessage, createErrorModal } = useMessage()
 
   if (errMsg && errorMessageMode === 'modal') {
-    createErrorModal({ title: t('common.error'), content: errMsg });
-    return;
+    createErrorModal({ title: t('common.error'), content: errMsg })
+    return
   }
 
   if (errMsg && errorMessageMode === 'message') {
     createMessage.error({
       content: errMsg,
       key: `global_error_message_status_${status}`,
-    });
+    })
   }
 }

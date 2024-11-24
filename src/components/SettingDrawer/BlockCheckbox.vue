@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import { ThemeType } from '@/types';
-import { CheckOutlined } from '@ant-design/icons-vue';
-import { useAntdToken } from '@/hooks';
+import type { ThemeType } from '@/types'
+import { useAntdToken } from '@/hooks'
+import { CheckOutlined } from '@ant-design/icons-vue'
 
-defineOptions({ name: 'BlockCheckbox' });
+defineOptions({ name: 'BlockCheckbox' })
 
 const props = defineProps<{
-  theme?: ThemeType;
-  isDark?: boolean;
-  checked?: boolean;
-  t?: (key: string, ...args: any[]) => string;
-}>();
+  theme?: ThemeType
+  isDark?: boolean
+  checked?: boolean
+  t?: (key: string, ...args: any[]) => string
+}>()
 
-const prefixCls = 'cover-setting-drawer-block-checkbox';
+const prefixCls = 'cover-setting-drawer-block-checkbox'
 
-const { token } = useAntdToken();
+const { token } = useAntdToken()
 const cls = computed(() => {
   return {
     [`${prefixCls}-item`]: true,
     [`${prefixCls}-theme-item`]: props.isDark,
     [`${prefixCls}-item-${props.theme}`]: !!props.theme,
     [`${prefixCls}-theme-item-${props.theme}`]: props.isDark,
-  };
-});
+  }
+})
 </script>
 
 <template>
@@ -35,7 +35,7 @@ const cls = computed(() => {
       }}
     </template>
     <div :class="cls">
-      <check-outlined
+      <CheckOutlined
         v-show="checked"
         :style="{ color: token?.colorPrimary }"
         :class="`${prefixCls}-selectIcon`"

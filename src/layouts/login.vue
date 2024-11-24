@@ -1,10 +1,10 @@
 <script setup lang="ts">
-defineOptions({ name: 'LoginLayout' });
+defineOptions({ name: 'LoginLayout' })
 </script>
 
 <template>
   <div class="login-container">
-    <router-view></router-view>
+    <router-view />
   </div>
 </template>
 

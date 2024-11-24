@@ -1,6 +1,6 @@
-import { ContentType as _ContentType } from '@/services/api';
+import { ContentType as _ContentType } from '@/services/api'
 
-export const ContentTypeEnum = _ContentType;
+export const ContentTypeEnum = _ContentType
 
 export enum StatusEnum {
   SUCCESS = 200,

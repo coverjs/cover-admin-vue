@@ -1,7 +1,7 @@
 name: DeployTest
 on:
   push: # 监听调用时机为push事件
-    branches: ['main']
+    branches: [main]
 jobs:
   deploy:
     runs-on: ubuntu-latest # runs-on 指定job任务运行所需要的虚拟机环境(必填字段)
@@ -34,7 +34,7 @@ jobs:
           host: ${{ secrets.TEST_SSH_HOST }}
           username: ${{ secrets.TEST_SSH_USERNAME }}
           password: ${{ secrets.TEST_SSH_PASSWORD }}
-          source: 'dist/'
+          source: dist/
           target: '/${{secrets.TEST_SSH_USERNAME}}/Projects/.cover-admin-vue_temp/'
           rm: true
           strip_components: 1

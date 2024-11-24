@@ -1,72 +1,73 @@
 <script lang="ts" setup>
-import { api, MenuVo } from '@/services';
-import { CreateMenuDtoWithId } from '@/pages/system/menu/index.vue';
-import { useMessage } from '@/hooks';
+import type { CreateMenuDtoWithId } from '@/pages/system/menu/index.vue'
+import type { MenuVo } from '@/services'
+import { useMessage } from '@/hooks'
+import { api } from '@/services'
 
 defineOptions({
   name: 'MenuDrawer',
-});
+})
 
-const open = defineModel('open');
-const emit = defineEmits<{
-  (e: 'refresh'): void;
-}>();
-
-interface Props {
-  type: boolean;
-  formData: CreateMenuDtoWithId;
-  treeData: MenuVo[];
-  t?: (key: string, ...args: any[]) => string;
-}
-
-const formRef = ref();
 const props = withDefaults(defineProps<Props>(), {
   type: false,
-});
+})
+const emit = defineEmits<{
+  (e: 'refresh'): void
+}>()
+const open = defineModel('open')
+interface Props {
+  type: boolean
+  formData: CreateMenuDtoWithId
+  treeData: MenuVo[]
+  t?: (key: string, ...args: any[]) => string
+}
 
-const formState = ref<CreateMenuDtoWithId>(toRaw(props.formData));
+const formRef = ref()
+const formState = ref<CreateMenuDtoWithId>(toRaw(props.formData))
 watch(
   () => props.formData,
-  value => {
-    formState.value = toRaw(value);
+  (value) => {
+    formState.value = toRaw(value)
   },
   { immediate: true },
-);
-const { createNotify } = useMessage();
+)
+const { createNotify } = useMessage()
 
-const onClose = () => {
-  open.value = false;
-  formRef.value.resetFields();
-};
+function onClose() {
+  open.value = false
+  formRef.value.resetFields()
+}
 
-const onSubmit = async () => {
+async function onSubmit() {
   try {
-    await formRef.value?.validate();
-    const formData = toRaw(formState.value);
+    await formRef.value?.validate()
+    const formData = toRaw(formState.value)
     if (formData.parentId === undefined) {
-      formData.parentId = null as unknown as number; // 现在先这样 等后端改了再改
+      formData.parentId = null as unknown as number // 现在先这样 等后端改了再改
     }
     if (props.type) {
-      const { data: res } = await api.system.menuCreate(formData);
-      handleResponse(res, '新增成功');
-    } else {
-      const id = formData.id!;
-      const { data: res } = await api.system.menuUpdate(id, formData);
-      handleResponse(res, '修改成功');
+      const { data: res } = await api.system.menuCreate(formData)
+      handleResponse(res, '新增成功')
     }
-  } catch (error: any) {
-    console.error(error);
+    else {
+      const id = formData.id!
+      const { data: res } = await api.system.menuUpdate(id, formData)
+      handleResponse(res, '修改成功')
+    }
   }
-};
+  catch (error: any) {
+    console.error(error)
+  }
+}
 
 function handleResponse(res: any, successMessage: string) {
   if (res.code === 0) {
     createNotify.success({
       message: successMessage,
       duration: 3,
-    });
-    open.value = false;
-    emit('refresh');
+    })
+    open.value = false
+    emit('refresh')
   }
 }
 </script>
@@ -85,8 +86,8 @@ function handleResponse(res: any, successMessage: string) {
     "
     placement="right"
     destroy-on-close
-    @close="onClose"
     :footer-style="{ textAlign: 'right' }"
+    @close="onClose"
   >
     <a-form
       ref="formRef"
@@ -104,9 +105,15 @@ function handleResponse(res: any, successMessage: string) {
             :rules="[{ required: true, message: '请选择菜单类型!' }]"
           >
             <a-radio-group v-model:value="formState.type">
-              <a-radio-button value="DIRECTORY">目录</a-radio-button>
-              <a-radio-button value="MENU">菜单</a-radio-button>
-              <a-radio-button value="ACTION">按钮</a-radio-button>
+              <a-radio-button value="DIRECTORY">
+                目录
+              </a-radio-button>
+              <a-radio-button value="MENU">
+                菜单
+              </a-radio-button>
+              <a-radio-button value="ACTION">
+                按钮
+              </a-radio-button>
             </a-radio-group>
           </a-form-item>
         </a-col>
@@ -135,8 +142,7 @@ function handleResponse(res: any, successMessage: string) {
                 value: 'id',
                 label: 'name',
               }"
-            >
-            </a-tree-select>
+            />
           </a-form-item>
         </a-col>
         <a-col :lg="12" :md="24">
@@ -149,18 +155,18 @@ function handleResponse(res: any, successMessage: string) {
           </a-form-item>
         </a-col>
 
-        <a-col :lg="12" :md="24" v-if="formState.type !== 'ACTION'">
+        <a-col v-if="formState.type !== 'ACTION'" :lg="12" :md="24">
           <a-form-item label="多语言" name="locale">
             <a-input v-model:value="formState.locale" />
           </a-form-item>
         </a-col>
 
-        <a-col :lg="12" :md="24" v-if="formState.type !== 'ACTION'">
+        <a-col v-if="formState.type !== 'ACTION'" :lg="12" :md="24">
           <a-form-item label="图标" name="icon">
             <a-input v-model:value="formState.icon" />
           </a-form-item>
         </a-col>
-        <a-col :lg="12" :md="24" v-if="formState.type !== 'ACTION'">
+        <a-col v-if="formState.type !== 'ACTION'" :lg="12" :md="24">
           <a-form-item label="路由地址" name="path">
             <a-input v-model:value="formState.path" />
           </a-form-item>
@@ -179,12 +185,16 @@ function handleResponse(res: any, successMessage: string) {
     </a-form>
 
     <template #footer>
-      <a-button style="margin-right: 8px" @click="onClose">{{
-        t?.('common.cancel')
-      }}</a-button>
-      <a-button type="primary" @click="onSubmit">{{
-        t?.('common.confirm')
-      }}</a-button>
+      <a-button style="margin-right: 8px" @click="onClose">
+        {{
+          t?.('common.cancel')
+        }}
+      </a-button>
+      <a-button type="primary" @click="onSubmit">
+        {{
+          t?.('common.confirm')
+        }}
+      </a-button>
     </template>
   </a-drawer>
 </template>

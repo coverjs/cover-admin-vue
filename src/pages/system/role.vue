@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 defineOptions({
   name: 'RolePage',
-});
+})
 </script>
 
 <template>

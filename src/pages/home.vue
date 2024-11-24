@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import welcomeImg from '@/assets/welcome.png';
+import welcomeImg from '@/assets/welcome.png'
+
 defineOptions({
   name: 'HomePage',
-});
+})
 </script>
 
 <template>
   <div>
-    <img class="welcome-img" :src="welcomeImg" alt="welcomeImg" />
+    <img class="welcome-img" :src="welcomeImg" alt="welcomeImg">
   </div>
 </template>
 

@@ -1,33 +1,36 @@
-import { RouteRecordRaw } from 'vue-router';
-import { MenuData, MenuDataItem } from '@/router/types.ts';
-import { t } from '@/locales';
+import type { MenuData, MenuDataItem } from '@/router/types.ts'
+import type { RouteRecordRaw } from 'vue-router'
+import { t } from '@/locales'
 
 export const basicRouteMap = {
   // 空页面 跳转 404
   ComponentError: () => import('@/pages/[...path].vue'),
-};
+}
 
-const routerModules = import.meta.glob(['@/pages/**/*.vue']);
+const routerModules = import.meta.glob(['@/pages/**/*.vue'])
 
 function checkEager(module: any) {
-  if (typeof module === 'object' && 'default' in module) return module.default;
+  if (typeof module === 'object' && 'default' in module)
+    return module.default
 
-  return module;
+  return module
 }
 
 export function getRouterModule(path?: string): any {
-  if (!path) return basicRouteMap.ComponentError;
+  if (!path)
+    return basicRouteMap.ComponentError
   // 判断开头是不是/
-  if (path.startsWith('/')) path = path.slice(1);
+  if (path.startsWith('/'))
+    path = path.slice(1)
   // 组装数据格式
-  const fullPath = `/src/pages/${path}.vue`;
-  const fullPathIndex = `/src/pages/${path}/index.vue`;
+  const fullPath = `/src/pages/${path}.vue`
+  const fullPathIndex = `/src/pages/${path}/index.vue`
 
   if (fullPathIndex in routerModules) {
-    return checkEager(routerModules[fullPathIndex]);
+    return checkEager(routerModules[fullPathIndex])
   }
 
-  return checkEager(routerModules[fullPath]);
+  return checkEager(routerModules[fullPath])
 }
 
 export function formatRoute(menu: MenuDataItem, parent?: MenuDataItem) {
@@ -39,28 +42,29 @@ export function formatRoute(menu: MenuDataItem, parent?: MenuDataItem) {
       title: t(menu.locale!) || menu?.name,
       originPath: parent?.path,
     },
-  } as RouteRecordRaw;
+  } as RouteRecordRaw
 }
 
 export function genRoutes(
   menus: MenuDataItem[],
   parent?: MenuDataItem,
 ): RouteRecordRaw[] {
-  const routesData: RouteRecordRaw[] = [];
-  menus.forEach(menu => {
-    const item = formatRoute(menu, parent);
-    item.children = [];
+  const routesData: RouteRecordRaw[] = []
+  menus.forEach((menu) => {
+    const item = formatRoute(menu, parent)
+    item.children = []
     if (menu.children && menu.children.length) {
-      item.children = genRoutes(menu.children, menu);
+      item.children = genRoutes(menu.children, menu)
       if (menu.children?.length > 0 && menu.children[0].type === 'ACTION') {
-        item.meta!['actions'] = menu.children;
-        delete item.children;
+        item.meta!.actions = menu.children
+        delete item.children
       }
     }
-    if (item.children?.length === 0) delete item.children;
-    routesData.push(item);
-  });
-  return routesData;
+    if (item.children?.length === 0)
+      delete item.children
+    routesData.push(item)
+  })
+  return routesData
 }
 
 /**
@@ -68,11 +72,11 @@ export function genRoutes(
  */
 export function generateMenuAndRoutes(treeMenuData: any) {
   // 转变成路由
-  const routeData = genRoutes(treeMenuData);
+  const routeData = genRoutes(treeMenuData)
 
-  const menuData = routeData as MenuData;
+  const menuData = routeData as MenuData
   return {
     routeData,
     menuData,
-  };
+  }
 }
