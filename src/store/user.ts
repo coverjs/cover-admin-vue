@@ -1,6 +1,7 @@
-import type { type AccountLoginDto, api, UserInfoVo } from '@/services'
+import type { AccountLoginDto, UserInfoVo } from '@/services'
 import { PageEnum, TimeEnum } from '@/enums'
 import { router } from '@/router'
+import { api } from '@/services'
 import { waittingFor } from '@/utils'
 import { bind, each, get, isEmpty, set } from 'lodash-es'
 import { store, useAppStore } from '.'
