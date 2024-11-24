@@ -11,7 +11,7 @@
     "build:test": "vue-tsc -b && vite build --mode test",
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit --skipLibCheck",
-    "lint": "eslint --ignore-pattern .gitignore --ext .ts,.tsx,.vue,.js,.jsx src --fix",
+    "lint": "eslint  --ignore-pattern .gitignore src --fix",
     "postinstall": "simple-git-hooks"
   },
   "dependencies": {
