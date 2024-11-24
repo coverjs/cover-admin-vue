@@ -10,6 +10,7 @@ export function setupRouterGuards(router: Router) {
   createPermissionGuard(router);
   createMessageGuard(router);
   createProgressGuard(router);
+  createRouteChangeGuard(router);
 }
 
 function createPageGuard(router: Router) {
@@ -56,6 +57,14 @@ export function createMessageGuard(router: Router) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {
       /** nothing */
+    }
+  });
+}
+
+export function createRouteChangeGuard(router: Router) {
+  router.beforeEach(async to => {
+    if (to.path === '/') {
+      return '/home';
     }
   });
 }
