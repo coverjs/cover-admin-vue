@@ -1,6 +1,6 @@
 import type { LanguagesType } from './types';
-import { createI18n } from 'vue-i18n';
 import { each } from 'lodash-es';
+import { createI18n } from 'vue-i18n';
 
 const loadedLangs = new Set<string>();
 
@@ -22,9 +22,10 @@ function loadLocalesMap(modules: Record<string, () => Promise<unknown>>) {
   > = {};
   each(modules, (loadLocale, path) => {
     const key = path.match(/([\w-]*)\.(yaml|yml|json)/)?.[1];
-    if (!key) return;
+    if (!key)
+      return;
     result[key] = loadLocale as () => Promise<{
-      default: Record<string, string>;
+      default: Record<string, string>
     }>;
   });
   return result;

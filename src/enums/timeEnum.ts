@@ -1,3 +1,4 @@
+/* eslint-disable ts/prefer-literal-enum-member */
 export enum TimeEnum {
   SECOND = 1000,
   MINUTE = 60 * SECOND,

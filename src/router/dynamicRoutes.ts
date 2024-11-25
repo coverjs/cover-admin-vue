@@ -1,5 +1,5 @@
-import { RouteRecordRaw } from 'vue-router';
-import { MenuData, MenuDataItem } from '@/router/types.ts';
+import type { MenuData, MenuDataItem } from '@/router/types.ts';
+import type { RouteRecordRaw } from 'vue-router';
 import { t } from '@/locales';
 
 export const basicRouteMap = {
@@ -10,15 +10,18 @@ export const basicRouteMap = {
 const routerModules = import.meta.glob(['@/pages/**/*.vue']);
 
 function checkEager(module: any) {
-  if (typeof module === 'object' && 'default' in module) return module.default;
+  if (typeof module === 'object' && 'default' in module)
+    return module.default;
 
   return module;
 }
 
 export function getRouterModule(path?: string): any {
-  if (!path) return basicRouteMap.ComponentError;
+  if (!path)
+    return basicRouteMap.ComponentError;
   // 判断开头是不是/
-  if (path.startsWith('/')) path = path.slice(1);
+  if (path.startsWith('/'))
+    path = path.slice(1);
   // 组装数据格式
   const fullPath = `/src/pages/${path}.vue`;
   const fullPathIndex = `/src/pages/${path}/index.vue`;
@@ -47,17 +50,18 @@ export function genRoutes(
   parent?: MenuDataItem,
 ): RouteRecordRaw[] {
   const routesData: RouteRecordRaw[] = [];
-  menus.forEach(menu => {
+  menus.forEach((menu) => {
     const item = formatRoute(menu, parent);
     item.children = [];
     if (menu.children && menu.children.length) {
       item.children = genRoutes(menu.children, menu);
       if (menu.children?.length > 0 && menu.children[0].type === 'ACTION') {
-        item.meta!['actions'] = menu.children;
+        item.meta!.actions = menu.children;
         delete item.children;
       }
     }
-    if (item.children?.length === 0) delete item.children;
+    if (item.children?.length === 0)
+      delete item.children;
     routesData.push(item);
   });
   return routesData;

@@ -1,15 +1,16 @@
 <script lang="ts" setup>
-import { h, ref } from 'vue';
-import { api, CreateMenuDto, MenuVo } from '@/services';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
+import type { CreateMenuDto, MenuVo } from '@/services';
 import AsyncIcon from '@/components/SubMenu/AsyncIcon.vue';
 import MenuDrawer from '@/pages/system/menu/MenuDrawer.vue';
-
-const { t } = useI18n();
+import { api } from '@/services';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
+import { h, ref } from 'vue';
 
 defineOptions({
   name: 'MenuPage',
 });
+
+const { t } = useI18n();
 
 const columns = [
   {
@@ -93,24 +94,23 @@ const treeTableData = computed(() => {
   return generateTreeDataWithKey(tableData.value);
 });
 
-const fetchData = async () => {
+async function fetchData() {
   const { data: res } = await api.system.menuFindList();
   if (res.code === 0) {
     tableData.value = res.data;
   }
-};
+}
 
-const onDelete = (id: number) => {
+function onDelete(id: number) {
   console.log(id);
-};
+}
 
-const showDrawer = (state: boolean) => {
+function showDrawer(state: boolean) {
   open.value = true;
   type.value = state;
-};
+}
 
 function handleEdit(record: MenuVoWithKey) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { children, createdAt, updatedAt, key, ...rest } = record;
   formData.value = rest;
   showDrawer(false);
@@ -129,28 +129,30 @@ function refresh() {
 <template>
   <div>
     <a-card title="菜单查询" class="mb-[24px]">
-      <!--TODO 查询-->
+      <!-- TODO 查询 -->
     </a-card>
 
     <a-card :title="t?.('pages.system.menu.menuList')">
       <template #extra>
-        <a-button type="primary" @click="handleAdd">{{
-          t?.('pages.system.menu.editMenu')
-        }}</a-button>
+        <a-button type="primary" @click="handleAdd">
+          {{
+            t?.('pages.system.menu.editMenu')
+          }}
+        </a-button>
       </template>
       <a-table :columns="columns" :data-source="treeTableData">
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'icon'">
-            <async-icon :icon="text" />
+            <AsyncIcon :icon="text" />
           </template>
           <template v-if="column.dataIndex === 'operation'">
             <div class="editable-row-operations">
               <a-space>
                 <a-button
                   type="link"
-                  @click="handleEdit(record)"
                   :icon="h(EditOutlined)"
-                ></a-button>
+                  @click="handleEdit(record)"
+                />
                 <a-popconfirm
                   v-if="tableData.length"
                   :title="t('fallback.sureDelete')"
@@ -160,7 +162,7 @@ function refresh() {
                     type="link"
                     danger
                     :icon="h(DeleteOutlined)"
-                  ></a-button>
+                  />
                 </a-popconfirm>
               </a-space>
             </div>
@@ -169,11 +171,11 @@ function refresh() {
       </a-table>
     </a-card>
     <MenuDrawer
-      :t
       v-model:open="open"
+      :t
       :type
-      :formData
-      :treeData="tableData"
+      :form-data
+      :tree-data="tableData"
       @refresh="refresh"
     />
   </div>

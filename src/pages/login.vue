@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { AccountLoginDto, UserInfoVo } from '@/services';
 
-import { initialUserHash } from '@config';
-import { useUserStore } from '@/store';
 import { useMessage } from '@/hooks';
+import { useUserStore } from '@/store';
+import { initialUserHash } from '@config';
 
 defineOptions({ name: 'LoginPage' });
 
@@ -28,7 +28,8 @@ const {
 
 async function login() {
   await logoinAction();
-  if (loginError.value) return;
+  if (loginError.value)
+    return;
 
   createNotify.success({
     message: t('authentication.loginSuccess'),
@@ -41,8 +42,8 @@ async function login() {
 <template>
   <div class="login-form-container">
     <a-typography class="title-container">
-      <a-typography-title class="title" :level="3"
-        >{{ t('authentication.loginTitle') }}
+      <a-typography-title class="title" :level="3">
+        {{ t('authentication.loginTitle') }}
       </a-typography-title>
       <span class="title-extra">
         <a-space>
@@ -56,8 +57,8 @@ async function login() {
       hash-type="RIPEMD160"
       :loading="loginLoading"
       :initial-user-hash="initialUserHash"
-      @submit="login"
       secure-pwd
+      @submit="login"
     />
   </div>
 </template>

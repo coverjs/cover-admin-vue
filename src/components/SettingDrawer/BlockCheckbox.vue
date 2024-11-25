@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { ThemeType } from '@/types';
-import { CheckOutlined } from '@ant-design/icons-vue';
+import type { ThemeType } from '@/types';
 import { useAntdToken } from '@/hooks';
+import { CheckOutlined } from '@ant-design/icons-vue';
 
 defineOptions({ name: 'BlockCheckbox' });
 
 const props = defineProps<{
-  theme?: ThemeType;
-  isDark?: boolean;
-  checked?: boolean;
-  t?: (key: string, ...args: any[]) => string;
+  theme?: ThemeType
+  isDark?: boolean
+  checked?: boolean
+  t?: (key: string, ...args: any[]) => string
 }>();
 
 const prefixCls = 'cover-setting-drawer-block-checkbox';
@@ -35,7 +35,7 @@ const cls = computed(() => {
       }}
     </template>
     <div :class="cls">
-      <check-outlined
+      <CheckOutlined
         v-show="checked"
         :style="{ color: token?.colorPrimary }"
         :class="`${prefixCls}-selectIcon`"

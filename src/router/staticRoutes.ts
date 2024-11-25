@@ -1,6 +1,6 @@
 import { PageEnum } from '@/enums';
-import { routes } from 'vue-router/auto-routes';
 import { setupLayouts } from 'virtual:generated-layouts';
+import { routes } from 'vue-router/auto-routes';
 
 const staticRoutesPaths = new Set<string>();
 staticRoutesPaths.add(PageEnum.BASE_INDEX);

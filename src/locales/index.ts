@@ -1,14 +1,14 @@
-import type { App } from 'vue';
 import type { Locale } from 'ant-design-vue/es/locale';
+import type { App } from 'vue';
 import type { LanguagesType } from './types';
 
-import { i18n, loadI18nMsgs } from './i18n';
-import { genStorageKey } from '@/utils';
 import { CacheEnum } from '@/enums';
-
+import { genStorageKey } from '@/utils';
 import antdEnLocale from 'ant-design-vue/es/locale/en_US';
+
 import antdZhLocale from 'ant-design-vue/es/locale/zh_CN';
 import dayjs from 'dayjs';
+import { i18n, loadI18nMsgs } from './i18n';
 
 const dayjsLocaleMap = new Map([
   ['zh-CN', async () => await import('dayjs/locale/zh-cn')],
@@ -23,14 +23,15 @@ export const antdLocale = ref<Locale>(antdZhLocale);
 
 async function loadAntdLocale(lang: LanguagesType) {
   const locale = antdLocaleMap.get(lang) ?? antdZhLocale;
-  if (!locale) return;
+  if (!locale)
+    return;
   antdLocale.value = locale;
 }
 
 async function loadDayjsLocale(lang: LanguagesType) {
-  const locale =
-    (await dayjsLocaleMap.get(lang)?.()) ??
-    (await import('dayjs/locale/zh-cn'));
+  const locale
+    = (await dayjsLocaleMap.get(lang)?.())
+    ?? (await import('dayjs/locale/zh-cn'));
   dayjs.locale(locale);
 }
 async function loadThirdPartyMsgs(lang: LanguagesType) {

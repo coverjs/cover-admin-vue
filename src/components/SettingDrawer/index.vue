@@ -1,25 +1,25 @@
 <script setup lang="ts">
 import type { ThemeType } from '@/types';
-import { useAppStore } from '@/store';
 import { useAntdToken } from '@/hooks';
+import { useAppStore } from '@/store';
 import {
+  CheckOutlined,
   CloseOutlined,
   SettingOutlined,
-  CheckOutlined,
 } from '@ant-design/icons-vue';
 
 import BlockCheckbox from './BlockCheckbox.vue';
-import SettingBlock from './SettingBlock.vue';
 import BlockThemeColor from './BlockThemeColor.vue';
+import SettingBlock from './SettingBlock.vue';
 
 defineOptions({ name: 'SettingDrawer' });
 
 withDefaults(
   defineProps<{
-    theme?: ThemeType;
-    colorPrimary?: string;
-    layoutSetting?: Record<string, any>;
-    colorList?: { key: string; color: string }[];
+    theme?: ThemeType
+    colorPrimary?: string
+    layoutSetting?: Record<string, any>
+    colorList?: { key: string, color: string }[]
   }>(),
   {
     theme: 'light',
@@ -49,9 +49,9 @@ function handleVisible(status: boolean) {
   open.value = status;
 }
 
-const handleThemeColorChange = (color: string) => {
+function handleThemeColorChange(color: string) {
   emit('settingChange', 'colorPrimary', color);
-};
+}
 
 function changeTheme(theme: string) {
   emit('settingChange', 'theme', theme);
@@ -72,12 +72,12 @@ const { t } = useI18n();
     }"
     @click="handleVisible(!open)"
   >
-    <check-outlined
+    <CheckOutlined
       v-if="open"
       :class="`${prefixCls}-handle-icon${appLayoutSetting.theme === 'light' ? '' : '-dark'}`"
       style="font-size: 20px"
     />
-    <setting-outlined
+    <SettingOutlined
       v-else
       :class="`${prefixCls}-handle-icon${appLayoutSetting.theme === 'light' ? '' : '-dark'}`"
       style="font-size: 20px"
@@ -97,12 +97,12 @@ const { t } = useI18n();
         }"
         @click="handleVisible(!open)"
       >
-        <close-outlined
+        <CloseOutlined
           v-if="open"
           :class="`${prefixCls}-handle-icon${appLayoutSetting.theme === 'light' ? '' : '-dark'}`"
           style="font-size: 20px"
         />
-        <setting-outlined
+        <SettingOutlined
           v-else
           :class="`${prefixCls}-handle-icon${appLayoutSetting.theme === 'light' ? '' : '-dark'}`"
           style="font-size: 20px"
@@ -110,16 +110,16 @@ const { t } = useI18n();
       </div>
     </template>
     <div :class="`${prefixCls}-content`">
-      <setting-block :title="t('app.setting.pageStyle.pageStyle')">
+      <SettingBlock :title="t('app.setting.pageStyle.pageStyle')">
         <div :class="`${prefixCls}-block-checkbox`">
-          <block-checkbox
+          <BlockCheckbox
             :t="t"
             theme="light"
             :is-dark="false"
             :checked="theme === 'light'"
             @click="changeTheme('light')"
           />
-          <block-checkbox
+          <BlockCheckbox
             :t="t"
             theme="dark"
             :is-dark="true"
@@ -127,15 +127,15 @@ const { t } = useI18n();
             @click="changeTheme('dark')"
           />
         </div>
-      </setting-block>
-      <setting-block :title="t('app.setting.themeColor.themeColor')">
-        <block-theme-color
+      </SettingBlock>
+      <SettingBlock :title="t('app.setting.themeColor.themeColor')">
+        <BlockThemeColor
           :t="t"
           :color-list="colorList"
           :color="colorPrimary"
           :on-change="handleThemeColorChange"
         />
-      </setting-block>
+      </SettingBlock>
     </div>
   </a-drawer>
 </template>

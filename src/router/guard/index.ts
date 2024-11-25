@@ -1,8 +1,8 @@
 import type { Router } from 'vue-router';
-import { Modal, notification } from 'ant-design-vue';
-import { createPermissionGuard } from './permission';
 import { AxiosCanceler } from '@/interceptors';
+import { Modal, notification } from 'ant-design-vue';
 import nProgress from 'nprogress';
+import { createPermissionGuard } from './permission';
 
 export function setupRouterGuards(router: Router) {
   createPageGuard(router);
@@ -15,13 +15,13 @@ export function setupRouterGuards(router: Router) {
 
 function createPageGuard(router: Router) {
   const loadedPage = new Map<string, boolean>();
-  router.beforeEach(async to => {
+  router.beforeEach(async (to) => {
     to.meta.loaded = loadedPage.has(to.path);
 
     return true;
   });
 
-  router.afterEach(to => {
+  router.afterEach((to) => {
     loadedPage.set(to.path, true);
   });
 }
@@ -35,7 +35,7 @@ function createHttpGuard(router: Router) {
 }
 
 export function createProgressGuard(router: Router) {
-  router.beforeEach(async to => {
+  router.beforeEach(async (to) => {
     if (to.meta.loaded) {
       return true;
     }
@@ -54,15 +54,15 @@ export function createMessageGuard(router: Router) {
     try {
       Modal.destroyAll();
       notification.destroy();
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (_) {
+    }
+    catch (_) {
       /** nothing */
     }
   });
 }
 
 export function createRouteChangeGuard(router: Router) {
-  router.beforeEach(async to => {
+  router.beforeEach(async (to) => {
     if (to.path === '/') {
       return '/home';
     }

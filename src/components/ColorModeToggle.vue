@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { SkinOutlined } from '@ant-design/icons-vue';
+
 defineOptions({ name: 'DarkModeSwitch' });
 
 const colorMode = useColorMode();
@@ -14,10 +15,10 @@ function handleUpdate(value: 'light' | 'dark' | 'auto') {
 
 <template>
   <a-dropdown placement="bottom" trigger="click">
-    <skin-outlined />
+    <SkinOutlined />
     <template #overlay>
       <a-menu
-        v-model:selectedKeys="selectedKeys"
+        v-model:selected-keys="selectedKeys"
         @click="handleUpdate($event.key)"
       >
         <a-menu-item key="light">

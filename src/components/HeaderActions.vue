@@ -1,7 +1,7 @@
 <script lang="ts" setup>
+import { useLogoutConfirm } from '@/hooks';
 import { useUserStore } from '@/store';
 import { UserOutlined } from '@ant-design/icons-vue';
-import { useLogoutConfirm } from '@/hooks';
 
 defineOptions({ name: 'LayoutHeader' });
 
@@ -26,7 +26,7 @@ const { t } = useI18n();
         <a-dropdown placement="bottom" trigger="click">
           <span class="user-info">
             <a-avatar class="user-avatar" size="small">
-              <template #icon><user-outlined /></template>
+              <template #icon><UserOutlined /></template>
             </a-avatar>
             {{ userStore.userInfo.nickname }}
           </span>

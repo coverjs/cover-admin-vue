@@ -1,8 +1,8 @@
 import type { Router } from 'vue-router';
 
+import { PageEnum } from '@/enums';
 import { useAppStore, useUserStore } from '@/store';
 import { isEmpty, omit } from 'lodash-es';
-import { PageEnum } from '@/enums';
 
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStore();
@@ -23,15 +23,16 @@ export function createPermissionGuard(router: Router) {
     }
 
     if (
-      isEmpty(userStore.userInfo) &&
-      !to.meta.ignoreAuth &&
-      !to.meta.exception
+      isEmpty(userStore.userInfo)
+      && !to.meta.ignoreAuth
+      && !to.meta.exception
     ) {
       try {
         await userStore.getUserInfoAction();
         const currentRoute = await appStore.generateDynamicRoutes();
         router.addRoute(currentRoute);
-      } catch (e) {
+      }
+      catch (e) {
         to.meta.exception = !!e;
         to.meta.exceptionCode = 500;
         next(e as Error);

@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { CompressOutlined, ExpandOutlined } from '@ant-design/icons-vue';
 import screenfull from 'screenfull';
-import { ExpandOutlined, CompressOutlined } from '@ant-design/icons-vue';
 
 const isFullScreen = ref(false);
 
@@ -19,7 +19,7 @@ onUnmounted(() => {
 
 <template>
   <span @click="screenfull.toggle()">
-    <expand-outlined v-if="!isFullScreen" />
-    <compress-outlined v-else />
+    <ExpandOutlined v-if="!isFullScreen" />
+    <CompressOutlined v-else />
   </span>
 </template>

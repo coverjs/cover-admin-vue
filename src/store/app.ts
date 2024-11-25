@@ -1,14 +1,14 @@
-import type { LayoutSetting, ThemeType, PageTagItem } from '@/types';
+import type { MenuData, MenuDataItem } from '@/router/types.ts';
 
-import { ThemeConfig } from 'ant-design-vue/es/config-provider/context';
-import { theme as antdTheme } from 'ant-design-vue/es';
-import { defaultLayoutSetting } from '@config';
-import { api } from '@/services';
+import type { LayoutSetting, PageTagItem, ThemeType } from '@/types';
+import type { ThemeConfig } from 'ant-design-vue/es/config-provider/context';
 import { CacheEnum, PageEnum } from '@/enums';
-import { genStorageKey } from '@/utils';
 import { generateMenuAndRoutes } from '@/router/dynamicRoutes.ts';
 import staticRoutes from '@/router/staticRoutes.ts';
-import { MenuData, MenuDataItem } from '@/router/types.ts';
+import { api } from '@/services';
+import { genStorageKey } from '@/utils';
+import { defaultLayoutSetting } from '@config';
+import { theme as antdTheme } from 'ant-design-vue/es';
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
@@ -31,10 +31,12 @@ export const useAppStore = defineStore('app', () => {
     },
   });
 
-  if (isDark.value || layoutSetting.theme === 'dark') toggleTheme('dark');
+  if (isDark.value || layoutSetting.theme === 'dark')
+    toggleTheme('dark');
 
   watch(isDark, () => {
-    if (isDark.value) toggleTheme('dark');
+    if (isDark.value)
+      toggleTheme('dark');
     else toggleTheme('light');
   });
 
@@ -47,8 +49,10 @@ export const useAppStore = defineStore('app', () => {
     if (theme === 'light') {
       toggleDark(false);
       themeConfig.algorithm = [defaultAlgorithm];
-      if (themeConfig.token) themeConfig.token.colorBgContainer = '#fff';
-    } else if (theme === 'dark') {
+      if (themeConfig.token)
+        themeConfig.token.colorBgContainer = '#fff';
+    }
+    else if (theme === 'dark') {
       toggleDark(true);
       themeConfig.algorithm = [darkAlgorithm];
       if (themeConfig.token)
@@ -83,7 +87,6 @@ export const useAppStore = defineStore('app', () => {
         return;
       case 'theme':
         toggleTheme(value);
-        return;
     }
   }
 
@@ -119,11 +122,11 @@ export const useAppStore = defineStore('app', () => {
    * 它首先调用getMenuData函数来获取经过处理的菜单数据和路由数据，然后将这些数据更新到应用的相应状态中
    * 这有助于在应用启动时或按需时动态地生成和更新应用的路由配置
    *
-   * @returns {Promise<Object>} 返回更新后的路由数据对象，包括根路由和子路由
+   * @returns {Promise<object>} 返回更新后的路由数据对象，包括根路由和子路由
    */
   async function generateDynamicRoutes() {
-    const { menuData: treeMenuData, routeData: treeRouterData } =
-      await getMenuData();
+    const { menuData: treeMenuData, routeData: treeRouterData }
+      = await getMenuData();
     const root = staticRoutes.find(item => item.path === '/');
     root?.children?.push(...treeRouterData);
     const home = staticRoutes.find(item => item.path === PageEnum.BASE_HOME);

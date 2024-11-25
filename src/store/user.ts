@@ -1,9 +1,10 @@
-import { type AccountLoginDto, api, UserInfoVo } from '@/services';
-import { router } from '@/router';
+import type { AccountLoginDto, UserInfoVo } from '@/services';
 import { PageEnum, TimeEnum } from '@/enums';
+import { router } from '@/router';
+import { api } from '@/services';
 import { waittingFor } from '@/utils';
+import { bind, each, get, isEmpty, set } from 'lodash-es';
 import { store, useAppStore } from '.';
-import { each, get, set, bind, isEmpty } from 'lodash-es';
 
 export const useUserStore = defineStore(
   'user',
@@ -47,7 +48,8 @@ export const useUserStore = defineStore(
     }
 
     async function logout(callApi: boolean = true) {
-      if (callApi) await api.auth.authLogout();
+      if (callApi)
+        await api.auth.authLogout();
 
       setToken(void 0);
       await router.replace(PageEnum.BASE_LOGIN);
@@ -55,7 +57,8 @@ export const useUserStore = defineStore(
     }
 
     async function afterLoginAction(goHome?: boolean) {
-      if (!getToken.value) return;
+      if (!getToken.value)
+        return;
 
       await getUserInfoAction();
       const routes = await appStore.generateDynamicRoutes();
@@ -65,12 +68,13 @@ export const useUserStore = defineStore(
     }
 
     function getUserInfoAction() {
-      if (!getToken.value) return;
+      if (!getToken.value)
+        return;
 
       // 轮询用户信息 检查token是否过期
       !isPollActive.value && startGetUserInfoPoll();
 
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         waittingFor(() => !isEmpty(userInfo), bind(resolve, void 0, userInfo));
       });
     }

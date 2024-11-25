@@ -1,6 +1,6 @@
-import { useRegisterSW } from 'virtual:pwa-register/vue';
-import { Button } from 'ant-design-vue';
 import { TimeEnum } from '@/enums';
+import { Button } from 'ant-design-vue';
+import { useRegisterSW } from 'virtual:pwa-register/vue';
 
 import useMessage from './useMessage';
 
@@ -30,10 +30,10 @@ export function useRefreshPrompt(
       });
     },
     onRegistered(r) {
-      r &&
-        setInterval(() => {
-          r.update();
-        }, pollingInterval);
+      r
+      && setInterval(() => {
+        r.update();
+      }, pollingInterval);
     },
   });
 }

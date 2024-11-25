@@ -1,20 +1,21 @@
-import { defineConfig, loadEnv } from 'vite';
-import { VitePWA } from 'vite-plugin-pwa';
-import { VueRouterAutoImports } from 'unplugin-vue-router';
-import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
-import { createHtmlPlugin as html } from 'vite-plugin-html';
-import { resolve } from 'path';
-import tailwindcss from 'tailwindcss';
-import vue from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx';
-import components from 'unplugin-vue-components/vite';
-import layouts from 'vite-plugin-vue-layouts';
-import vueRouter from 'unplugin-vue-router/vite';
-import autoImport from 'unplugin-auto-import/vite';
+import { resolve } from 'node:path'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import tailwindcss from 'tailwindcss'
+import autoImport from 'unplugin-auto-import/vite'
+import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
+import components from 'unplugin-vue-components/vite'
+import { VueRouterAutoImports } from 'unplugin-vue-router'
+import vueRouter from 'unplugin-vue-router/vite'
+import { defineConfig, loadEnv } from 'vite'
+import { createHtmlPlugin as html } from 'vite-plugin-html'
+import { VitePWA } from 'vite-plugin-pwa'
+import layouts from 'vite-plugin-vue-layouts'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd());
+  // eslint-disable-next-line node/prefer-global/process
+  const env = loadEnv(mode, process.cwd())
   return {
     css: {
       preprocessorOptions: {
@@ -77,7 +78,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      port: parseInt(env.VITE_SERVER_PORT),
+      port: Number.parseInt(env.VITE_SERVER_PORT),
       proxy: {
         [env.VITE_GLOB_API_URL]: {
           target: env.VITE_API_BASE,
@@ -111,5 +112,5 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-  };
-});
+  }
+})

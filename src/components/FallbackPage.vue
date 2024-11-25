@@ -4,7 +4,7 @@ import { PageEnum } from '@/enums';
 defineOptions({ name: 'FallbackPage' });
 
 const props = defineProps<{
-  status: 403 | 404 | 500;
+  status: 403 | 404 | 500
 }>();
 
 const router = useRouter();
@@ -34,9 +34,11 @@ function backHome() {
 <template>
   <a-result :status="status" :title="title" :sub-title="subTitle">
     <template #extra>
-      <a-button type="primary" @click="backHome">{{
-        t('common.backToHome')
-      }}</a-button>
+      <a-button type="primary" @click="backHome">
+        {{
+          t('common.backToHome')
+        }}
+      </a-button>
     </template>
   </a-result>
 </template>

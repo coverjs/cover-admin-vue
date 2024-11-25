@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import type { RouteMeta } from 'vue-router';
-import { useAppStore } from '@/store';
-import { loadEnv } from '@/utils';
-import { useAntdToken } from '@/hooks';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
-
+import Logo from '@/assets/logo.png';
 import HeaderActions from '@/components/HeaderActions.vue';
 import LayoutHeader from '@/components/LayoutHeader/index.vue';
 import SettingDrawer from '@/components/SettingDrawer/index.vue';
-import SubMenu from '@/components/SubMenu/index.vue';
 
-import Logo from '@/assets/logo.png';
+import SubMenu from '@/components/SubMenu/index.vue';
+import { useAntdToken } from '@/hooks';
+import { useAppStore } from '@/store';
+import { loadEnv } from '@/utils';
+
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 
 defineOptions({ name: 'DefaultLayout' });
 const prefixCls = shallowRef('cover-layout-app');
@@ -31,14 +31,15 @@ function checkedException(meta: RouteMeta) {
   if (meta.exception) {
     exception.value = true;
     exceptionCode.value = meta.exceptionCode as number;
-  } else {
+  }
+  else {
     exception.value = false;
   }
 }
 
 watch(
   () => route.meta,
-  val => {
+  (val) => {
     checkedException(val);
   },
   { immediate: true },
@@ -62,31 +63,31 @@ onMounted(() => {
     >
       <div :class="`${prefixCls}-title`">
         <span>
-          <img class="title-logo" :src="Logo" alt="logo" />
+          <img class="title-logo" :src="Logo" alt="logo">
           <template v-if="!collapsed">
             {{ env.VITE_APP_TITLE ?? 'Cover Admin' }}
           </template>
         </span>
       </div>
       <a-menu
-        v-model:openKeys="openKeys"
-        :selectedKeys="[$route.path]"
+        v-model:open-keys="openKeys"
+        :selected-keys="[$route.path]"
         mode="inline"
       >
         <template v-for="menu in appStore.menuData" :key="menu.path">
-          <sub-menu :item="menu" />
+          <SubMenu :item="menu" />
         </template>
       </a-menu>
     </a-layout-sider>
     <a-layout :style="{ borderLeft: `1px solid ${token.colorBorder}` }">
-      <layout-header>
+      <LayoutHeader>
         <template #headerContent>
-          <menu-unfold-outlined
+          <MenuUnfoldOutlined
             v-if="collapsed"
             class="trigger"
             @click="() => (collapsed = !collapsed)"
           />
-          <menu-fold-outlined
+          <MenuFoldOutlined
             v-else
             class="trigger"
             @click="() => (collapsed = !collapsed)"
@@ -94,18 +95,17 @@ onMounted(() => {
           <header-breadcrumb />
         </template>
         <template #headerActions>
-          <header-actions />
+          <HeaderActions />
         </template>
-      </layout-header>
+      </LayoutHeader>
       <a-layout-content>
         <page-tags />
         <div class="my-[24px] mx-[16px] p-[24px] overflow-auto page-container">
           <fallback-page v-if="exception" :status="Number(exceptionCode)" />
-
-          <router-view v-else v-slot="{ Component, route }">
+          <router-view v-else v-slot="{ Component, route: currentRoute }">
             <transition name="fade-transform" mode="out-in">
               <keep-alive>
-                <component :is="Component" :key="route.path" />
+                <component :is="Component" :key="currentRoute.path" />
               </keep-alive>
             </transition>
           </router-view>
@@ -113,12 +113,12 @@ onMounted(() => {
       </a-layout-content>
     </a-layout>
   </a-layout>
-  <setting-drawer
+  <SettingDrawer
     v-if="env.VITE_SHOW_SETTING === 'true'"
     :theme="layoutSetting.theme"
     :color-primary="layoutSetting.colorPrimary"
     :layout-setting="layoutSetting"
-    @settingChange="appStore.changeSettingLayout"
+    @setting-change="appStore.changeSettingLayout"
   />
 </template>
 

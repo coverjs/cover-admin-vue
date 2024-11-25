@@ -27,13 +27,15 @@ function genMenuItems(children: RouteRecordRaw[]) {
 
 <template>
   <a-breadcrumb class="header-breadcrumb">
-    <breadcrumb-transition :use-transition="loadEnv().PROD">
+    <BreadcrumbTransition :use-transition="loadEnv().PROD">
       <template v-for="(item, index) in breadcrumbList" :key="item.path">
-        <a-breadcrumb-item v-if="index === breadcrumbList.length - 1">{{
-          item.meta?.title
-        }}</a-breadcrumb-item>
-        <a-breadcrumb-item :href="item.path" v-else
-          >{{ item.meta.title }}
+        <a-breadcrumb-item v-if="index === breadcrumbList.length - 1">
+          {{
+            item.meta?.title
+          }}
+        </a-breadcrumb-item>
+        <a-breadcrumb-item v-else :href="item.path">
+          {{ item.meta.title }}
           <template v-if="item.children.length > 1" #overlay>
             <a-menu :selected-keys="[$route.path]">
               <a-menu-item
@@ -47,7 +49,7 @@ function genMenuItems(children: RouteRecordRaw[]) {
           </template>
         </a-breadcrumb-item>
       </template>
-    </breadcrumb-transition>
+    </BreadcrumbTransition>
   </a-breadcrumb>
 </template>
 

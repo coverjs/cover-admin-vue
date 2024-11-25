@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { RouteLocation } from 'vue-router';
 import type { PageTagItem } from '@/types';
+import type { RouteLocation } from 'vue-router';
+import { useAntdToken } from '@/hooks';
 import { useAppStore } from '@/store';
 import { size } from 'lodash-es';
-import { useAntdToken } from '@/hooks';
 
 const blackList = ['/', '/login'];
 
@@ -49,10 +49,11 @@ function handleMenuClick(key: string, tag: PageTagItem) {
 
 watch(
   route,
-  to => {
+  (to) => {
     const title = genTitle(to);
 
-    if (blackList.includes(to.path) || !title) return;
+    if (blackList.includes(to.path) || !title)
+      return;
 
     const { fullPath, meta, name, params, path, query } = to;
     appStore.addTag({ title, name, path, fullPath, meta, params, query });
@@ -83,16 +84,24 @@ watch(
         :color="route.fullPath === tag.fullPath ? token.colorPrimaryActive : ''"
         @close="handleItemClose(tag)"
       >
-        <router-link :to="tag.fullPath">{{ tag.title }}</router-link>
+        <router-link :to="tag.fullPath">
+          {{ tag.title }}
+        </router-link>
       </a-tag>
       <template #overlay>
         <a-menu @click="handleMenuClick($event.key, tag)">
-          <a-menu-item key="refresh" :disabled="route.fullPath !== tag.fullPath"
-            >刷新</a-menu-item
-          >
-          <a-menu-item key="close-right">关闭右侧</a-menu-item>
-          <a-menu-item key="close-left">关闭左侧</a-menu-item>
-          <a-menu-item key="close-other">关闭其他</a-menu-item>
+          <a-menu-item key="refresh" :disabled="route.fullPath !== tag.fullPath">
+            刷新
+          </a-menu-item>
+          <a-menu-item key="close-right">
+            关闭右侧
+          </a-menu-item>
+          <a-menu-item key="close-left">
+            关闭左侧
+          </a-menu-item>
+          <a-menu-item key="close-other">
+            关闭其他
+          </a-menu-item>
         </a-menu>
       </template>
     </a-dropdown>

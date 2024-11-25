@@ -2,25 +2,25 @@
 import type { FormInstance } from 'ant-design-vue/es/form/index';
 import type { InternalNamePath } from 'ant-design-vue/es/form/interface';
 
-import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import { CacheEnum } from '@/enums';
 import { genStorageKey } from '@/utils';
-import { cloneDeep, isEqual } from 'lodash-es';
-
+import { LockOutlined, UserOutlined } from '@ant-design/icons-vue';
 import crypto from 'crypto-js';
+
+import { cloneDeep, isEqual } from 'lodash-es';
 import objHash from 'object-hash';
 
 interface FormData {
-  username: string;
-  password: string;
+  username: string
+  password: string
 }
 
 defineOptions({ name: 'LoginForm' });
 
 const props = withDefaults(
   defineProps<{
-    loading: boolean;
-    securePwd?: boolean;
+    loading: boolean
+    securePwd?: boolean
     hashType?:
       | 'MD5'
       | 'SHA1'
@@ -29,14 +29,14 @@ const props = withDefaults(
       | 'SHA3'
       | 'SHA384'
       | 'SHA512'
-      | 'RIPEMD160';
-    initialUserHash?: string;
+      | 'RIPEMD160'
+    initialUserHash?: string
   }>(),
   { loading: false, securePassword: true, hashType: 'MD5' },
 );
 
 defineEmits<{
-  (e: 'submit', formData: FormData): void;
+  (e: 'submit', formData: FormData): void
 }>();
 
 const { t } = useI18n();
@@ -60,10 +60,10 @@ const rememberMe = ref(rememberMeInStorage.value ?? false);
 
 function getFieldsValue(nameList?: InternalNamePath[] | true) {
   const result = cloneDeep(formRef.value?.getFieldsValue(nameList));
-  const shouldEncryptPwd =
-    !isEqual(objHash(formData), props.initialUserHash ?? '') &&
-    props.securePwd &&
-    result?.password;
+  const shouldEncryptPwd
+    = !isEqual(objHash(formData), props.initialUserHash ?? '')
+    && props.securePwd
+    && result?.password;
 
   if (shouldEncryptPwd) {
     result.password = crypto[props.hashType]?.(result.password)?.toString();
@@ -74,14 +74,14 @@ function getFieldsValue(nameList?: InternalNamePath[] | true) {
 
 watch(
   () => rememberMe.value,
-  val => {
+  (val) => {
     rememberMeInStorage.value = val;
   },
 );
 
 watch(
   () => formData.username,
-  val => {
+  (val) => {
     if (rememberMe.value) {
       usernameInStorage.value = val;
     }
@@ -95,8 +95,8 @@ defineExpose({
 
 <template>
   <a-form
-    class="login-form"
     ref="formRef"
+    class="login-form"
     :model="formData"
     @finish="$emit('submit', getFieldsValue())"
   >
@@ -111,7 +111,7 @@ defineExpose({
         size="large"
       >
         <template #prefix>
-          <user-outlined />
+          <UserOutlined />
         </template>
       </a-input>
     </a-form-item>
@@ -127,14 +127,16 @@ defineExpose({
         visiblity-toggle
       >
         <template #prefix>
-          <lock-outlined />
+          <LockOutlined />
         </template>
       </a-input-password>
     </a-form-item>
     <a-form-item>
-      <a-checkbox v-model:checked="rememberMe" size="small">{{
-        t('authentication.rememberMe')
-      }}</a-checkbox>
+      <a-checkbox v-model:checked="rememberMe" size="small">
+        {{
+          t('authentication.rememberMe')
+        }}
+      </a-checkbox>
     </a-form-item>
     <a-form-item>
       <a-button
@@ -143,8 +145,9 @@ defineExpose({
         size="large"
         :loading="loading"
         block
-        >{{ t('common.login') }}</a-button
       >
+        {{ t('common.login') }}
+      </a-button>
     </a-form-item>
   </a-form>
 </template>

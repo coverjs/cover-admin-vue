@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import type { CSSProperties } from 'vue';
 import { useAppStore } from '@/store';
-import { CSSProperties } from 'vue';
 
 defineOptions({
   name: 'LayoutHeader',
@@ -29,10 +29,10 @@ const headerStyle = computed(() => {
   <a-layout-header :style="headerStyle" :class="cls">
     <div :class="`${prefixCls}-container`">
       <div class="flex-1 overflow-x-auto">
-        <slot name="headerContent"></slot>
+        <slot name="headerContent" />
       </div>
       <a-space align="center" class="flex-shrink-0">
-        <slot name="headerActions"></slot>
+        <slot name="headerActions" />
       </a-space>
     </div>
   </a-layout-header>

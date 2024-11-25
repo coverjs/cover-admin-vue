@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MenuDataItem } from '@/router/types.ts';
+import type { MenuDataItem } from '@/router/types.ts';
 import AsyncIcon from '@/components/SubMenu/AsyncIcon.vue';
 
 defineOptions({
@@ -7,8 +7,8 @@ defineOptions({
 });
 withDefaults(
   defineProps<{
-    item: MenuDataItem;
-    link?: boolean;
+    item: MenuDataItem
+    link?: boolean
   }>(),
   {
     link: true,
@@ -21,7 +21,7 @@ const { t } = useI18n();
   <template v-if="item.children">
     <a-sub-menu :key="item.path">
       <template v-if="item.icon" #icon>
-        <async-icon :icon="item.icon" />
+        <AsyncIcon :icon="item.icon" />
       </template>
       <template #title>
         {{ t(item.locale!) || item.name }}
@@ -31,9 +31,9 @@ const { t } = useI18n();
           <sub-menu :key="menu.path" :item="menu" />
         </template>
         <template v-else>
-          <a-menu-item :key="menu.path" v-if="menu.type === 'MENU'">
+          <a-menu-item v-if="menu.type === 'MENU'" :key="menu.path">
             <template v-if="menu.icon" #icon>
-              <async-icon :icon="menu.icon" />
+              <AsyncIcon :icon="menu.icon" />
             </template>
             <RouterLink v-if="link" :to="menu.path">
               {{ t(menu.locale!) || menu.name }}
@@ -46,7 +46,7 @@ const { t } = useI18n();
   <template v-else>
     <a-menu-item :key="item.path">
       <template v-if="item.icon" #icon>
-        <async-icon :icon="item.icon" />
+        <AsyncIcon :icon="item.icon" />
       </template>
       <RouterLink v-if="link" :to="item.path">
         {{ t(item.locale!) || item.name }}

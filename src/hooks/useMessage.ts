@@ -1,14 +1,14 @@
 import type { ModalFuncProps } from 'ant-design-vue/lib/modal/Modal';
-import { Modal, message, notification } from 'ant-design-vue';
-
 import {
-  InfoCircleFilled,
   CheckCircleFilled,
   CloseCircleFilled,
+  InfoCircleFilled,
 } from '@ant-design/icons-vue';
 
+import { message, Modal, notification } from 'ant-design-vue';
+
 export interface ModalOptionsEx extends Omit<ModalFuncProps, 'iconType'> {
-  iconType: 'warning' | 'success' | 'error' | 'info';
+  iconType: 'warning' | 'success' | 'error' | 'info'
 }
 export type ModalOptionsPartial = Partial<ModalOptionsEx> &
   Pick<ModalOptionsEx, 'content'>;
@@ -40,13 +40,13 @@ function createConfirm(options: ModalOptionsEx) {
   return Modal.confirm(opt);
 }
 
-const getBaseOptions = () => {
+function getBaseOptions() {
   const { t } = useI18n();
   return {
     okText: t('common.confirm'),
     centered: true,
   };
-};
+}
 
 function createModalOptions(
   options: ModalOptionsPartial,

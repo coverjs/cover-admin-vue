@@ -1,13 +1,13 @@
-import type { Context, Middleware } from 'onion-interceptor';
 import type { ErrorMessageMode } from '@/types';
+import type { Context, Middleware } from 'onion-interceptor';
 
-import { tap } from '@onion-interceptor/pipes';
-import { getReqOptItem } from '@/utils';
-import { useMessage, useLogoutConfirm } from '@/hooks';
-import { t } from '@/locales';
 import { StatusEnum } from '@/enums';
-import { isCancel, isAxiosError, AxiosError } from 'axios';
-import { isNil, get, isEqual } from 'lodash-es';
+import { useLogoutConfirm, useMessage } from '@/hooks';
+import { t } from '@/locales';
+import { getReqOptItem } from '@/utils';
+import { tap } from '@onion-interceptor/pipes';
+import { AxiosError, isAxiosError, isCancel } from 'axios';
+import { get, isEqual, isNil } from 'lodash-es';
 
 const statusHandlers = new Map<
   number,
@@ -39,8 +39,9 @@ statusHandlers.set(
   (msg?: string) => msg || t('fallback.http.internalServerError'),
 );
 const _getCode = (ctx: Context) => get(ctx, ['res', 'data', 'code']);
-const _getErrMsg = (ctx: Context) =>
-  get(ctx, ['res', 'data', 'msg']) ?? get(ctx, ['res', 'statusText']);
+function _getErrMsg(ctx: Context) {
+  return get(ctx, ['res', 'data', 'msg']) ?? get(ctx, ['res', 'statusText']);
+}
 
 /**
  * 错误拦截器中间件
@@ -50,17 +51,20 @@ const _getErrMsg = (ctx: Context) =>
  */
 export const errorInterceptor: Middleware = async function (ctx, next) {
   // 禁用error拦截器
-  if (!getReqOptItem(ctx, 'errorInterceptorEnabled')) return await next();
+  if (!getReqOptItem(ctx, 'errorInterceptorEnabled'))
+    return await next();
 
   await next(
     tap(
-      ctx => {
-        if (isEqual(_getCode(ctx), 0)) return;
+      (ctx) => {
+        if (isEqual(_getCode(ctx), 0))
+          return;
 
         throw new Error(_getErrMsg(ctx));
       },
-      err => {
-        if (isCancel(err)) return err;
+      (err) => {
+        if (isCancel(err))
+          return err;
         return handleError(ctx, err as Error);
       },
     ),
@@ -88,8 +92,8 @@ function handleError(ctx: Context, error: Error) {
     return error;
   }
 
-  const status =
-    get(ctx, ['res', 'status']) ?? get(error, ['response', 'status']);
+  const status
+    = get(ctx, ['res', 'status']) ?? get(error, ['response', 'status']);
 
   const _status = isEqual(status, StatusEnum.SUCCESS) // 兼容 http status 200 ,但是后端传错误码的情况
     ? (_getCode(ctx) ?? StatusEnum.SUCCESS)
@@ -112,7 +116,8 @@ function checkStatus(
   errorMessageMode: ErrorMessageMode = 'message',
 ) {
   const handleRes = statusHandlers.get(status)?.(msg);
-  if (isEqual(status, StatusEnum.SUCCESS) || handleRes === false) return;
+  if (isEqual(status, StatusEnum.SUCCESS) || handleRes === false)
+    return;
 
   callMsg(
     handleRes ?? msg ?? t('fallback.http.internalServerError'),

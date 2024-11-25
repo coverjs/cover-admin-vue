@@ -1,13 +1,13 @@
 import type { ShallowReactive } from 'vue';
-import { useMessage } from '.';
-import { useUserStore } from '@/store';
 import { TimeEnum } from '@/enums';
 import { t } from '@/locales';
+import { useUserStore } from '@/store';
+import { useMessage } from '.';
 
 const { createConfirm } = useMessage();
 const modal: ShallowReactive<{
-  visible: boolean;
-  instance: ReturnType<typeof createConfirm> | void;
+  visible: boolean
+  instance: ReturnType<typeof createConfirm> | void
 }> = shallowReactive({
   visible: false,
   instance: void 0,
@@ -32,7 +32,8 @@ export function useLogoutConfirm(mode: 'auto' | 'manual' = 'manual') {
   const { start: showModal } = useTimeoutFn(
     // 让动画更丝滑
     () => {
-      if (!userStore.getToken || modal.visible) return;
+      if (!userStore.getToken || modal.visible)
+        return;
 
       modal.visible = true;
       let secondsToGo = 5;
@@ -45,14 +46,16 @@ export function useLogoutConfirm(mode: 'auto' | 'manual' = 'manual') {
         onCancel: () => (modal.visible = false),
       });
 
-      if (isManual) return;
+      if (isManual)
+        return;
 
       const interval = setInterval(() => {
         secondsToGo--;
         modal.instance?.update({
           okText: `${t('common.confirm')}(${secondsToGo})`,
         });
-        if (secondsToGo > 0) return;
+        if (secondsToGo > 0)
+          return;
         modal.visible && onConfirm();
         clearInterval(interval);
       }, TimeEnum.SECOND);

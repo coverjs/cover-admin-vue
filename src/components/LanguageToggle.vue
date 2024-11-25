@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { LanguagesType } from '@/locales/types';
 
-import { TranslationOutlined } from '@ant-design/icons-vue';
-import { loadMessages } from '@/locales';
 import { CacheEnum } from '@/enums';
-import { genStorageKey } from '@/utils';
+import { loadMessages } from '@/locales';
 import { i18n } from '@/locales/i18n';
+import { genStorageKey } from '@/utils';
+import { TranslationOutlined } from '@ant-design/icons-vue';
 
 defineOptions({ name: 'LanguageToggle' });
 
@@ -25,14 +25,18 @@ async function handleUpdate(value: LanguagesType) {
 
 <template>
   <a-dropdown placement="bottom" trigger="click">
-    <translation-outlined />
+    <TranslationOutlined />
     <template #overlay>
       <a-menu
-        v-model:selectedKeys="selectedKeys"
+        v-model:selected-keys="selectedKeys"
         @click="handleUpdate($event.key)"
       >
-        <a-menu-item key="zh-CN"> 简体中文 </a-menu-item>
-        <a-menu-item key="en-US"> English </a-menu-item>
+        <a-menu-item key="zh-CN">
+          简体中文
+        </a-menu-item>
+        <a-menu-item key="en-US">
+          English
+        </a-menu-item>
       </a-menu>
     </template>
   </a-dropdown>
