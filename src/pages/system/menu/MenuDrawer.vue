@@ -8,7 +8,6 @@ interface Props {
   type: boolean
   formData: CreateMenuDtoWithId
   treeData: MenuVo[]
-  t?: (key: string, ...args: any[]) => string
 }
 
 defineOptions({
@@ -84,8 +83,8 @@ watch(
     :root-style="{ color: 'blue' }"
     :title="
       type
-        ? t?.('pages.system.menu.createMenu')
-        : t?.('pages.system.menu.createMenu')
+        ? $t('pages.system.menu.createMenu')
+        : $t('pages.system.menu.createMenu')
     "
     placement="right"
     destroy-on-close
@@ -190,12 +189,12 @@ watch(
     <template #footer>
       <a-button style="margin-right: 8px" @click="onClose">
         {{
-          t?.('common.cancel')
+          $t('common.cancel')
         }}
       </a-button>
       <a-button type="primary" @click="onSubmit">
         {{
-          t?.('common.confirm')
+          $t('common.confirm')
         }}
       </a-button>
     </template>

@@ -6,7 +6,7 @@ const { toggle, isFullscreen } = useFullscreen();
 
 <template>
   <span @click="toggle()">
-    <ExpandOutlined v-if="!isFullscreen" />
-    <CompressOutlined v-else />
+    <expand-outlined v-if="!isFullscreen" />
+    <compress-outlined v-else />
   </span>
 </template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ThemeType } from '@/types';
+
 import { useAntdToken } from '@/hooks';
 import { CheckOutlined } from '@ant-design/icons-vue';
 
@@ -9,7 +10,6 @@ const props = defineProps<{
   theme?: ThemeType
   isDark?: boolean
   checked?: boolean
-  t?: (key: string, ...args: any[]) => string
 }>();
 
 const prefixCls = 'cover-setting-drawer-block-checkbox';
@@ -30,12 +30,12 @@ const cls = computed(() => {
     <template #title>
       {{
         theme === 'light'
-          ? `${t && t('app.setting.pageStyle.light')}`
-          : `${t && t('app.setting.pageStyle.dark')}`
+          ? $t('app.setting.pageStyle.light')
+          : $t('app.setting.pageStyle.dark')
       }}
     </template>
     <div :class="cls">
-      <CheckOutlined
+      <check-outlined
         v-show="checked"
         :style="{ color: token?.colorPrimary }"
         :class="`${prefixCls}-selectIcon`"

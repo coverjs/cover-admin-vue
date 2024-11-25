@@ -14,7 +14,7 @@ function handleUpdate(value: 'light' | 'dark' | 'auto') {
 
 <template>
   <a-dropdown placement="bottom" trigger="click">
-    <SkinOutlined />
+    <skin-outlined />
     <template #overlay>
       <a-menu
         v-model:selected-keys="selectedKeys"

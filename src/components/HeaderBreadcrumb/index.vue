@@ -1,8 +1,7 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import type { RouteRecordRaw } from 'vue-router';
 
 import { loadEnv } from '@/utils';
-
 import { isEmpty, last, split } from 'lodash-es';
 
 defineOptions({

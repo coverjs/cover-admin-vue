@@ -25,7 +25,7 @@ const logout = useLogoutConfirm('manual');
         <a-dropdown placement="bottom" trigger="click">
           <span class="user-info">
             <a-avatar class="user-avatar" size="small">
-              <template #icon><UserOutlined /></template>
+              <template #icon><user-outlined /></template>
             </a-avatar>
             {{ userStore.userInfo.nickname }}
           </span>

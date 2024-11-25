@@ -109,7 +109,7 @@ defineExpose({
         size="large"
       >
         <template #prefix>
-          <UserOutlined />
+          <user-outlined />
         </template>
       </a-input>
     </a-form-item>
@@ -125,7 +125,7 @@ defineExpose({
         visiblity-toggle
       >
         <template #prefix>
-          <LockOutlined />
+          <lock-outlined />
         </template>
       </a-input-password>
     </a-form-item>

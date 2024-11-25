@@ -141,7 +141,7 @@ function refresh() {
       <a-table :columns="columns" :data-source="treeTableData">
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'icon'">
-            <AsyncIcon :icon="text" />
+            <async-icon :icon="text" />
           </template>
           <template v-if="column.dataIndex === 'operation'">
             <div class="editable-row-operations">
@@ -164,7 +164,7 @@ function refresh() {
         </template>
       </a-table>
     </a-card>
-    <MenuDrawer
+    <menu-drawer
       v-model:open="open"
       :t="$t"
       :type

@@ -43,7 +43,7 @@ async function login() {
   <div class="login-form-container">
     <a-typography class="title-container">
       <a-typography-title class="title" :level="3">
-        {{ t('authentication.loginTitle') }}
+        {{ $t('authentication.loginTitle') }}
       </a-typography-title>
       <span class="title-extra">
         <a-space>
