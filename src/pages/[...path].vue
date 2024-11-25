@@ -1,9 +1,9 @@
 <script setup lang="ts">
 defineOptions({
-  name: 'NotFoundPage',
+	name: 'NotFoundPage',
 });
 </script>
 
 <template>
-  <fallback-page :status="404" />
+	<fallback-page :status="404" />
 </template>

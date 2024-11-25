@@ -5,15 +5,15 @@ import { defaultCustomRequestOptions as DEFAULT } from '@config';
 import { get } from 'lodash-es';
 
 const _getVal = (
-  obj: Record<string, any> | void,
-  key: keyof CustomRequestOptions,
+	obj: Record<string, any> | void,
+	key: keyof CustomRequestOptions,
 ) => get(obj, ['customOptions', key]);
 export const getReqOptItem = (
-  ctx: Context,
-  key: keyof CustomRequestOptions,
+	ctx: Context,
+	key: keyof CustomRequestOptions,
 ) => {
-  const [params] = ctx?.args as [RequestParams];
-  const config = ctx?.cfg;
+	const [params] = ctx?.args as [RequestParams];
+	const config = ctx?.cfg;
 
-  return _getVal(params, key) ?? _getVal(config, key) ?? DEFAULT[key];
+	return _getVal(params, key) ?? _getVal(config, key) ?? DEFAULT[key];
 };

@@ -5,51 +5,51 @@ import { isEmpty, omit } from 'lodash-es';
 import { PageEnum } from '@/enums';
 
 export function createPermissionGuard(router: Router) {
-  const userStore = useUserStore();
-  const appStore = useAppStore();
+	const userStore = useUserStore();
+	const appStore = useAppStore();
 
-  router.beforeEach(async (to, _from, next) => {
-    const token = userStore.getToken;
-    to.meta.exception = false;
+	router.beforeEach(async (to, _from, next) => {
+		const token = userStore.getToken;
+		to.meta.exception = false;
 
-    if (!token && !to.meta.ignoreAuth) {
-      next({ name: 'login', replace: true });
-      return;
-    }
+		if (!token && !to.meta.ignoreAuth) {
+			next({ name: 'login', replace: true });
+			return;
+		}
 
-    if (to.name === 'login' && token) {
-      next(PageEnum.BASE_HOME);
-      return;
-    }
+		if (to.name === 'login' && token) {
+			next(PageEnum.BASE_HOME);
+			return;
+		}
 
-    if (
-      isEmpty(userStore.userInfo) &&
-      !to.meta.ignoreAuth &&
-      !to.meta.exception
-    ) {
-      try {
-        await userStore.getUserInfoAction();
-        const currentRoute = await appStore.generateDynamicRoutes();
-        router.addRoute(currentRoute);
-      } catch (e) {
-        to.meta.exception = !!e;
-        to.meta.exceptionCode = 500;
-        next(e as Error);
-        return;
-      }
+		if (
+			isEmpty(userStore.userInfo) &&
+			!to.meta.ignoreAuth &&
+			!to.meta.exception
+		) {
+			try {
+				await userStore.getUserInfoAction();
+				const currentRoute = await appStore.generateDynamicRoutes();
+				router.addRoute(currentRoute);
+			} catch (e) {
+				to.meta.exception = !!e;
+				to.meta.exceptionCode = 500;
+				next(e as Error);
+				return;
+			}
 
-      next({
-        ...omit(to, 'name'),
-        replace: true,
-      });
-      return;
-    }
+			next({
+				...omit(to, 'name'),
+				replace: true,
+			});
+			return;
+		}
 
-    if (to.path === '/403') {
-      to.meta.exception = true;
-      to.meta.exceptionCode = 403;
-    }
+		if (to.path === '/403') {
+			to.meta.exception = true;
+			to.meta.exceptionCode = 403;
+		}
 
-    next();
-  });
+		next();
+	});
 }

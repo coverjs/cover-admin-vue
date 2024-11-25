@@ -5,7 +5,7 @@ import { antdLocale } from '@/locales';
 import { theme } from 'ant-design-vue';
 
 defineOptions({
-  name: 'App',
+	name: 'App',
 });
 
 useRefreshPrompt();
@@ -19,12 +19,12 @@ const { token } = theme.useToken();
 const { setToken } = useAntdToken();
 
 watchEffect(() => {
-  setToken(token.value);
+	setToken(token.value);
 });
 </script>
 
 <template>
-  <a-config-provider :theme="antdTheme" :locale="antdLocale">
-    <router-view />
-  </a-config-provider>
+	<a-config-provider :theme="antdTheme" :locale="antdLocale">
+		<router-view />
+	</a-config-provider>
 </template>

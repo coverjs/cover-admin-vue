@@ -1,27 +1,27 @@
 .cover-setting-drawer-handle {
-  position: fixed;
-  inset-block-start: 240px;
-  inset-inline-end: 0px;
-  z-index: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  font-size: 16px;
-  text-align: center;
-  -webkit-backdropilter: saturate(180%) blur(20px);
-  backdrop-filter: saturate(180%) blur(20px);
-  cursor: pointer;
-  pointer-events: auto;
+	position: fixed;
+	inset-block-start: 240px;
+	inset-inline-end: 0px;
+	z-index: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 48px;
+	height: 48px;
+	font-size: 16px;
+	text-align: center;
+	-webkit-backdropilter: saturate(180%) blur(20px);
+	backdrop-filter: saturate(180%) blur(20px);
+	cursor: pointer;
+	pointer-events: auto;
 
-  &-icon {
-    color: #fff;
-  }
+	&-icon {
+		color: #fff;
+	}
 
-  &-icon-dark {
-    color: #e5e0d8;
-  }
+	&-icon-dark {
+		color: #e5e0d8;
+	}
 }
 
 // .cover-setting-drawer-content {
@@ -29,120 +29,120 @@
 // }
 
 .cover-setting-drawer-block {
-  margin-bottom: 24px;
+	margin-bottom: 24px;
 
-  > h3 {
-    font-weight: 500;
-    margin-bottom: 12px;
-    font-size: 14px;
-    line-height: 22px;
-  }
+	> h3 {
+		font-weight: 500;
+		margin-bottom: 12px;
+		font-size: 14px;
+		line-height: 22px;
+	}
 
-  .cover-setting-drawer-block-checkbox {
-    display: flex;
-    min-height: 42px;
+	.cover-setting-drawer-block-checkbox {
+		display: flex;
+		min-height: 42px;
 
-    &-selectIcon {
-      position: absolute;
-      right: 6px;
-      bottom: 4px;
-      font-weight: 700;
-      font-size: 14px;
-      pointer-events: none;
-    }
+		&-selectIcon {
+			position: absolute;
+			right: 6px;
+			bottom: 4px;
+			font-weight: 700;
+			font-size: 14px;
+			pointer-events: none;
+		}
 
-    &-item {
-      position: relative;
-      width: 44px;
-      height: 36px;
-      margin-right: 16px;
-      overflow: hidden;
-      background-color: #f0f2f5;
-      border-radius: 4px;
-      box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, 0.18);
-      cursor: pointer;
+		&-item {
+			position: relative;
+			width: 44px;
+			height: 36px;
+			margin-right: 16px;
+			overflow: hidden;
+			background-color: #f0f2f5;
+			border-radius: 4px;
+			box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, 0.18);
+			cursor: pointer;
 
-      &::before {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 33%;
-        height: 100%;
-        background-color: #fff;
-        content: '';
-      }
+			&::before {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 33%;
+				height: 100%;
+				background-color: #fff;
+				content: '';
+			}
 
-      &::after {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 25%;
-        background-color: #fff;
-        content: '';
-      }
+			&::after {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 25%;
+				background-color: #fff;
+				content: '';
+			}
 
-      &-dark {
-        background-color: rgba(0, 21, 41, 0.85);
+			&-dark {
+				background-color: rgba(0, 21, 41, 0.85);
 
-        &::before {
-          background-color: rgba(0, 21, 41, 0.65);
-          content: '';
-        }
+				&::before {
+					background-color: rgba(0, 21, 41, 0.65);
+					content: '';
+				}
 
-        &::after {
-          background-color: rgba(0, 21, 41, 0.85);
-        }
-      }
+				&::after {
+					background-color: rgba(0, 21, 41, 0.85);
+				}
+			}
 
-      &-light {
-        &::before {
-          background-color: #fff;
-          content: '';
-        }
+			&-light {
+				&::before {
+					background-color: #fff;
+					content: '';
+				}
 
-        &::after {
-          background-color: #fff;
-        }
-      }
+				&::after {
+					background-color: #fff;
+				}
+			}
 
-      &-theme-item {
-        background: rgb(42, 44, 44);
-        box-shadow: rgba(13, 13, 13, 0.18) 0 1px 2.5px 0;
+			&-theme-item {
+				background: rgb(42, 44, 44);
+				box-shadow: rgba(13, 13, 13, 0.18) 0 1px 2.5px 0;
 
-        &-light {
-          &::before,
-          &::after {
-            background-color: rgb(36, 37, 37);
-          }
-        }
+				&-light {
+					&::before,
+					&::after {
+						background-color: rgb(36, 37, 37);
+					}
+				}
 
-        &-dark {
-          &::before,
-          &::after {
-            background-color: rgba(15, 28, 41, 0.65);
-          }
-        }
-      }
-    }
-  }
+				&-dark {
+					&::before,
+					&::after {
+						background-color: rgba(15, 28, 41, 0.65);
+					}
+				}
+			}
+		}
+	}
 
-  .cover-setting-drawer-block-theme-color {
-    overflow: hidden;
+	.cover-setting-drawer-block-theme-color {
+		overflow: hidden;
 
-    &-item {
-      float: left;
-      width: 20px;
-      height: 20px;
-      margin-top: 8px;
-      margin-right: 8px;
-      font-weight: 700;
-      display: flex;
-      color: #fff;
-      align-items: center;
-      justify-content: center;
-      border-radius: 2px;
-      cursor: pointer;
-    }
-  }
+		&-item {
+			float: left;
+			width: 20px;
+			height: 20px;
+			margin-top: 8px;
+			margin-right: 8px;
+			font-weight: 700;
+			display: flex;
+			color: #fff;
+			align-items: center;
+			justify-content: center;
+			border-radius: 2px;
+			cursor: pointer;
+		}
+	}
 }

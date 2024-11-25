@@ -5,11 +5,11 @@ import { cancelInterceptor } from './cancel';
 import { langInterceptor } from './lang';
 
 export const interceptors = [
-  errorInterceptor,
-  cancelInterceptor,
-  authInterceptor,
-  langInterceptor,
-  loadingInterceptor,
+	errorInterceptor,
+	cancelInterceptor,
+	authInterceptor,
+	langInterceptor,
+	loadingInterceptor,
 ];
 
 export * from './auth';

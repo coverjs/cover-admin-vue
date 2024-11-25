@@ -5,11 +5,11 @@ import { setupRouterGuards } from './guard';
 import staticRoutes from './staticRoutes.ts';
 
 export const router = createRouter({
-  history: createWebHashHistory(),
-  routes: staticRoutes,
+	history: createWebHashHistory(),
+	routes: staticRoutes,
 });
 
 export function setupRouter(app: App) {
-  app.use(router);
-  setupRouterGuards(router);
+	app.use(router);
+	setupRouterGuards(router);
 }

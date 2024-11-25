@@ -8,16 +8,16 @@ import objHash from 'object-hash';
 const apis: Map<string, Api<unknown>> = new Map();
 
 export function createApi(config: ApiConfig = defaultRequestConfig) {
-  const key = objHash(config);
+	const key = objHash(config);
 
-  if (apis.has(key)) return apis.get(key)!;
+	if (apis.has(key)) return apis.get(key)!;
 
-  const api = new Api(config);
+	const api = new Api(config);
 
-  createInterceptor(api.instance).use(...interceptors);
+	createInterceptor(api.instance).use(...interceptors);
 
-  apis.set(key, api);
-  return api;
+	apis.set(key, api);
+	return api;
 }
 
 export * from './api';

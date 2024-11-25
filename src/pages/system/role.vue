@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 defineOptions({
-  name: 'RolePage',
+	name: 'RolePage',
 });
 </script>
 
 <template>
-  <div>role</div>
+	<div>role</div>
 </template>
 
 <style lang="scss" scoped></style>
