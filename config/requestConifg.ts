@@ -1,4 +1,4 @@
-import type { CustomRequestOptions, ApiConfig } from '@/types';
+import type { ApiConfig, CustomRequestOptions } from '@/types';
 import { ContentTypeEnum, TimeEnum } from '@/enums';
 
 export const defaultCustomRequestOptions: CustomRequestOptions = {
