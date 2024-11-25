@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { CheckOutlined } from '@ant-design/icons-vue'
+import { CheckOutlined } from '@ant-design/icons-vue';
 
-defineOptions({ name: 'BlockThemeColor' })
+defineOptions({ name: 'BlockThemeColor' });
 
 defineProps<{
   colorList: { key: string, color: string }[]
   color?: string
   onChange?: (color: string) => void
   t?: (key: string, ...args: any[]) => string
-}>()
+}>();
 
-const prefixCls = shallowRef('cover-setting-drawer-block-theme-color')
+const prefixCls = shallowRef('cover-setting-drawer-block-theme-color');
 </script>
 
 <template>

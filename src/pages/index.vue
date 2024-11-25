@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import welcomeImg from '@/assets/welcome.png'
+import welcomeImg from '@/assets/welcome.png';
 
 defineOptions({
   name: 'PageIndex',
-})
+});
 </script>
 
 <template>

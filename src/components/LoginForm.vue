@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import type { FormInstance } from 'ant-design-vue/es/form/index'
-import type { InternalNamePath } from 'ant-design-vue/es/form/interface'
+import type { FormInstance } from 'ant-design-vue/es/form/index';
+import type { InternalNamePath } from 'ant-design-vue/es/form/interface';
 
-import { CacheEnum } from '@/enums'
-import { genStorageKey } from '@/utils'
-import { LockOutlined, UserOutlined } from '@ant-design/icons-vue'
-import crypto from 'crypto-js'
+import { CacheEnum } from '@/enums';
+import { genStorageKey } from '@/utils';
+import { LockOutlined, UserOutlined } from '@ant-design/icons-vue';
+import crypto from 'crypto-js';
 
-import { cloneDeep, isEqual } from 'lodash-es'
-import objHash from 'object-hash'
+import { cloneDeep, isEqual } from 'lodash-es';
+import objHash from 'object-hash';
 
 interface FormData {
   username: string
   password: string
 }
 
-defineOptions({ name: 'LoginForm' })
+defineOptions({ name: 'LoginForm' });
 
 const props = withDefaults(
   defineProps<{
@@ -33,64 +33,64 @@ const props = withDefaults(
     initialUserHash?: string
   }>(),
   { loading: false, securePassword: true, hashType: 'MD5' },
-)
+);
 
 defineEmits<{
   (e: 'submit', formData: FormData): void
-}>()
+}>();
 
-const { t } = useI18n()
+const { t } = useI18n();
 
 const rememberMeInStorage = useLocalStorage(
   genStorageKey(CacheEnum.LOGIN_REMEMBER_ME),
   false,
-)
+);
 const usernameInStorage = useLocalStorage(
   genStorageKey(CacheEnum.LOGIN_USERNAME),
   '',
-)
+);
 
 const formData: FormData = reactive({
   username: rememberMeInStorage.value ? usernameInStorage.value || '' : '',
   password: '',
-})
+});
 
-const formRef = ref<FormInstance>()
-const rememberMe = ref(rememberMeInStorage.value ?? false)
+const formRef = ref<FormInstance>();
+const rememberMe = ref(rememberMeInStorage.value ?? false);
 
 function getFieldsValue(nameList?: InternalNamePath[] | true) {
-  const result = cloneDeep(formRef.value?.getFieldsValue(nameList))
+  const result = cloneDeep(formRef.value?.getFieldsValue(nameList));
   const shouldEncryptPwd
     = !isEqual(objHash(formData), props.initialUserHash ?? '')
     && props.securePwd
-    && result?.password
+    && result?.password;
 
   if (shouldEncryptPwd) {
-    result.password = crypto[props.hashType]?.(result.password)?.toString()
+    result.password = crypto[props.hashType]?.(result.password)?.toString();
   }
 
-  return result as FormData
+  return result as FormData;
 }
 
 watch(
   () => rememberMe.value,
   (val) => {
-    rememberMeInStorage.value = val
+    rememberMeInStorage.value = val;
   },
-)
+);
 
 watch(
   () => formData.username,
   (val) => {
     if (rememberMe.value) {
-      usernameInStorage.value = val
+      usernameInStorage.value = val;
     }
   },
-)
+);
 
 defineExpose({
   getFieldsValue,
-})
+});
 </script>
 
 <template>

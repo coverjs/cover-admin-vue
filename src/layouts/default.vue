@@ -1,56 +1,56 @@
 <script lang="ts" setup>
-import type { RouteMeta } from 'vue-router'
-import Logo from '@/assets/logo.png'
-import HeaderActions from '@/components/HeaderActions.vue'
-import LayoutHeader from '@/components/LayoutHeader/index.vue'
-import SettingDrawer from '@/components/SettingDrawer/index.vue'
+import type { RouteMeta } from 'vue-router';
+import Logo from '@/assets/logo.png';
+import HeaderActions from '@/components/HeaderActions.vue';
+import LayoutHeader from '@/components/LayoutHeader/index.vue';
+import SettingDrawer from '@/components/SettingDrawer/index.vue';
 
-import SubMenu from '@/components/SubMenu/index.vue'
-import { useAntdToken } from '@/hooks'
-import { useAppStore } from '@/store'
-import { loadEnv } from '@/utils'
+import SubMenu from '@/components/SubMenu/index.vue';
+import { useAntdToken } from '@/hooks';
+import { useAppStore } from '@/store';
+import { loadEnv } from '@/utils';
 
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue'
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 
-defineOptions({ name: 'DefaultLayout' })
-const prefixCls = shallowRef('cover-layout-app')
+defineOptions({ name: 'DefaultLayout' });
+const prefixCls = shallowRef('cover-layout-app');
 
-const openKeys = ref<string[]>([])
-const collapsed = ref<boolean>(false)
+const openKeys = ref<string[]>([]);
+const collapsed = ref<boolean>(false);
 
-const exception = ref(false)
-const exceptionCode = ref(403)
+const exception = ref(false);
+const exceptionCode = ref(403);
 
-const env = loadEnv()
+const env = loadEnv();
 
-const route = useRoute()
+const route = useRoute();
 
-const { token } = useAntdToken()
+const { token } = useAntdToken();
 
 function checkedException(meta: RouteMeta) {
   if (meta.exception) {
-    exception.value = true
-    exceptionCode.value = meta.exceptionCode as number
+    exception.value = true;
+    exceptionCode.value = meta.exceptionCode as number;
   }
   else {
-    exception.value = false
+    exception.value = false;
   }
 }
 
 watch(
   () => route.meta,
   (val) => {
-    checkedException(val)
+    checkedException(val);
   },
   { immediate: true },
-)
-const appStore = useAppStore()
-const { layoutSetting } = storeToRefs(appStore)
+);
+const appStore = useAppStore();
+const { layoutSetting } = storeToRefs(appStore);
 
 onMounted(() => {
-  const originPath = route.meta?.originPath
-  openKeys.value = originPath ? [originPath] : []
-})
+  const originPath = route.meta?.originPath;
+  openKeys.value = originPath ? [originPath] : [];
+});
 </script>
 
 <template>

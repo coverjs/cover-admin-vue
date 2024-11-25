@@ -1,14 +1,14 @@
-import { TimeEnum } from '@/enums'
-import { Button } from 'ant-design-vue'
-import { useRegisterSW } from 'virtual:pwa-register/vue'
+import { TimeEnum } from '@/enums';
+import { Button } from 'ant-design-vue';
+import { useRegisterSW } from 'virtual:pwa-register/vue';
 
-import useMessage from './useMessage'
+import useMessage from './useMessage';
 
 export function useRefreshPrompt(
   pollingInterval: number = TimeEnum.LONG_POLLING_INTERVAL,
 ) {
-  const { createNotify } = useMessage()
-  const { t } = useI18n()
+  const { createNotify } = useMessage();
+  const { t } = useI18n();
   const { updateServiceWorker } = useRegisterSW({
     onNeedRefresh() {
       createNotify.info({
@@ -22,20 +22,20 @@ export function useRefreshPrompt(
           {
             type: 'primary',
             onClick: async () => {
-              await updateServiceWorker(true)
+              await updateServiceWorker(true);
             },
           },
           t('common.refresh'),
         ),
-      })
+      });
     },
     onRegistered(r) {
       r
       && setInterval(() => {
-        r.update()
-      }, pollingInterval)
+        r.update();
+      }, pollingInterval);
     },
-  })
+  });
 }
 
-export default useRefreshPrompt
+export default useRefreshPrompt;

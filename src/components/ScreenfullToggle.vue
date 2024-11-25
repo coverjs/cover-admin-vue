@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { CompressOutlined, ExpandOutlined } from '@ant-design/icons-vue'
-import screenfull from 'screenfull'
+import { CompressOutlined, ExpandOutlined } from '@ant-design/icons-vue';
+import screenfull from 'screenfull';
 
-const isFullScreen = ref(false)
+const isFullScreen = ref(false);
 
 function changeListener() {
-  isFullScreen.value = screenfull.isFullscreen
+  isFullScreen.value = screenfull.isFullscreen;
 }
 
 onMounted(() => {
-  screenfull.on('change', changeListener)
-})
+  screenfull.on('change', changeListener);
+});
 
 onUnmounted(() => {
-  screenfull.off('change', changeListener)
-})
+  screenfull.off('change', changeListener);
+});
 </script>
 
 <template>

@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import type { CSSProperties } from 'vue'
-import { useAppStore } from '@/store'
+import type { CSSProperties } from 'vue';
+import { useAppStore } from '@/store';
 
 defineOptions({
   name: 'LayoutHeader',
-})
+});
 
-const prefixCls = shallowRef('cover-layout-header')
+const prefixCls = shallowRef('cover-layout-header');
 const cls = computed(() => ({
   [prefixCls.value]: true,
-}))
+}));
 
-const appStore = useAppStore()
-const { layoutSetting } = storeToRefs(appStore)
+const appStore = useAppStore();
+const { layoutSetting } = storeToRefs(appStore);
 
 const headerStyle = computed(() => {
   const defaultStyle: CSSProperties = {
     height: `${layoutSetting.value.headerHeight}px`,
     lineHeight: `${layoutSetting.value.headerHeight}px`,
     paddingInline: 0,
-  }
+  };
 
-  return defaultStyle
-})
+  return defaultStyle;
+});
 </script>
 
 <template>

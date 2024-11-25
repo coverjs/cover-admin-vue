@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import type { AccountLoginDto, UserInfoVo } from '@/services'
+import type { AccountLoginDto, UserInfoVo } from '@/services';
 
-import { useMessage } from '@/hooks'
-import { useUserStore } from '@/store'
-import { initialUserHash } from '@config'
+import { useMessage } from '@/hooks';
+import { useUserStore } from '@/store';
+import { initialUserHash } from '@config';
 
-defineOptions({ name: 'LoginPage' })
+defineOptions({ name: 'LoginPage' });
 
-const userStore = useUserStore()
+const userStore = useUserStore();
 const loginFormRef = useTemplateRef<{ getFieldsValue: () => AccountLoginDto }>(
   'loginForm',
-)
-const { createNotify } = useMessage()
-const { t } = useI18n()
+);
+const { createNotify } = useMessage();
+const { t } = useI18n();
 
 const {
   isLoading: loginLoading,
@@ -24,18 +24,18 @@ const {
     userStore.login(loginFormRef.value?.getFieldsValue() as AccountLoginDto),
   { nickname: '' },
   { immediate: false },
-)
+);
 
 async function login() {
-  await logoinAction()
+  await logoinAction();
   if (loginError.value)
-    return
+    return;
 
   createNotify.success({
     message: t('authentication.loginSuccess'),
     description: `${t('authentication.loginSuccessDesc')},${userInfo.value?.nickname ?? ''}`,
     duration: 3,
-  })
+  });
 }
 </script>
 

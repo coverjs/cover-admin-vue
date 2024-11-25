@@ -1,8 +1,8 @@
 <script setup lang="ts">
-defineOptions({ name: 'BreadcrumbItems' })
+defineOptions({ name: 'BreadcrumbItems' });
 defineProps<{
   useTransition: boolean
-}>()
+}>();
 </script>
 
 <template>

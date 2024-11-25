@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import type { LanguagesType } from '@/locales/types'
+import type { LanguagesType } from '@/locales/types';
 
-import { CacheEnum } from '@/enums'
-import { loadMessages } from '@/locales'
-import { i18n } from '@/locales/i18n'
-import { genStorageKey } from '@/utils'
-import { TranslationOutlined } from '@ant-design/icons-vue'
+import { CacheEnum } from '@/enums';
+import { loadMessages } from '@/locales';
+import { i18n } from '@/locales/i18n';
+import { genStorageKey } from '@/utils';
+import { TranslationOutlined } from '@ant-design/icons-vue';
 
-defineOptions({ name: 'LanguageToggle' })
+defineOptions({ name: 'LanguageToggle' });
 
-const selectedKeys = ref([i18n.global.locale.value])
+const selectedKeys = ref([i18n.global.locale.value]);
 
 const localeStorage = useLocalStorage(
   genStorageKey(CacheEnum.LOCALE_KEY),
   i18n.global.locale.value,
-)
+);
 
 async function handleUpdate(value: LanguagesType) {
-  await loadMessages(value)
-  selectedKeys.value = [value]
-  localeStorage.value = value
+  await loadMessages(value);
+  selectedKeys.value = [value];
+  localeStorage.value = value;
 }
 </script>
 

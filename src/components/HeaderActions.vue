@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { useLogoutConfirm } from '@/hooks'
-import { useUserStore } from '@/store'
-import { UserOutlined } from '@ant-design/icons-vue'
+import { useLogoutConfirm } from '@/hooks';
+import { useUserStore } from '@/store';
+import { UserOutlined } from '@ant-design/icons-vue';
 
-defineOptions({ name: 'LayoutHeader' })
+defineOptions({ name: 'LayoutHeader' });
 
-const userStore = useUserStore()
-const logout = useLogoutConfirm('manual')
-const { t } = useI18n()
+const userStore = useUserStore();
+const logout = useLogoutConfirm('manual');
+const { t } = useI18n();
 </script>
 
 <template>

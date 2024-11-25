@@ -1,51 +1,51 @@
-import type { ModalFuncProps } from 'ant-design-vue/lib/modal/Modal'
+import type { ModalFuncProps } from 'ant-design-vue/lib/modal/Modal';
 import {
   CheckCircleFilled,
   CloseCircleFilled,
   InfoCircleFilled,
-} from '@ant-design/icons-vue'
+} from '@ant-design/icons-vue';
 
-import { message, Modal, notification } from 'ant-design-vue'
+import { message, Modal, notification } from 'ant-design-vue';
 
 export interface ModalOptionsEx extends Omit<ModalFuncProps, 'iconType'> {
   iconType: 'warning' | 'success' | 'error' | 'info'
 }
 export type ModalOptionsPartial = Partial<ModalOptionsEx> &
-  Pick<ModalOptionsEx, 'content'>
+  Pick<ModalOptionsEx, 'content'>;
 
 const iconMap = new Map([
   ['warning', h(InfoCircleFilled, { class: 'modal-icon-warning' })],
   ['success', h(CheckCircleFilled, { class: 'modal-icon-success' })],
   ['info', h(InfoCircleFilled, { class: 'modal-icon-info' })],
   ['error', h(CloseCircleFilled, { class: 'modal-icon-error' })],
-])
+]);
 function getIcon(iconType: string) {
   return (
     iconMap.get(iconType) ?? h(InfoCircleFilled, { class: 'modal-icon-info' })
-  )
+  );
 }
 
 /**
  * @description: Create confirmation box
  */
 function createConfirm(options: ModalOptionsEx) {
-  const iconType = options.iconType || 'warning'
-  Reflect.deleteProperty(options, 'iconType')
+  const iconType = options.iconType || 'warning';
+  Reflect.deleteProperty(options, 'iconType');
   const opt: ModalFuncProps = {
     centered: true,
     icon: getIcon(iconType),
     ...options,
     content: options.content,
-  }
-  return Modal.confirm(opt)
+  };
+  return Modal.confirm(opt);
 }
 
 function getBaseOptions() {
-  const { t } = useI18n()
+  const { t } = useI18n();
   return {
     okText: t('common.confirm'),
     centered: true,
-  }
+  };
 }
 
 function createModalOptions(
@@ -57,29 +57,29 @@ function createModalOptions(
     ...options,
     content: options.content,
     icon: getIcon(icon),
-  }
+  };
 }
 
 function createSuccessModal(options: ModalOptionsPartial) {
-  return Modal.success(createModalOptions(options, 'success'))
+  return Modal.success(createModalOptions(options, 'success'));
 }
 
 function createErrorModal(options: ModalOptionsPartial) {
-  return Modal.error(createModalOptions(options, 'error'))
+  return Modal.error(createModalOptions(options, 'error'));
 }
 
 function createInfoModal(options: ModalOptionsPartial) {
-  return Modal.info(createModalOptions(options, 'info'))
+  return Modal.info(createModalOptions(options, 'info'));
 }
 
 function createWarningModal(options: ModalOptionsPartial) {
-  return Modal.warning(createModalOptions(options, 'warning'))
+  return Modal.warning(createModalOptions(options, 'warning'));
 }
 
 notification.config({
   placement: 'topRight',
   duration: 3,
-})
+});
 
 /**
  * @description: message
@@ -93,7 +93,7 @@ export function useMessage() {
     createErrorModal,
     createInfoModal,
     createWarningModal,
-  }
+  };
 }
 
-export default useMessage
+export default useMessage;

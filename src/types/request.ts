@@ -1,7 +1,7 @@
-import type { ApiConfig, RequestParams } from '@/services'
+import type { ApiConfig, RequestParams } from '@/services';
 
-export type ErrorMessageMode = 'none' | 'modal' | 'message' | void
-export type SuccessMessageMode = ErrorMessageMode
+export type ErrorMessageMode = 'none' | 'modal' | 'message' | void;
+export type SuccessMessageMode = ErrorMessageMode;
 
 export interface CustomRequestOptions {
   loadingInterceptorEnabled?: boolean
@@ -13,4 +13,4 @@ export interface CustomRequestOptions {
   successMessageMode?: SuccessMessageMode
 }
 
-export { ApiConfig, RequestParams }
+export { ApiConfig, RequestParams };

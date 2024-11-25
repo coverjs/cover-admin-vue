@@ -1,33 +1,33 @@
 <script setup lang="ts">
-import { PageEnum } from '@/enums'
+import { PageEnum } from '@/enums';
 
-defineOptions({ name: 'FallbackPage' })
+defineOptions({ name: 'FallbackPage' });
 
 const props = defineProps<{
   status: 403 | 404 | 500
-}>()
+}>();
 
-const router = useRouter()
-const { t } = useI18n()
+const router = useRouter();
+const { t } = useI18n();
 
 const titleMap = new Map([
   [403, () => t('fallback.forbidden')],
   [404, () => t('fallback.pageNotFound')],
   [500, () => t('fallback.internalError')],
-])
+]);
 
 const descMap = new Map([
   [403, () => t('fallback.forbiddenDesc')],
   [404, () => t('fallback.pageNotFoundDesc')],
   [500, () => t('fallback.internalErrorDesc')],
-])
+]);
 
-const title = computed(() => titleMap.get(props.status)?.() ?? 'Error')
+const title = computed(() => titleMap.get(props.status)?.() ?? 'Error');
 
-const subTitle = computed(() => descMap.get(props.status)?.() ?? '')
+const subTitle = computed(() => descMap.get(props.status)?.() ?? '');
 
 function backHome() {
-  router.replace(PageEnum.BASE_HOME)
+  router.replace(PageEnum.BASE_HOME);
 }
 </script>
 

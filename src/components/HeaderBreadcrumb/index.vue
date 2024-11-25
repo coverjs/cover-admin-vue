@@ -1,27 +1,27 @@
 <script setup lang="tsx">
-import type { RouteRecordRaw } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router';
 
-import { loadEnv } from '@/utils'
+import { loadEnv } from '@/utils';
 
 // antd 的面包屑 在 <a-breadcrumb> 中加动画会报 warn
 // a-breadcrumb 给 children 加的属性这里的使用场景用不到,所以正式环境可以加上动画 忽略 warn (坏笑~)
-import BreadcrumbTransition from './BreadcrumbTransition.vue'
+import BreadcrumbTransition from './BreadcrumbTransition.vue';
 
 defineOptions({
   name: 'HeaderBreadcrumb',
-})
+});
 
-const route = useRoute()
+const route = useRoute();
 
 const breadcrumbList = computed(() =>
   route.matched.filter(item => item.meta?.title),
-)
+);
 
 function genMenuItems(children: RouteRecordRaw[]) {
   return children.map(item => ({
     title: item.meta?.title,
     key: item.path,
-  }))
+  }));
 }
 </script>
 

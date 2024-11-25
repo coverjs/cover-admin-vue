@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { useAntdToken, useLogo, useRefreshPrompt } from '@/hooks'
-import { antdLocale } from '@/locales'
-import { useAppStore } from '@/store'
-import { theme } from 'ant-design-vue'
+import { useAntdToken, useLogo, useRefreshPrompt } from '@/hooks';
+import { antdLocale } from '@/locales';
+import { useAppStore } from '@/store';
+import { theme } from 'ant-design-vue';
 
 defineOptions({
   name: 'App',
-})
+});
 
-useRefreshPrompt()
-useLogo()
+useRefreshPrompt();
+useLogo();
 
-const appStore = useAppStore()
-const { theme: antdTheme } = storeToRefs(appStore)
+const appStore = useAppStore();
+const { theme: antdTheme } = storeToRefs(appStore);
 
 // 重新设置 全局的token
-const { token } = theme.useToken()
-const { setToken } = useAntdToken()
+const { token } = theme.useToken();
+const { setToken } = useAntdToken();
 
 watchEffect(() => {
-  setToken(token.value)
-})
+  setToken(token.value);
+});
 </script>
 
 <template>

@@ -1,26 +1,26 @@
-import type { MenuData, MenuDataItem } from '@/router/types.ts'
+import type { MenuData, MenuDataItem } from '@/router/types.ts';
 
-import type { LayoutSetting, PageTagItem, ThemeType } from '@/types'
-import type { ThemeConfig } from 'ant-design-vue/es/config-provider/context'
-import { CacheEnum, PageEnum } from '@/enums'
-import { generateMenuAndRoutes } from '@/router/dynamicRoutes.ts'
-import staticRoutes from '@/router/staticRoutes.ts'
-import { api } from '@/services'
-import { genStorageKey } from '@/utils'
-import { defaultLayoutSetting } from '@config'
-import { theme as antdTheme } from 'ant-design-vue/es'
+import type { LayoutSetting, PageTagItem, ThemeType } from '@/types';
+import type { ThemeConfig } from 'ant-design-vue/es/config-provider/context';
+import { CacheEnum, PageEnum } from '@/enums';
+import { generateMenuAndRoutes } from '@/router/dynamicRoutes.ts';
+import staticRoutes from '@/router/staticRoutes.ts';
+import { api } from '@/services';
+import { genStorageKey } from '@/utils';
+import { defaultLayoutSetting } from '@config';
+import { theme as antdTheme } from 'ant-design-vue/es';
 
-const isDark = useDark()
-const toggleDark = useToggle(isDark)
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
 
 export const useAppStore = defineStore('app', () => {
   /**
    * ----------------------------- theme&layout start-----------------------------
    * --------------------------主题以及布局相关----------------------------------
    */
-  const { darkAlgorithm, defaultAlgorithm } = antdTheme
+  const { darkAlgorithm, defaultAlgorithm } = antdTheme;
 
-  const layoutSetting = reactive<LayoutSetting>(defaultLayoutSetting)
+  const layoutSetting = reactive<LayoutSetting>(defaultLayoutSetting);
   const themeConfig: ThemeConfig = reactive<ThemeConfig>({
     algorithm:
       layoutSetting.theme === 'light' ? [defaultAlgorithm] : [darkAlgorithm],
@@ -29,34 +29,34 @@ export const useAppStore = defineStore('app', () => {
       colorBgContainer:
         layoutSetting.theme === 'light' ? '#fff' : 'rgb(36, 37, 37)',
     },
-  })
+  });
 
   if (isDark.value || layoutSetting.theme === 'dark')
-    toggleTheme('dark')
+    toggleTheme('dark');
 
   watch(isDark, () => {
     if (isDark.value)
-      toggleTheme('dark')
-    else toggleTheme('light')
-  })
+      toggleTheme('dark');
+    else toggleTheme('light');
+  });
 
   /**
    * 切换主题配置
    * @param theme 当前选择的主题类型，可以是 'light' 或 'dark'
    */
   function toggleTheme(theme: ThemeType) {
-    layoutSetting.theme = theme
+    layoutSetting.theme = theme;
     if (theme === 'light') {
-      toggleDark(false)
-      themeConfig.algorithm = [defaultAlgorithm]
+      toggleDark(false);
+      themeConfig.algorithm = [defaultAlgorithm];
       if (themeConfig.token)
-        themeConfig.token.colorBgContainer = '#fff'
+        themeConfig.token.colorBgContainer = '#fff';
     }
     else if (theme === 'dark') {
-      toggleDark(true)
-      themeConfig.algorithm = [darkAlgorithm]
+      toggleDark(true);
+      themeConfig.algorithm = [darkAlgorithm];
       if (themeConfig.token)
-        themeConfig.token.colorBgContainer = 'rgb(36, 37, 37)'
+        themeConfig.token.colorBgContainer = 'rgb(36, 37, 37)';
     }
   }
 
@@ -66,9 +66,9 @@ export const useAppStore = defineStore('app', () => {
    * @param color 新的主颜色值
    */
   function toggleColorPrimary(color: string) {
-    layoutSetting.colorPrimary = color
+    layoutSetting.colorPrimary = color;
     if (themeConfig.token) {
-      themeConfig.token.colorPrimary = color
+      themeConfig.token.colorPrimary = color;
     }
   }
 
@@ -83,10 +83,10 @@ export const useAppStore = defineStore('app', () => {
   function changeSettingLayout(key: keyof LayoutSetting, value: any) {
     switch (key) {
       case 'colorPrimary':
-        toggleColorPrimary(value)
-        return
+        toggleColorPrimary(value);
+        return;
       case 'theme':
-        toggleTheme(value)
+        toggleTheme(value);
     }
   }
 
@@ -99,8 +99,8 @@ export const useAppStore = defineStore('app', () => {
    * --------------------------菜单以及动态路由相关-----------------------------
    */
 
-  const routerData = shallowRef()
-  const menuData = shallowRef<MenuData>([])
+  const routerData = shallowRef();
+  const menuData = shallowRef<MenuData>([]);
 
   /**
    * 异步获取菜单数据并生成对应的路由和菜单
@@ -111,8 +111,8 @@ export const useAppStore = defineStore('app', () => {
    * @returns {Promise<any>} 返回生成的菜单和路由数据
    */
   async function getMenuData() {
-    const { data: res } = await api.profile.profileGetMenus()
-    return generateMenuAndRoutes(res.data)
+    const { data: res } = await api.profile.profileGetMenus();
+    return generateMenuAndRoutes(res.data);
   }
 
   /**
@@ -126,20 +126,20 @@ export const useAppStore = defineStore('app', () => {
    */
   async function generateDynamicRoutes() {
     const { menuData: treeMenuData, routeData: treeRouterData }
-      = await getMenuData()
-    const root = staticRoutes.find(item => item.path === '/')
-    root?.children?.push(...treeRouterData)
-    const home = staticRoutes.find(item => item.path === PageEnum.BASE_HOME)
+      = await getMenuData();
+    const root = staticRoutes.find(item => item.path === '/');
+    root?.children?.push(...treeRouterData);
+    const home = staticRoutes.find(item => item.path === PageEnum.BASE_HOME);
     const homePage = {
       ...home?.children![0],
       path: '/home',
       name: '首页',
       locale: 'menu.home.home',
       icon: 'FileOutlined',
-    } as MenuDataItem
-    menuData.value = [homePage, ...treeMenuData]
-    routerData.value = treeRouterData
-    return root!
+    } as MenuDataItem;
+    menuData.value = [homePage, ...treeMenuData];
+    routerData.value = treeRouterData;
+    return root!;
   }
 
   /**
@@ -154,21 +154,21 @@ export const useAppStore = defineStore('app', () => {
   const tags: Ref<Array<PageTagItem>> = useLocalStorage(
     genStorageKey(CacheEnum.PAGE_TAGS_KEY),
     [] as PageTagItem[],
-  )
+  );
 
   function addTag(tag: PageTagItem) {
-    const isExist = tags.value.some(item => item.path === tag.path)
+    const isExist = tags.value.some(item => item.path === tag.path);
     if (!isExist) {
-      tags.value.push(tag)
+      tags.value.push(tag);
     }
   }
 
   function removeTag(tag: PageTagItem) {
-    tags.value = tags.value.filter(item => item.path !== tag.path)
+    tags.value = tags.value.filter(item => item.path !== tag.path);
   }
 
   function removeTags(target: PageTagItem[]) {
-    tags.value = tags.value.filter(item => !target.includes(item))
+    tags.value = tags.value.filter(item => !target.includes(item));
   }
 
   return {
@@ -182,5 +182,5 @@ export const useAppStore = defineStore('app', () => {
     addTag,
     removeTag,
     removeTags,
-  }
-})
+  };
+});

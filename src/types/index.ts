@@ -1,3 +1,3 @@
-export * from './request'
-export * from './tags'
-export * from './theme'
+export * from './request';
+export * from './tags';
+export * from './theme';

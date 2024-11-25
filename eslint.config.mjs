@@ -1,7 +1,7 @@
-import antfu from '@antfu/eslint-config';
+import linter from '@antfu/eslint-config';
 import autoImport from './.eslintrc-auto-import.json' assert {type: 'json'};
 
-export default antfu({
+export default linter({
   typescript: true,
   vue: true,
   ignores: [
@@ -24,5 +24,6 @@ export default antfu({
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unsafe-function-type': 'off',
     'eslint-comments/no-unlimited-disable': 'off',
+    'style/semi':[2,'always']
   },
 });

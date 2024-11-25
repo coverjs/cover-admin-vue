@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { MenuDataItem } from '@/router/types.ts'
-import AsyncIcon from '@/components/SubMenu/AsyncIcon.vue'
+import type { MenuDataItem } from '@/router/types.ts';
+import AsyncIcon from '@/components/SubMenu/AsyncIcon.vue';
 
 defineOptions({
   name: 'SubMenu',
-})
+});
 withDefaults(
   defineProps<{
     item: MenuDataItem
@@ -13,8 +13,8 @@ withDefaults(
   {
     link: true,
   },
-)
-const { t } = useI18n()
+);
+const { t } = useI18n();
 </script>
 
 <template>

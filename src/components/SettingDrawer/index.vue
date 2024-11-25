@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import type { ThemeType } from '@/types'
-import { useAntdToken } from '@/hooks'
-import { useAppStore } from '@/store'
+import type { ThemeType } from '@/types';
+import { useAntdToken } from '@/hooks';
+import { useAppStore } from '@/store';
 import {
   CheckOutlined,
   CloseOutlined,
   SettingOutlined,
-} from '@ant-design/icons-vue'
+} from '@ant-design/icons-vue';
 
-import BlockCheckbox from './BlockCheckbox.vue'
-import BlockThemeColor from './BlockThemeColor.vue'
-import SettingBlock from './SettingBlock.vue'
+import BlockCheckbox from './BlockCheckbox.vue';
+import BlockThemeColor from './BlockThemeColor.vue';
+import SettingBlock from './SettingBlock.vue';
 
-defineOptions({ name: 'SettingDrawer' })
+defineOptions({ name: 'SettingDrawer' });
 
 withDefaults(
   defineProps<{
@@ -35,31 +35,31 @@ withDefaults(
       { key: 'geekBlue', color: '#2F54EB' },
     ],
   },
-)
+);
 
-const emit = defineEmits(['settingChange'])
+const emit = defineEmits(['settingChange']);
 
-const appStore = useAppStore()
-const { layoutSetting: appLayoutSetting } = storeToRefs(appStore)
-const open = ref(false)
+const appStore = useAppStore();
+const { layoutSetting: appLayoutSetting } = storeToRefs(appStore);
+const open = ref(false);
 
-const prefixCls = 'cover-setting-drawer'
+const prefixCls = 'cover-setting-drawer';
 
 function handleVisible(status: boolean) {
-  open.value = status
+  open.value = status;
 }
 
 function handleThemeColorChange(color: string) {
-  emit('settingChange', 'colorPrimary', color)
+  emit('settingChange', 'colorPrimary', color);
 }
 
 function changeTheme(theme: string) {
-  emit('settingChange', 'theme', theme)
+  emit('settingChange', 'theme', theme);
 }
 
-const { token } = useAntdToken()
+const { token } = useAntdToken();
 
-const { t } = useI18n()
+const { t } = useI18n();
 </script>
 
 <template>

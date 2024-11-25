@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import type { CreateMenuDto, MenuVo } from '@/services'
-import AsyncIcon from '@/components/SubMenu/AsyncIcon.vue'
-import MenuDrawer from '@/pages/system/menu/MenuDrawer.vue'
-import { api } from '@/services'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue'
-import { h, ref } from 'vue'
+import type { CreateMenuDto, MenuVo } from '@/services';
+import AsyncIcon from '@/components/SubMenu/AsyncIcon.vue';
+import MenuDrawer from '@/pages/system/menu/MenuDrawer.vue';
+import { api } from '@/services';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
+import { h, ref } from 'vue';
 
 defineOptions({
   name: 'MenuPage',
-})
+});
 
-const { t } = useI18n()
+const { t } = useI18n();
 
 const columns = [
   {
@@ -54,10 +54,10 @@ const columns = [
     key: 'operation',
     width: 120,
   },
-]
+];
 
-const open = ref<boolean>(false)
-const tableData = shallowRef<MenuVo[]>([])
+const open = ref<boolean>(false);
+const tableData = shallowRef<MenuVo[]>([]);
 const defaultFormData: CreateMenuDto = {
   name: '',
   icon: '',
@@ -67,16 +67,16 @@ const defaultFormData: CreateMenuDto = {
   sort: 0,
   parentId: undefined,
   type: 'DIRECTORY',
-}
-const formData = ref<CreateMenuDtoWithId>(defaultFormData)
-const type = ref<boolean>(false) // 编辑 | 新增
+};
+const formData = ref<CreateMenuDtoWithId>(defaultFormData);
+const type = ref<boolean>(false); // 编辑 | 新增
 
-type MenuVoWithKey = MenuVo & { key: number }
-export type CreateMenuDtoWithId = CreateMenuDto & { id?: number }
+type MenuVoWithKey = MenuVo & { key: number };
+export type CreateMenuDtoWithId = CreateMenuDto & { id?: number };
 
 onMounted(() => {
-  fetchData()
-})
+  fetchData();
+});
 
 function generateTreeDataWithKey(data: MenuVo[]): MenuVoWithKey[] {
   return data.map((item: MenuVo) => {
@@ -86,43 +86,43 @@ function generateTreeDataWithKey(data: MenuVo[]): MenuVoWithKey[] {
       children: item.children
         ? generateTreeDataWithKey(item.children)
         : undefined,
-    }
-  })
+    };
+  });
 }
 
 const treeTableData = computed(() => {
-  return generateTreeDataWithKey(tableData.value)
-})
+  return generateTreeDataWithKey(tableData.value);
+});
 
 async function fetchData() {
-  const { data: res } = await api.system.menuFindList()
+  const { data: res } = await api.system.menuFindList();
   if (res.code === 0) {
-    tableData.value = res.data
+    tableData.value = res.data;
   }
 }
 
 function onDelete(id: number) {
-  console.log(id)
+  console.log(id);
 }
 
 function showDrawer(state: boolean) {
-  open.value = true
-  type.value = state
+  open.value = true;
+  type.value = state;
 }
 
 function handleEdit(record: MenuVoWithKey) {
-  const { children, createdAt, updatedAt, key, ...rest } = record
-  formData.value = rest
-  showDrawer(false)
+  const { children, createdAt, updatedAt, key, ...rest } = record;
+  formData.value = rest;
+  showDrawer(false);
 }
 
 function handleAdd() {
-  formData.value = defaultFormData
-  showDrawer(true)
+  formData.value = defaultFormData;
+  showDrawer(true);
 }
 
 function refresh() {
-  fetchData()
+  fetchData();
 }
 </script>
 

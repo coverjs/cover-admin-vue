@@ -1,20 +1,20 @@
 <script lang="ts" setup>
-import type { CreateMenuDtoWithId } from '@/pages/system/menu/index.vue'
-import type { MenuVo } from '@/services'
-import { useMessage } from '@/hooks'
-import { api } from '@/services'
+import type { CreateMenuDtoWithId } from '@/pages/system/menu/index.vue';
+import type { MenuVo } from '@/services';
+import { useMessage } from '@/hooks';
+import { api } from '@/services';
 
 defineOptions({
   name: 'MenuDrawer',
-})
+});
 
 const props = withDefaults(defineProps<Props>(), {
   type: false,
-})
+});
 const emit = defineEmits<{
   (e: 'refresh'): void
-}>()
-const open = defineModel('open')
+}>();
+const open = defineModel('open');
 interface Props {
   type: boolean
   formData: CreateMenuDtoWithId
@@ -22,41 +22,41 @@ interface Props {
   t?: (key: string, ...args: any[]) => string
 }
 
-const formRef = ref()
-const formState = ref<CreateMenuDtoWithId>(toRaw(props.formData))
+const formRef = ref();
+const formState = ref<CreateMenuDtoWithId>(toRaw(props.formData));
 watch(
   () => props.formData,
   (value) => {
-    formState.value = toRaw(value)
+    formState.value = toRaw(value);
   },
   { immediate: true },
-)
-const { createNotify } = useMessage()
+);
+const { createNotify } = useMessage();
 
 function onClose() {
-  open.value = false
-  formRef.value.resetFields()
+  open.value = false;
+  formRef.value.resetFields();
 }
 
 async function onSubmit() {
   try {
-    await formRef.value?.validate()
-    const formData = toRaw(formState.value)
+    await formRef.value?.validate();
+    const formData = toRaw(formState.value);
     if (formData.parentId === undefined) {
-      formData.parentId = null as unknown as number // 现在先这样 等后端改了再改
+      formData.parentId = null as unknown as number; // 现在先这样 等后端改了再改
     }
     if (props.type) {
-      const { data: res } = await api.system.menuCreate(formData)
-      handleResponse(res, '新增成功')
+      const { data: res } = await api.system.menuCreate(formData);
+      handleResponse(res, '新增成功');
     }
     else {
-      const id = formData.id!
-      const { data: res } = await api.system.menuUpdate(id, formData)
-      handleResponse(res, '修改成功')
+      const id = formData.id!;
+      const { data: res } = await api.system.menuUpdate(id, formData);
+      handleResponse(res, '修改成功');
     }
   }
   catch (error: any) {
-    console.error(error)
+    console.error(error);
   }
 }
 
@@ -65,9 +65,9 @@ function handleResponse(res: any, successMessage: string) {
     createNotify.success({
       message: successMessage,
       duration: 3,
-    })
-    open.value = false
-    emit('refresh')
+    });
+    open.value = false;
+    emit('refresh');
   }
 }
 </script>

@@ -1,4 +1,4 @@
-import type { VNodeChild } from 'vue'
+import type { VNodeChild } from 'vue';
 
 export interface MenuDataItem {
   // 唯一id
@@ -21,4 +21,4 @@ export interface MenuDataItem {
   locale?: string
 }
 
-export type MenuData = MenuDataItem[]
+export type MenuData = MenuDataItem[];

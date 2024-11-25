@@ -1,4 +1,4 @@
-import type { LocationQuery, ParamValue, RouteMeta } from 'vue-router'
+import type { LocationQuery, ParamValue, RouteMeta } from 'vue-router';
 
 export interface PageTagItem {
   title: string

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 defineOptions({
   name: 'UserPage',
-})
+});
 </script>
 
 <template>

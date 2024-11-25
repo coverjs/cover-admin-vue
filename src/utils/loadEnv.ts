@@ -1,1 +1,1 @@
-export const loadEnv = () => JSON.parse(JSON.stringify(import.meta.env))
+export const loadEnv = () => JSON.parse(JSON.stringify(import.meta.env));

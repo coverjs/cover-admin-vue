@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { SkinOutlined } from '@ant-design/icons-vue'
+import { SkinOutlined } from '@ant-design/icons-vue';
 
-defineOptions({ name: 'DarkModeSwitch' })
+defineOptions({ name: 'DarkModeSwitch' });
 
-const colorMode = useColorMode()
-const { t } = useI18n()
+const colorMode = useColorMode();
+const { t } = useI18n();
 
-const selectedKeys = ref([colorMode.value])
+const selectedKeys = ref([colorMode.value]);
 function handleUpdate(value: 'light' | 'dark' | 'auto') {
-  colorMode.value = value
-  selectedKeys.value = [value]
+  colorMode.value = value;
+  selectedKeys.value = [value];
 }
 </script>
 
