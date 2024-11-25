@@ -4,6 +4,7 @@ import autoImport from './.eslintrc-auto-import.json' assert {type: 'json'};
 export default linter({
   typescript: true,
   vue: true,
+  yaml: false,
   ignores: [
     '**/dist/**',
     'types/auto-imports.d.ts',
