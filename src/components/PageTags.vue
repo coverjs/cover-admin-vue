@@ -3,7 +3,7 @@ import type { PageTagItem } from '@/types';
 import type { RouteLocation } from 'vue-router';
 import { useAntdToken } from '@/hooks';
 import { useAppStore } from '@/store';
-import { size } from 'lodash-es';
+import { isEmpty, last, size, split } from 'lodash-es';
 
 const blackList = ['/', '/login'];
 
@@ -11,6 +11,7 @@ const appStore = useAppStore();
 const route = useRoute();
 const router = useRouter();
 const { token } = useAntdToken();
+const { t } = useI18n();
 
 function genTitle(route: RouteLocation) {
   return route.meta?.title;
@@ -47,9 +48,19 @@ function handleMenuClick(key: string, tag: PageTagItem) {
   menuHandlers.has(key) && menuHandlers.get(key)?.(tag);
 }
 
+function genTagTitle(tag: PageTagItem) {
+  if (tag.meta?.locale && !isEmpty(tag.meta?.locale)) {
+    return t(tag.meta.locale as string);
+  }
+  if (tag.meta?.title && !isEmpty(tag.meta.title)) {
+    return tag.meta.title;
+  }
+  return last(split(tag.path, '/'));
+}
+
 watch(
   route,
-  (to) => {
+  to => {
     const title = genTitle(to);
 
     if (blackList.includes(to.path) || !title)
@@ -85,7 +96,7 @@ watch(
         @close="handleItemClose(tag)"
       >
         <router-link :to="tag.fullPath">
-          {{ tag.title }}
+          {{ genTagTitle(tag) }}
         </router-link>
       </a-tag>
       <template #overlay>

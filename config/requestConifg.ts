@@ -1,5 +1,5 @@
-import type { ApiConfig, CustomRequestOptions } from '@/types'
-import { ContentTypeEnum, TimeEnum } from '@/enums'
+import type { ApiConfig, CustomRequestOptions } from '@/types';
+import { ContentTypeEnum, TimeEnum } from '@/enums';
 
 export const defaultCustomRequestOptions: CustomRequestOptions = {
   // 是否开启loading拦截器
@@ -16,11 +16,11 @@ export const defaultCustomRequestOptions: CustomRequestOptions = {
   errorMessageMode: 'message',
   // 成功提示方式
   successMessageMode: 'message',
-} as const
+} as const;
 
 export const defaultRequestConfig: ApiConfig = {
   baseURL: import.meta.env.VITE_GLOB_API_URL,
   timeout: 10 * TimeEnum.SECOND,
   headers: { 'Content-Type': ContentTypeEnum.Json },
   customOptions: defaultCustomRequestOptions,
-} as const
+} as const;

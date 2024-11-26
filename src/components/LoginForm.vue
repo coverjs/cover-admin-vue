@@ -39,8 +39,6 @@ defineEmits<{
   (e: 'submit', formData: FormData): void
 }>();
 
-const { t } = useI18n();
-
 const rememberMeInStorage = useLocalStorage(
   genStorageKey(CacheEnum.LOGIN_REMEMBER_ME),
   false,
@@ -74,14 +72,14 @@ function getFieldsValue(nameList?: InternalNamePath[] | true) {
 
 watch(
   () => rememberMe.value,
-  (val) => {
+  val => {
     rememberMeInStorage.value = val;
   },
 );
 
 watch(
   () => formData.username,
-  (val) => {
+  val => {
     if (rememberMe.value) {
       usernameInStorage.value = val;
     }
@@ -102,39 +100,39 @@ defineExpose({
   >
     <a-form-item
       name="username"
-      :rules="[{ required: true, message: t('authentication.usernameTip') }]"
+      :rules="[{ required: true, message: $t('authentication.usernameTip') }]"
     >
       <a-input
         v-model:value="formData.username"
-        :placeholder="t('authentication.username')"
+        :placeholder="$t('authentication.username')"
         autocomplete="username"
         size="large"
       >
         <template #prefix>
-          <UserOutlined />
+          <user-outlined />
         </template>
       </a-input>
     </a-form-item>
     <a-form-item
       name="password"
-      :rules="[{ required: true, message: t('authentication.passwordTip') }]"
+      :rules="[{ required: true, message: $t('authentication.passwordTip') }]"
     >
       <a-input-password
         v-model:value="formData.password"
-        :placeholder="t('authentication.password')"
+        :placeholder="$t('authentication.password')"
         autocomplete="password"
         size="large"
         visiblity-toggle
       >
         <template #prefix>
-          <LockOutlined />
+          <lock-outlined />
         </template>
       </a-input-password>
     </a-form-item>
     <a-form-item>
       <a-checkbox v-model:checked="rememberMe" size="small">
         {{
-          t('authentication.rememberMe')
+          $t('authentication.rememberMe')
         }}
       </a-checkbox>
     </a-form-item>
@@ -146,7 +144,7 @@ defineExpose({
         :loading="loading"
         block
       >
-        {{ t('common.login') }}
+        {{ $t('common.login') }}
       </a-button>
     </a-form-item>
   </a-form>

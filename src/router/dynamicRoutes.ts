@@ -40,6 +40,7 @@ export function formatRoute(menu: MenuDataItem, parent?: MenuDataItem) {
     meta: {
       id: menu?.id,
       title: t(menu.locale!) || menu?.name,
+      locale: menu.locale,
       originPath: parent?.path,
     },
   } as RouteRecordRaw;
@@ -50,7 +51,7 @@ export function genRoutes(
   parent?: MenuDataItem,
 ): RouteRecordRaw[] {
   const routesData: RouteRecordRaw[] = [];
-  menus.forEach((menu) => {
+  menus.forEach(menu => {
     const item = formatRoute(menu, parent);
     item.children = [];
     if (menu.children && menu.children.length) {

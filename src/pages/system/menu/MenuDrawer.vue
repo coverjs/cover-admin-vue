@@ -4,33 +4,27 @@ import type { MenuVo } from '@/services';
 import { useMessage } from '@/hooks';
 import { api } from '@/services';
 
-defineOptions({
-  name: 'MenuDrawer',
-});
-
-const props = withDefaults(defineProps<Props>(), {
-  type: false,
-});
-const emit = defineEmits<{
-  (e: 'refresh'): void
-}>();
-const open = defineModel('open');
 interface Props {
   type: boolean
   formData: CreateMenuDtoWithId
   treeData: MenuVo[]
-  t?: (key: string, ...args: any[]) => string
 }
+
+defineOptions({
+  name: 'MenuDrawer',
+});
+const props = withDefaults(defineProps<Props>(), {
+  type: false,
+});
+
+const emit = defineEmits<{
+  (e: 'refresh'): void
+}>();
+
+const open = defineModel('open');
 
 const formRef = ref();
 const formState = ref<CreateMenuDtoWithId>(toRaw(props.formData));
-watch(
-  () => props.formData,
-  (value) => {
-    formState.value = toRaw(value);
-  },
-  { immediate: true },
-);
 const { createNotify } = useMessage();
 
 function onClose() {
@@ -42,7 +36,7 @@ async function onSubmit() {
   try {
     await formRef.value?.validate();
     const formData = toRaw(formState.value);
-    if (formData.parentId === undefined) {
+    if (formData.parentId === void 0) {
       formData.parentId = null as unknown as number; // 现在先这样 等后端改了再改
     }
     if (props.type) {
@@ -70,6 +64,14 @@ function handleResponse(res: any, successMessage: string) {
     emit('refresh');
   }
 }
+
+watch(
+  () => props.formData,
+  value => {
+    formState.value = toRaw(value);
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
@@ -81,8 +83,8 @@ function handleResponse(res: any, successMessage: string) {
     :root-style="{ color: 'blue' }"
     :title="
       type
-        ? t?.('pages.system.menu.createMenu')
-        : t?.('pages.system.menu.createMenu')
+        ? $t('pages.system.menu.createMenu')
+        : $t('pages.system.menu.createMenu')
     "
     placement="right"
     destroy-on-close
@@ -187,12 +189,12 @@ function handleResponse(res: any, successMessage: string) {
     <template #footer>
       <a-button style="margin-right: 8px" @click="onClose">
         {{
-          t?.('common.cancel')
+          $t('common.cancel')
         }}
       </a-button>
       <a-button type="primary" @click="onSubmit">
         {{
-          t?.('common.confirm')
+          $t('common.confirm')
         }}
       </a-button>
     </template>

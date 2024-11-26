@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import type { RouteMeta } from 'vue-router';
+
 import Logo from '@/assets/logo.png';
 import HeaderActions from '@/components/HeaderActions.vue';
 import LayoutHeader from '@/components/LayoutHeader/index.vue';
 import SettingDrawer from '@/components/SettingDrawer/index.vue';
-
 import SubMenu from '@/components/SubMenu/index.vue';
+
 import { useAntdToken } from '@/hooks';
 import { useAppStore } from '@/store';
 import { loadEnv } from '@/utils';
@@ -39,7 +40,7 @@ function checkedException(meta: RouteMeta) {
 
 watch(
   () => route.meta,
-  (val) => {
+  val => {
     checkedException(val);
   },
   { immediate: true },
@@ -75,19 +76,19 @@ onMounted(() => {
         mode="inline"
       >
         <template v-for="menu in appStore.menuData" :key="menu.path">
-          <SubMenu :item="menu" />
+          <sub-menu :item="menu" />
         </template>
       </a-menu>
     </a-layout-sider>
     <a-layout :style="{ borderLeft: `1px solid ${token.colorBorder}` }">
-      <LayoutHeader>
+      <layout-header>
         <template #headerContent>
-          <MenuUnfoldOutlined
+          <menu-unfold-outlined
             v-if="collapsed"
             class="trigger"
             @click="() => (collapsed = !collapsed)"
           />
-          <MenuFoldOutlined
+          <menu-fold-outlined
             v-else
             class="trigger"
             @click="() => (collapsed = !collapsed)"
@@ -95,17 +96,18 @@ onMounted(() => {
           <header-breadcrumb />
         </template>
         <template #headerActions>
-          <HeaderActions />
+          <header-actions />
         </template>
-      </LayoutHeader>
+      </layout-header>
       <a-layout-content>
         <page-tags />
         <div class="my-[24px] mx-[16px] p-[24px] overflow-auto page-container">
           <fallback-page v-if="exception" :status="Number(exceptionCode)" />
-          <router-view v-else v-slot="{ Component, route: currentRoute }">
+
+          <router-view v-else v-slot="{ Component, route: _route }">
             <transition name="fade-transform" mode="out-in">
               <keep-alive>
-                <component :is="Component" :key="currentRoute.path" />
+                <component :is="Component" :key="_route.path" />
               </keep-alive>
             </transition>
           </router-view>
@@ -113,7 +115,7 @@ onMounted(() => {
       </a-layout-content>
     </a-layout>
   </a-layout>
-  <SettingDrawer
+  <setting-drawer
     v-if="env.VITE_SHOW_SETTING === 'true'"
     :theme="layoutSetting.theme"
     :color-primary="layoutSetting.colorPrimary"

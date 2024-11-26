@@ -74,7 +74,7 @@ export const useUserStore = defineStore(
       // 轮询用户信息 检查token是否过期
       !isPollActive.value && startGetUserInfoPoll();
 
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         waittingFor(() => !isEmpty(userInfo), bind(resolve, void 0, userInfo));
       });
     }

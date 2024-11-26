@@ -7,7 +7,6 @@ defineOptions({ name: 'LayoutHeader' });
 
 const userStore = useUserStore();
 const logout = useLogoutConfirm('manual');
-const { t } = useI18n();
 </script>
 
 <template>
@@ -26,14 +25,14 @@ const { t } = useI18n();
         <a-dropdown placement="bottom" trigger="click">
           <span class="user-info">
             <a-avatar class="user-avatar" size="small">
-              <template #icon><UserOutlined /></template>
+              <template #icon><user-outlined /></template>
             </a-avatar>
             {{ userStore.userInfo.nickname }}
           </span>
           <template #overlay>
             <a-menu theme="dark">
               <a-menu-item @click="logout">
-                {{ t('common.logout') }}
+                {{ $t('common.logout') }}
               </a-menu-item>
             </a-menu>
           </template>

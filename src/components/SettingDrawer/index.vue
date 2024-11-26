@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ThemeType } from '@/types';
+import type { LayoutSetting, ThemeType } from '@/types';
 import { useAntdToken } from '@/hooks';
 import { useAppStore } from '@/store';
 import {
@@ -37,7 +37,9 @@ withDefaults(
   },
 );
 
-const emit = defineEmits(['settingChange']);
+const emit = defineEmits<{
+  (e: 'settingChange', key: keyof LayoutSetting, value: string): void
+}>();
 
 const appStore = useAppStore();
 const { layoutSetting: appLayoutSetting } = storeToRefs(appStore);
@@ -58,8 +60,6 @@ function changeTheme(theme: string) {
 }
 
 const { token } = useAntdToken();
-
-const { t } = useI18n();
 </script>
 
 <template>
@@ -72,18 +72,23 @@ const { t } = useI18n();
     }"
     @click="handleVisible(!open)"
   >
-    <CheckOutlined
+    <check-outlined
       v-if="open"
       :class="`${prefixCls}-handle-icon${appLayoutSetting.theme === 'light' ? '' : '-dark'}`"
       style="font-size: 20px"
     />
-    <SettingOutlined
+    <setting-outlined
       v-else
       :class="`${prefixCls}-handle-icon${appLayoutSetting.theme === 'light' ? '' : '-dark'}`"
       style="font-size: 20px"
     />
   </div>
-  <a-drawer :open="open" :width="300" placement="right" :closable="false">
+  <a-drawer
+    :open="open"
+    :width="300"
+    placement="right"
+    :closable="false"
+  >
     <template #handle>
       <div
         :class="`${prefixCls}-handle`"
@@ -97,12 +102,12 @@ const { t } = useI18n();
         }"
         @click="handleVisible(!open)"
       >
-        <CloseOutlined
+        <close-outlined
           v-if="open"
           :class="`${prefixCls}-handle-icon${appLayoutSetting.theme === 'light' ? '' : '-dark'}`"
           style="font-size: 20px"
         />
-        <SettingOutlined
+        <setting-outlined
           v-else
           :class="`${prefixCls}-handle-icon${appLayoutSetting.theme === 'light' ? '' : '-dark'}`"
           style="font-size: 20px"
@@ -110,34 +115,31 @@ const { t } = useI18n();
       </div>
     </template>
     <div :class="`${prefixCls}-content`">
-      <SettingBlock :title="t('app.setting.pageStyle.pageStyle')">
+      <setting-block :title="$t('app.setting.pageStyle.pageStyle')">
         <div :class="`${prefixCls}-block-checkbox`">
-          <BlockCheckbox
-            :t="t"
+          <block-checkbox
             theme="light"
             :is-dark="false"
             :checked="theme === 'light'"
             @click="changeTheme('light')"
           />
-          <BlockCheckbox
-            :t="t"
+          <block-checkbox
             theme="dark"
             :is-dark="true"
             :checked="theme === 'dark'"
             @click="changeTheme('dark')"
           />
         </div>
-      </SettingBlock>
-      <SettingBlock :title="t('app.setting.themeColor.themeColor')">
-        <BlockThemeColor
-          :t="t"
-          :color-list="colorList"
+      </setting-block>
+      <setting-block :title="$t('app.setting.themeColor.themeColor')">
+        <block-theme-color
           :color="colorPrimary"
+          :color-list="colorList"
           :on-change="handleThemeColorChange"
         />
-      </SettingBlock>
+      </setting-block>
     </div>
   </a-drawer>
 </template>
 
-<style lang="scss" src="./index.scss"></style>
+<style lang="scss" src="./index.scss" scoped></style>

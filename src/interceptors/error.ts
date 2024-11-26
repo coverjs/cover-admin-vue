@@ -38,7 +38,9 @@ statusHandlers.set(
   StatusEnum.INTERNAL_SERVER_ERRO,
   (msg?: string) => msg || t('fallback.http.internalServerError'),
 );
-const _getCode = (ctx: Context) => get(ctx, ['res', 'data', 'code']);
+function _getCode(ctx: Context) {
+  return get(ctx, ['res', 'data', 'code']);
+}
 function _getErrMsg(ctx: Context) {
   return get(ctx, ['res', 'data', 'msg']) ?? get(ctx, ['res', 'statusText']);
 }
@@ -56,13 +58,13 @@ export const errorInterceptor: Middleware = async function (ctx, next) {
 
   await next(
     tap(
-      (ctx) => {
+      ctx => {
         if (isEqual(_getCode(ctx), 0))
           return;
 
         throw new Error(_getErrMsg(ctx));
       },
-      (err) => {
+      err => {
         if (isCancel(err))
           return err;
         return handleError(ctx, err as Error);

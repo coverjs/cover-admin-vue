@@ -35,9 +35,7 @@ function backHome() {
   <a-result :status="status" :title="title" :sub-title="subTitle">
     <template #extra>
       <a-button type="primary" @click="backHome">
-        {{
-          t('common.backToHome')
-        }}
+        {{ $t('common.backToHome') }}
       </a-button>
     </template>
   </a-result>

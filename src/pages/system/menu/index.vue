@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import type { CreateMenuDto, MenuVo } from '@/services';
 import AsyncIcon from '@/components/SubMenu/AsyncIcon.vue';
-import MenuDrawer from '@/pages/system/menu/MenuDrawer.vue';
 import { api } from '@/services';
+
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { h, ref } from 'vue';
+
+import { h } from 'vue';
+import MenuDrawer from './MenuDrawer.vue';
 
 defineOptions({
   name: 'MenuPage',
 });
-
-const { t } = useI18n();
 
 const columns = [
   {
@@ -65,7 +65,7 @@ const defaultFormData: CreateMenuDto = {
   path: '',
   code: '',
   sort: 0,
-  parentId: undefined,
+  parentId: void 0,
   type: 'DIRECTORY',
 };
 const formData = ref<CreateMenuDtoWithId>(defaultFormData);
@@ -85,7 +85,7 @@ function generateTreeDataWithKey(data: MenuVo[]): MenuVoWithKey[] {
       key: item.id,
       children: item.children
         ? generateTreeDataWithKey(item.children)
-        : undefined,
+        : void 0,
     };
   });
 }
@@ -101,8 +101,8 @@ async function fetchData() {
   }
 }
 
-function onDelete(id: number) {
-  console.log(id);
+function onDelete(_id: number) {
+  // TODO 删除
 }
 
 function showDrawer(state: boolean) {
@@ -132,18 +132,16 @@ function refresh() {
       <!-- TODO 查询 -->
     </a-card>
 
-    <a-card :title="t?.('pages.system.menu.menuList')">
+    <a-card :title="$t('pages.system.menu.menuList')">
       <template #extra>
         <a-button type="primary" @click="handleAdd">
-          {{
-            t?.('pages.system.menu.editMenu')
-          }}
+          {{ $t("pages.system.menu.editMenu") }}
         </a-button>
       </template>
       <a-table :columns="columns" :data-source="treeTableData">
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'icon'">
-            <AsyncIcon :icon="text" />
+            <async-icon :icon="text" />
           </template>
           <template v-if="column.dataIndex === 'operation'">
             <div class="editable-row-operations">
@@ -155,14 +153,10 @@ function refresh() {
                 />
                 <a-popconfirm
                   v-if="tableData.length"
-                  :title="t('fallback.sureDelete')"
+                  :title="$t('fallback.sureDelete')"
                   @confirm="onDelete(record.id)"
                 >
-                  <a-button
-                    type="link"
-                    danger
-                    :icon="h(DeleteOutlined)"
-                  />
+                  <a-button type="link" danger :icon="h(DeleteOutlined)" />
                 </a-popconfirm>
               </a-space>
             </div>
@@ -170,9 +164,9 @@ function refresh() {
         </template>
       </a-table>
     </a-card>
-    <MenuDrawer
+    <menu-drawer
       v-model:open="open"
-      :t
+      :t="$t"
       :type
       :form-data
       :tree-data="tableData"

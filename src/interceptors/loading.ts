@@ -8,6 +8,8 @@ export const loadingInterceptor: Middleware = async function (ctx, next) {
   if (!getReqOptItem(ctx, 'loadingInterceptorEnabled'))
     return await next();
 
-  console.log('loadingInterceptor start', ctx);
-  await next(finalize(() => console.log('loadingInterceptor end', ctx)));
+  // loadingInterceptor start';
+  await next(finalize(() => {
+    /** loadingInterceptor end */
+  }));
 };

@@ -15,13 +15,13 @@ export function setupRouterGuards(router: Router) {
 
 function createPageGuard(router: Router) {
   const loadedPage = new Map<string, boolean>();
-  router.beforeEach(async (to) => {
+  router.beforeEach(async to => {
     to.meta.loaded = loadedPage.has(to.path);
 
     return true;
   });
 
-  router.afterEach((to) => {
+  router.afterEach(to => {
     loadedPage.set(to.path, true);
   });
 }
@@ -35,7 +35,7 @@ function createHttpGuard(router: Router) {
 }
 
 export function createProgressGuard(router: Router) {
-  router.beforeEach(async (to) => {
+  router.beforeEach(async to => {
     if (to.meta.loaded) {
       return true;
     }
@@ -55,6 +55,7 @@ export function createMessageGuard(router: Router) {
       Modal.destroyAll();
       notification.destroy();
     }
+    // eslint-disable-next-line unused-imports/no-unused-vars
     catch (_) {
       /** nothing */
     }
@@ -62,7 +63,7 @@ export function createMessageGuard(router: Router) {
 }
 
 export function createRouteChangeGuard(router: Router) {
-  router.beforeEach(async (to) => {
+  router.beforeEach(async to => {
     if (to.path === '/') {
       return '/home';
     }

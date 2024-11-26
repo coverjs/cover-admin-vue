@@ -4,7 +4,10 @@ import type { Context } from 'onion-interceptor';
 import { defaultCustomRequestOptions as DEFAULT } from '@config';
 import { get } from 'lodash-es';
 
-function _getVal(obj: Record<string, any> | void, key: keyof CustomRequestOptions) {
+function _getVal(
+  obj: Record<string, any> | void,
+  key: keyof CustomRequestOptions,
+) {
   return get(obj, ['customOptions', key]);
 }
 export function getReqOptItem(ctx: Context, key: keyof CustomRequestOptions) {
