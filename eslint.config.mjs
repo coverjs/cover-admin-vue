@@ -3,6 +3,7 @@ import linter from '@antfu/eslint-config';
 export default linter({
   typescript: true,
   vue: true,
+  unocss: true,
   yaml: false,
   ignores: [
     '**/dist/**',

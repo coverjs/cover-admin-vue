@@ -1,7 +1,7 @@
 import { resolve } from 'node:path';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import tailwindcss from 'tailwindcss';
+import UnoCSS from 'unocss/vite';
 import autoImport from 'unplugin-auto-import/vite';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 import components from 'unplugin-vue-components/vite';
@@ -22,9 +22,6 @@ export default defineConfig(({ mode }) => {
         scss: {
           api: 'modern-compiler',
         },
-      },
-      postcss: {
-        plugins: [tailwindcss],
       },
     },
     plugins: [
@@ -67,6 +64,7 @@ export default defineConfig(({ mode }) => {
         ],
       }),
       VitePWA(),
+      UnoCSS(),
     ],
     resolve: {
       alias: {

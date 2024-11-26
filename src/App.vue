@@ -3,6 +3,7 @@ import { useAntdToken, useLogo, useRefreshPrompt } from '@/hooks';
 import { antdLocale } from '@/locales';
 import { useAppStore } from '@/store';
 import { theme } from 'ant-design-vue';
+import { registerTokenToCSSVar } from './utils/genThemeColor';
 
 defineOptions({
   name: 'App',
@@ -20,6 +21,7 @@ const { setToken } = useAntdToken();
 
 watchEffect(() => {
   setToken(token.value);
+  registerTokenToCSSVar(token.value);
 });
 </script>
 
