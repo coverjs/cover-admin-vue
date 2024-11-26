@@ -101,7 +101,7 @@ onMounted(() => {
       </layout-header>
       <a-layout-content>
         <page-tags />
-        <div class="my-[24px] mx-[16px] p-[24px] overflow-auto page-container">
+        <div class="page-container mx-[16px] my-[24px] overflow-auto p-[24px]">
           <fallback-page v-if="exception" :status="Number(exceptionCode)" />
 
           <router-view v-else v-slot="{ Component, route: _route }">

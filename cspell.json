@@ -5,7 +5,11 @@
   "allowCompoundWords": true,
   "words": [
     "antd",
-    "unocss"
+    "iconify",
+    "pinia",
+    "unocss",
+    "unplugin",
+    "vueuse"
   ],
   "ignorePaths": [
     "**/node_modules/**",
