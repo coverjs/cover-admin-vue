@@ -1,16 +1,19 @@
-import { resolve } from 'node:path';
-import vue from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx';
-import tailwindcss from 'tailwindcss';
-import autoImport from 'unplugin-auto-import/vite';
-import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
-import components from 'unplugin-vue-components/vite';
-import { VueRouterAutoImports } from 'unplugin-vue-router';
-import vueRouter from 'unplugin-vue-router/vite';
+/* eslint-disable perfectionist/sort-imports */
 import { defineConfig, loadEnv } from 'vite';
+import { resolve } from 'node:path';
+
+import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
+import { VueRouterAutoImports } from 'unplugin-vue-router';
 import { createHtmlPlugin as html } from 'vite-plugin-html';
 import { VitePWA } from 'vite-plugin-pwa';
+
+import tailwindcss from 'tailwindcss';
+import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx';
 import layouts from 'vite-plugin-vue-layouts';
+import vueRouter from 'unplugin-vue-router/vite';
+import autoImport from 'unplugin-auto-import/vite';
+import components from 'unplugin-vue-components/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {

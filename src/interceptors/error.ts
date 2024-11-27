@@ -10,9 +10,10 @@ import { AxiosError, isAxiosError, isCancel } from 'axios';
 import { get, isEqual, isNil } from 'lodash-es';
 
 const statusHandlers = new Map<
-  number,
+  number, // 这里的 Status ，包括 http status 和 后端返回的 code
   (msg?: string) => string | false | void
 >();
+
 statusHandlers.set(
   StatusEnum.BAD_REQUEST,
   (msg?: string) => msg || t('fallback.http.badRequest'),

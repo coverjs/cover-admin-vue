@@ -1,9 +1,9 @@
 import { createApp } from 'vue';
+
 import App from './App.vue';
 import { setupLocale } from './locales';
 import { setupRouter } from './router';
 import { setupStore } from './store';
-
 import { loadEnv } from './utils';
 
 import 'ant-design-vue/dist/reset.css';

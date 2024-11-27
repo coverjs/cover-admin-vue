@@ -47,9 +47,6 @@ const logout = useLogoutConfirm('manual');
   display: flex;
   justify-content: end;
   align-items: center;
-  .dark-mode-switch {
-    margin-right: 20px;
-  }
   .header-menu {
     .user-info {
       min-width: 70px;
