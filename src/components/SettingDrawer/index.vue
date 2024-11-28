@@ -142,5 +142,5 @@ const { token } = useAntdToken();
   </a-drawer>
 </template>
 
-<!-- eslint-disable-next-line vue/enforce-style-attribute -->
+<!-- eslint-disable vue/enforce-style-attribute -->
 <style lang="scss" src="./index.scss"></style>

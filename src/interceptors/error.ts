@@ -62,8 +62,7 @@ export const errorInterceptor: Middleware = async function (ctx, next) {
       ctx => {
         if (isEqual(_getCode(ctx), 0))
           return;
-
-        throw new Error(_getErrMsg(ctx));
+        throw new AxiosError(_getErrMsg(ctx), _getCode(ctx));
       },
       err => {
         if (isCancel(err))

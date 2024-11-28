@@ -1,6 +1,6 @@
-# cover-admin-vue
+# laky-admin-vue
 
-coverjs admin是一个使用vue开发的中后台模板框架
+lacy admin是一个使用vue开发的中后台模板框架
 
 ## 开发
 

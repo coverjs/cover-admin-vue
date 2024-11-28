@@ -2,6 +2,7 @@
 import { useAntdToken, useLogoToFavicon, useRefreshPrompt } from '@/hooks';
 import { antdLocale } from '@/locales';
 import { useAppStore } from '@/store';
+import { registerTokenToCSSVar } from '@/utils';
 import { theme } from 'ant-design-vue';
 
 defineOptions({
@@ -20,6 +21,7 @@ const { setToken } = useAntdToken();
 
 watchEffect(() => {
   setToken(token.value);
+  registerTokenToCSSVar(token.value);
 });
 </script>
 
