@@ -35,8 +35,7 @@ export function createPermissionGuard(router: Router) {
       catch (e) {
         to.meta.exception = !!e;
         to.meta.exceptionCode = 500;
-        next(e as Error);
-        return;
+        return true;
       }
 
       next({

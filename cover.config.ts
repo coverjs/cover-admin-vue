@@ -1,4 +1,4 @@
-import { defineConfig } from 'cover-cli';
+import { defineConfig } from 'laky';
 
 export default defineConfig({
   generateApi: {

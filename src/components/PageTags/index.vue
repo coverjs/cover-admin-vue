@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import type { PageTagItem } from '@/types';
-import type { RouteLocation } from 'vue-router';
 import { useAntdToken } from '@/hooks';
 import { useAppStore } from '@/store';
 import { isEmpty, last, size, split } from 'lodash-es';
 
-const blackList = ['/', '/login'];
+defineOptions({ name: 'PageTags' });
 
 const appStore = useAppStore();
 const route = useRoute();
@@ -13,17 +12,13 @@ const router = useRouter();
 const { token } = useAntdToken();
 const { t } = useI18n();
 
-function genTitle(route: RouteLocation) {
-  return route.meta?.title;
-}
-
 function handleItemClose(tag: PageTagItem) {
   appStore.removeTag(tag);
 }
 
 const menuHandlers = new Map<string, (tag: PageTagItem) => void>();
 menuHandlers.set('refresh', () => {
-  router.go(0);
+  appStore.refreshTag(router);
 });
 
 menuHandlers.set('close-right', (tag: PageTagItem) => {
@@ -57,22 +52,6 @@ function genTagTitle(tag: PageTagItem) {
   }
   return last(split(tag.path, '/'));
 }
-
-watch(
-  route,
-  to => {
-    const title = genTitle(to);
-
-    if (blackList.includes(to.path) || !title)
-      return;
-
-    const { fullPath, meta, name, params, path, query } = to;
-    appStore.addTag({ title, name, path, fullPath, meta, params, query });
-  },
-  {
-    immediate: true,
-  },
-);
 </script>
 
 <template>

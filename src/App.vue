@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { useAntdToken, useLogo, useRefreshPrompt } from '@/hooks';
+import { useAntdToken, useLogoToFavicon, useRefreshPrompt } from '@/hooks';
 import { antdLocale } from '@/locales';
 import { useAppStore } from '@/store';
+import { registerTokenToCSSVar } from '@/utils';
 import { theme } from 'ant-design-vue';
-import { registerTokenToCSSVar } from './utils/genThemeColor';
 
 defineOptions({
   name: 'App',
 });
 
 useRefreshPrompt();
-useLogo();
+useLogoToFavicon();
 
 const appStore = useAppStore();
 const { theme: antdTheme } = storeToRefs(appStore);

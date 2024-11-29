@@ -2,10 +2,7 @@
 import type { RouteMeta } from 'vue-router';
 
 import Logo from '@/assets/logo.png';
-import HeaderActions from '@/components/HeaderActions.vue';
-import LayoutHeader from '@/components/LayoutHeader/index.vue';
-import SettingDrawer from '@/components/SettingDrawer/index.vue';
-import SubMenu from '@/components/SubMenu/index.vue';
+import PageRouteListener from '@/components/PageTags/PageRouteListener.vue';
 
 import { useAntdToken } from '@/hooks';
 import { useAppStore } from '@/store';
@@ -65,8 +62,11 @@ onMounted(() => {
       <div :class="`${prefixCls}-title`">
         <span>
           <img class="title-logo" :src="Logo" alt="logo">
+
           <template v-if="!collapsed">
-            {{ env.VITE_APP_TITLE ?? 'Cover Admin' }}
+            <span style="margin-left: 10px;">
+              {{ env.VITE_APP_TITLE ?? 'Cover Admin' }}
+            </span>
           </template>
         </span>
       </div>
@@ -103,13 +103,19 @@ onMounted(() => {
         <page-tags />
         <div class="page-container mx-[16px] my-[24px] overflow-auto p-[24px]">
           <fallback-page v-if="exception" :status="Number(exceptionCode)" />
-
           <router-view v-else v-slot="{ Component, route: _route }">
-            <transition name="fade-transform" mode="out-in">
-              <keep-alive>
-                <component :is="Component" :key="_route.path" />
-              </keep-alive>
-            </transition>
+            <page-route-listener
+              v-slot="{ include, componentKey }"
+              :component="Component"
+              :route="_route"
+            >
+              <!-- page-route-listener 为 renderless 组件 -->
+              <transition name="fade-transform" mode="out-in">
+                <keep-alive :include="include">
+                  <component :is="Component" :key="componentKey" />
+                </keep-alive>
+              </transition>
+            </page-route-listener>
           </router-view>
         </div>
       </a-layout-content>
@@ -142,8 +148,8 @@ onMounted(() => {
     justify-content: center;
     .title-logo {
       display: inline-block;
-      width: 45px;
-      height: 45px;
+      width: 35px;
+      height: 35px;
     }
     > span {
       text-wrap: nowrap;

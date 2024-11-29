@@ -1,5 +1,5 @@
 {
-  "name": "cover-admin-vue",
+  "name": "laky-admin-vue",
   "type": "module",
   "version": "0.0.0",
   "private": true,
@@ -10,13 +10,13 @@
   },
   "scripts": {
     "bootstrap": "pnpm install",
-    "openapi": "dotenv -e .env.development.local cover openapi",
+    "openapi": "dotenv -e .env.development.local laky openapi",
     "dev": "vite --mode development",
     "build": "vue-tsc -b && vite build --mode production",
     "build:test": "vue-tsc -b && vite build --mode test",
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit --skipLibCheck",
-    "lint": "eslint --no-ignore --ignore-pattern .gitignore src --fix",
+    "lint": "eslint --ignore-pattern .gitignore --fix",
     "postinstall": "simple-git-hooks"
   },
   "dependencies": {
@@ -40,6 +40,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^3.9.2",
     "@iconify-json/mdi": "^1.2.1",
+    "@lakyjs/eslint-config": "^0.0.0",
     "@types/crypto-js": "^4.2.2",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.9.0",
@@ -51,11 +52,11 @@
     "@unocss/transformer-variant-group": "^0.64.1",
     "@vitejs/plugin-vue": "^5.1.5",
     "@vitejs/plugin-vue-jsx": "^4.1.0",
-    "cover-cli": "^0.2.1",
     "dotenv-cli": "^7.4.2",
     "eslint": "^9.14.0",
     "glob": "^11.0.0",
     "globals": "^15.12.0",
+    "laky": "^0.3.3",
     "lint-staged": "^15.2.10",
     "picocolors": "^1.1.1",
     "sass": "^1.80.6",
@@ -76,11 +77,11 @@
   "simple-git-hooks": {
     "post-merge": "pnpm install",
     "pre-commit": "pnpm lint-staged",
-    "commit-msg": "node scripts/verifyCommit.js"
+    "commit-msg": "npx laky check --commit-msg"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,vue}": [
-      "eslint --no-warn-ignored --ignore-pattern .gitignore src --fix"
+      "eslint --no-warn-ignored --ignore-pattern .gitignore --fix"
     ]
   },
   "volta": {
