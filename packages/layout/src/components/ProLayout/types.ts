@@ -1,7 +1,7 @@
-import type { RouterTypes, WithFalse } from '@/types';
 import type { BreadcrumbProps } from 'ant-design-vue';
 import type { VNode } from 'vue';
 import type { JSX } from 'vue/jsx-runtime';
+import type { RouterTypes, WithFalse } from '../../types';
 
 export interface ProLayoutProps {
   /**

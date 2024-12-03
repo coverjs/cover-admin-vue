@@ -1,5 +1,5 @@
-import type { VueNode, WithFalse } from '@/types';
 import type { TabsProps } from 'ant-design-vue';
+import type { VueNode, WithFalse } from '../../types';
 
 export interface PageContainerProps {
   tablist?: {
