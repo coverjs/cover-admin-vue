@@ -4,14 +4,13 @@ import type { RouteMeta } from 'vue-router';
 import Logo from '@/assets/logo.png';
 import PageRouteListener from '@/components/PageTags/PageRouteListener.vue';
 
-import { useAntdToken } from '@/hooks';
 import { useAppStore } from '@/store';
 import { loadEnv } from '@/utils';
-
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 
+import { ProLayout as LakyLayout } from '@lakyjs/components-vue-layout';
+
 defineOptions({ name: 'DefaultLayout' });
-const prefixCls = shallowRef('cover-layout-app');
 
 const openKeys = ref<string[]>([]);
 const collapsed = ref<boolean>(false);
@@ -22,8 +21,6 @@ const exceptionCode = ref(403);
 const env = loadEnv();
 
 const route = useRoute();
-
-const { token } = useAntdToken();
 
 function checkedException(meta: RouteMeta) {
   if (meta.exception) {
@@ -52,80 +49,54 @@ onMounted(() => {
 </script>
 
 <template>
-  <a-layout :class="`${prefixCls}`">
-    <a-layout-sider
-      v-model:collapsed="collapsed"
-      theme="light"
-      :trigger="null"
-      collapsible
-    >
-      <div :class="`${prefixCls}-title`">
-        <span>
-          <img class="title-logo" :src="Logo" alt="logo">
+  <laky-layout :collapsed="collapsed">
+    <!-- 系统Logo -->
+    <template #logo>
+      <img class="title-logo" :src="Logo" alt="logo">
+    </template>
 
-          <template v-if="!collapsed">
-            <span style="margin-left: 10px;">
-              {{ env.VITE_APP_TITLE ?? 'Cover Admin' }}
-            </span>
-          </template>
-        </span>
-      </div>
-      <a-menu
-        v-model:open-keys="openKeys"
-        :selected-keys="[$route.path]"
-        mode="inline"
-      >
+    <!-- 系统标题 -->
+    <template #titleText>
+      {{ env.VITE_APP_TITLE ?? 'Cover Admin' }}
+    </template>
+
+    <!-- 系统菜单 -->
+    <template #menu>
+      <a-menu v-model:open-keys="openKeys" :selected-keys="[$route.path]" mode="inline">
         <template v-for="menu in appStore.menuData" :key="menu.path">
           <sub-menu :item="menu" />
         </template>
       </a-menu>
-    </a-layout-sider>
-    <a-layout :style="{ borderLeft: `1px solid ${token.colorBorder}` }">
-      <layout-header>
-        <template #headerContent>
-          <menu-unfold-outlined
-            v-if="collapsed"
-            class="trigger"
-            @click="() => (collapsed = !collapsed)"
-          />
-          <menu-fold-outlined
-            v-else
-            class="trigger"
-            @click="() => (collapsed = !collapsed)"
-          />
-          <header-breadcrumb />
-        </template>
-        <template #headerActions>
-          <header-actions />
-        </template>
-      </layout-header>
-      <a-layout-content>
-        <page-tags v-show="appStore.tags.length > 0" />
-        <div class="page-container mx-[16px] my-[24px] overflow-auto p-[24px]">
-          <fallback-page v-if="exception" :status="Number(exceptionCode)" />
-          <router-view v-else v-slot="{ Component, route: _route }">
-            <page-route-listener
-              v-slot="{ include, componentKey }"
-              :component="Component"
-              :route="_route"
-            >
-              <suspense>
-                <!-- page-route-listener 为 renderless 组件 -->
-                <transition name="fade-transform" mode="out-in">
-                  <keep-alive :include="include">
-                    <component :is="Component" :key="componentKey" />
-                  </keep-alive>
-                </transition>
-                <template #fallback>
-                  <fallback-page :status="500" />
-                </template>
-              </suspense>
-            </page-route-listener>
-          </router-view>
-        </div>
-      </a-layout-content>
-    </a-layout>
-  </a-layout>
+    </template>
+
+    <!-- 头部 -->
+    <template #headerContent>
+      <menu-unfold-outlined v-if="collapsed" class="trigger" @click="() => (collapsed = !collapsed)" />
+      <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
+      <header-breadcrumb />
+    </template>
+
+    <!-- 头部操作栏 -->
+    <template #headerActions>
+      <header-actions />
+    </template>
+
+    <page-tags v-show="appStore.tags.length > 0" />
+    <div class="page-container mx-[16px] my-[24px] overflow-auto p-[24px]">
+      <fallback-page v-if="exception" :status="Number(exceptionCode)" />
+      <router-view v-else v-slot="{ Component, route: _route }">
+        <!-- page-route-listener 为 renderless 组件 -->
+        <page-route-listener v-slot="{ include, componentKey }" :component="Component" :route="_route">
+          <transition name="fade-transform" mode="out-in">
+            <keep-alive :include="include">
+              <component :is="Component" :key="componentKey" />
+            </keep-alive>
+          </transition>
+        </page-route-listener>
+      </router-view>
+    </div>
+  </laky-layout>
+
   <setting-drawer
     v-if="env.VITE_SHOW_SETTING === 'true'"
     :theme="layoutSetting.theme"
@@ -136,39 +107,25 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-.cover-layout-app {
-  position: relative;
-  height: 100%;
-  width: 100%;
+.laky-layout-title {
 
-  &-title {
-    border-inline-end: 1px solid rgba(5, 5, 5, 0.06);
-    height: 65px;
-    font-size: 20px;
-    line-height: 24px;
-    padding: 10px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .title-logo {
-      display: inline-block;
-      width: 35px;
-      height: 35px;
-    }
-    > span {
-      text-wrap: nowrap;
-    }
+  .title-logo {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+  }
 
-    > img {
-      margin: 0 auto;
-      width: 45px;
-      height: 45px;
-    }
+  >span {
+    text-wrap: nowrap;
   }
-  .page-container {
-    overflow-x: hidden;
+
+  >img {
+    margin: 0 auto;
   }
+}
+
+.page-container {
+  overflow-x: hidden;
 }
 
 .fade-transform-enter-active,
@@ -180,6 +137,7 @@ onMounted(() => {
   opacity: 0;
   transform: translateX(50px);
 }
+
 .fade-transform-leave-to {
   opacity: 0;
   transform: translateX(-50px);
