@@ -91,11 +91,11 @@ function generateTreeDataWithKey(data: MenuVo[]): MenuVoWithKey[] {
   });
 }
 
-const { isLoading, error, execute, state } = await api.system.menuFindList({ customOptions: { responseMode: 'reactive' } }) as unknown as ReactiveResponse<MenuVo[]>;
 const treeTableData = computed(() => {
-  return generateTreeDataWithKey(state.value.data);
+  return generateTreeDataWithKey(tableData.value);
 });
 
+const { isLoading, error, execute, state } = await api.system.menuFindList({ customOptions: { responseMode: 'reactive' } }) as unknown as ReactiveResponse<MenuVo[]>;
 async function fetchData() {
   await execute();
   if (!error.value) {

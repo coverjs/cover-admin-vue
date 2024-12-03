@@ -117,7 +117,7 @@ onMounted(() => {
                   </keep-alive>
                 </transition>
                 <template #fallback>
-                  error
+                  <fallback-page :status="500" />
                 </template>
               </suspense>
             </page-route-listener>
