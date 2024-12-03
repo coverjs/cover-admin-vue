@@ -16,6 +16,10 @@ export const defaultCustomRequestOptions: CustomRequestOptions = {
   errorMessageMode: 'message',
   // 成功提示方式
   successMessageMode: 'message',
+  // 响应模式(响应拦截器处理方式)
+  responseMode: 'normal',
+  // 请求自动执行(仅 responseMode 为 reactive 时生效)
+  requestImmediate: false
 } as const;
 
 export const defaultRequestConfig: ApiConfig = {

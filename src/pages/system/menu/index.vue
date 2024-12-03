@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { CreateMenuDto, MenuVo } from '@/services';
+import type { ReactiveResponse } from '@/types';
 import AsyncIcon from '@/components/SubMenu/AsyncIcon.vue';
 import { api } from '@/services';
 
@@ -90,14 +91,15 @@ function generateTreeDataWithKey(data: MenuVo[]): MenuVoWithKey[] {
   });
 }
 
+const { isLoading, error, execute, state } = await api.system.menuFindList({ customOptions: { responseMode: 'reactive' } }) as unknown as ReactiveResponse<MenuVo[]>;
 const treeTableData = computed(() => {
-  return generateTreeDataWithKey(tableData.value);
+  return generateTreeDataWithKey(state.value.data);
 });
 
 async function fetchData() {
-  const { data: res } = await api.system.menuFindList();
-  if (res.code === 0) {
-    tableData.value = res.data;
+  await execute();
+  if (!error.value) {
+    tableData.value = state.value.data;
   }
 }
 
@@ -138,7 +140,7 @@ function refresh() {
           {{ $t("pages.system.menu.editMenu") }}
         </a-button>
       </template>
-      <a-table :columns="columns" :data-source="treeTableData">
+      <a-table :columns="columns" :data-source="treeTableData" :loading="isLoading">
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'icon'">
             <async-icon :icon="text" />

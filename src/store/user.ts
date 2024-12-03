@@ -1,4 +1,5 @@
 import type { AccountLoginDto, UserInfoVo } from '@/services';
+import type { ArrayResponse } from '@/types';
 import { PageEnum, TimeEnum } from '@/enums';
 import { router } from '@/router';
 import { api } from '@/services';
@@ -20,10 +21,12 @@ export const useUserStore = defineStore(
       isActive: isPollActive,
     } = useTimeoutPoll(
       async () => {
-        const { data: res } = await api.profile.profileFindUserInfo();
+        const [err, res] = await api.profile.profileFindUserInfo({ customOptions: { responseMode: 'array' } }) as unknown as ArrayResponse<UserInfoVo>;
 
-        if (res.code === 0)
-          each(get(res, 'data'), (value, key) => set(userInfo, key, value));
+        if (err)
+          return;
+
+        each(get(res, 'data'), (value, key) => set(userInfo, key, value));
       },
       TimeEnum.LONG_POLLING_INTERVAL,
       { immediate: false },
@@ -34,15 +37,18 @@ export const useUserStore = defineStore(
     }
 
     async function login(data: AccountLoginDto, goHome: boolean = true) {
-      const { data: res } = await api.auth.authLogin(data, {
+      const [err, res] = await api.auth.authLogin(data, {
         customOptions: {
           withToken: false,
+          responseMode: 'array'
         },
-      });
-      if (res.code === 0) {
-        setToken(res.data!.token);
-        await afterLoginAction(goHome);
-      }
+      }) as unknown as ArrayResponse;
+
+      if (err)
+        throw err;
+
+      setToken(res!.data!.token);
+      await afterLoginAction(goHome);
       return userInfo;
     }
 
@@ -75,9 +81,12 @@ export const useUserStore = defineStore(
         !isPollActive.value && startGetUserInfoPoll();
       }, TimeEnum.LONG_POLLING_INTERVAL);
 
-      const { data: res } = await api.profile.profileFindUserInfo();
-      if (res.code === 0)
-        each(get(res, 'data'), (value, key) => set(userInfo, key, value));
+      const [err, res] = await api.profile.profileFindUserInfo({ customOptions: { responseMode: 'array' } }) as unknown as ArrayResponse;
+
+      if (err)
+        throw err;
+
+      each(get(res, 'data'), (value, key) => set(userInfo, key, value));
 
       return userInfo;
     }
