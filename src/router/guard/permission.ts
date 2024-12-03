@@ -33,9 +33,10 @@ export function createPermissionGuard(router: Router) {
         router.addRoute(currentRoute);
       }
       catch (e) {
+        next(/** 正常展示 fallback 页面 */);
         to.meta.exception = !!e;
         to.meta.exceptionCode = 500;
-        return true;
+        return;
       }
 
       next({

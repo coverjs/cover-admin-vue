@@ -6,7 +6,7 @@ export type SuccessMessageMode = ErrorMessageMode;
 export interface CustomRequestOptions {
   loadingInterceptorEnabled?: boolean
   errorInterceptorEnabled?: boolean
-  authInterceptorEnabled?: boolean
+  headerInterceptorEnabled?: boolean
   ignoreCancelToken?: boolean
   withToken?: boolean
   errorMessageMode?: ErrorMessageMode

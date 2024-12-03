@@ -6,8 +6,8 @@ export const defaultCustomRequestOptions: CustomRequestOptions = {
   loadingInterceptorEnabled: false,
   // 是否开启错误拦截器
   errorInterceptorEnabled: true,
-  // 是否开启token拦截器
-  authInterceptorEnabled: true,
+  // 是否开启header拦截器
+  headerInterceptorEnabled: true,
   // 是否自动取消重复请求
   ignoreCancelToken: true,
   // 是否携带token

@@ -100,7 +100,7 @@ onMounted(() => {
         </template>
       </layout-header>
       <a-layout-content>
-        <page-tags />
+        <page-tags v-show="appStore.tags.length > 0" />
         <div class="page-container mx-[16px] my-[24px] overflow-auto p-[24px]">
           <fallback-page v-if="exception" :status="Number(exceptionCode)" />
           <router-view v-else v-slot="{ Component, route: _route }">
