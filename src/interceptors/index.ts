@@ -1,19 +1,15 @@
-import { authInterceptor } from './auth';
 import { cancelInterceptor } from './cancel';
 import { errorInterceptor } from './error';
-import { langInterceptor } from './lang';
+import { headerInterceptor } from './header';
 import { loadingInterceptor } from './loading';
 
 export const interceptors = [
   errorInterceptor,
   cancelInterceptor,
-  authInterceptor,
-  langInterceptor,
+  headerInterceptor,
   loadingInterceptor,
 ];
 
-export * from './auth';
 export * from './cancel';
 export * from './error';
-export * from './lang';
 export * from './loading';

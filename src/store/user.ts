@@ -36,7 +36,7 @@ export const useUserStore = defineStore(
     async function login(data: AccountLoginDto, goHome: boolean = true) {
       const { data: res } = await api.auth.authLogin(data, {
         customOptions: {
-          authInterceptorEnabled: false,
+          withToken: false,
         },
       });
       if (res.code === 0) {
