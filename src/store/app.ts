@@ -1,6 +1,6 @@
 import type { MenuData, MenuDataItem } from '@/router/types.ts';
 
-import type { LayoutSetting, PageTagItem, ThemeType } from '@/types';
+import type { LayoutSetting, NormalResponse, PageTagItem, ThemeType } from '@/types';
 import type { ThemeConfig } from 'ant-design-vue/es/config-provider/context';
 import type { Router } from 'vue-router';
 import { PageEnum } from '@/enums';
@@ -112,7 +112,7 @@ export const useAppStore = defineStore('app', () => {
    * @returns {Promise<any>} 返回生成的菜单和路由数据
    */
   async function getMenuData() {
-    const { data: res } = await api.profile.profileGetMenus();
+    const res = await api.profile.profileGetMenus() as unknown as NormalResponse;
     return generateMenuAndRoutes(res.data);
   }
 

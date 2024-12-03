@@ -109,12 +109,17 @@ onMounted(() => {
               :component="Component"
               :route="_route"
             >
-              <!-- page-route-listener 为 renderless 组件 -->
-              <transition name="fade-transform" mode="out-in">
-                <keep-alive :include="include">
-                  <component :is="Component" :key="componentKey" />
-                </keep-alive>
-              </transition>
+              <suspense>
+                <!-- page-route-listener 为 renderless 组件 -->
+                <transition name="fade-transform" mode="out-in">
+                  <keep-alive :include="include">
+                    <component :is="Component" :key="componentKey" />
+                  </keep-alive>
+                </transition>
+                <template #fallback>
+                  <fallback-page :status="500" />
+                </template>
+              </suspense>
             </page-route-listener>
           </router-view>
         </div>
