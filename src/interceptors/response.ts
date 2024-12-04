@@ -25,7 +25,7 @@ export const responseInterceptor: Middleware<Context, Response> = async function
     return useAsyncState<NormalResponse>(async () => {
       await next();
       return ctx.res?.data;
-    }, { data: {}, code: 0, msg: '' }, { immediate });
+    }, { data: {}, code: 0, msg: '' }, { immediate, resetOnExecute: false });
   }
 
   // mode = 'normal'

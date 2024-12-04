@@ -27,5 +27,6 @@ declare module 'vue-router/auto-routes' {
     'Redirect': RouteRecordInfo<'Redirect', '/system/redirect', Record<never, never>, Record<never, never>>,
     '/system/role': RouteRecordInfo<'/system/role', '/system/role', Record<never, never>, Record<never, never>>,
     '/system/user/': RouteRecordInfo<'/system/user/', '/system/user', Record<never, never>, Record<never, never>>,
+    '/system/user/UserDrawer': RouteRecordInfo<'/system/user/UserDrawer', '/system/user/UserDrawer', Record<never, never>, Record<never, never>>,
   }
 }

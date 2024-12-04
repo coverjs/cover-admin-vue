@@ -611,50 +611,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * No description
-     *
-     * @tags 系统管理-用户管理
-     * @name UserExportJob
-     * @summary 导出用户列表
-     * @request GET:/system/user/export
-     * @secure
-     */
-    userExportJob: (
-      query?: {
-        /**
-         * 当前页码
-         * @min 1
-         * @example 1
-         */
-        pageNum?: number;
-        /**
-         * 每页条数
-         * @min 1
-         * @example 10
-         */
-        pageSize?: number;
-        /** 用户账号 */
-        username?: string;
-        /** 昵称 */
-        nickname?: string;
-        /** 邮箱 */
-        email?: string;
-        /** 角色id */
-        roleId?: number;
-        /** 是否启用 */
-        enable?: boolean;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<any, File>({
-        path: `/system/user/export`,
-        method: "GET",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-
-    /**
      * @description [ 权限码：system:role:add ]
      *
      * @tags 系统管理-角色管理

@@ -136,6 +136,11 @@
         "menuList": "Menu List",
         "editMenu": "Edit Menu",
         "createMenu": "Create Menu"
+      },
+      "user": {
+        "userList": "User List",
+        "createUser": "Create User",
+        "editUser": "Edit User"
       }
     }
   },
