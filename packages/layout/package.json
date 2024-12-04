@@ -1,0 +1,21 @@
+{
+  "name": "@lakyjs/components-vue-layout",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "vite build"
+  },
+  "peerDependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
+    "ant-design-vue": "^4.2.6",
+    "vue": "^3.5.12"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.4",
+    "@vue/tsconfig": "^0.7.0"
+  }
+}

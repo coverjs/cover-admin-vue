@@ -40,6 +40,9 @@
   "devDependencies": {
     "@antfu/eslint-config": "^3.9.2",
     "@iconify-json/mdi": "^1.2.1",
+    "@lakyjs/components-vue-hooks": "workspace:*",
+    "@lakyjs/components-vue-layout": "workspace:*",
+    "@lakyjs/components-vue-utils": "workspace:*",
     "@lakyjs/eslint-config": "^0.0.0",
     "@types/crypto-js": "^4.2.2",
     "@types/lodash-es": "^4.17.12",
