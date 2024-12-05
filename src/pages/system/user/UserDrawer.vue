@@ -4,15 +4,26 @@ import type { ReactiveResponse } from '@/types';
 import type { ICreateUser } from './index.vue';
 import { useMessage } from '@/hooks';
 import { api } from '@/services';
+import crypto from 'crypto-js';
 import { ref } from 'vue';
 
 interface Props {
   type: boolean
   formData: ICreateUser
+  hashType?:
+    | 'MD5'
+    | 'SHA1'
+    | 'SHA256'
+    | 'SHA224'
+    | 'SHA3'
+    | 'SHA384'
+    | 'SHA512'
+    | 'RIPEMD160'
 }
 
 const props = withDefaults(defineProps<Props>(), {
   type: false,
+  hashType: 'MD5'
 });
 
 const emit = defineEmits<{
@@ -44,15 +55,16 @@ async function handleSubmit() {
   try {
     await formRef.value?.validate();
     const formData = toRaw(formState.value);
-    return;
     if (props.type) {
+      formData.password = crypto[props.hashType]?.(formData.password)?.toString();
       const { data: res } = await api.system.userCreate(formData);
       handleResponse(res, '新增成功');
     }
     else {
       const id = formData.id!;
-      const { data: res } = await api.system.roleUpdate(id, formData);
-      handleResponse(res, '修改成功');
+      return id;
+      // const { data: res } = await api.system.userUpdate(id, formData as unknown as UpdateRoleDto);
+      // handleResponse(res, '修改成功');
     }
   }
   catch (error: any) {

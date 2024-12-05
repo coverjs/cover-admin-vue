@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import type { CreateUserDto, UserInfoVo } from '@/services';
 import type { ReactiveResponse } from '@/types';
-import type { TableColumnType } from 'ant-design-vue';
+import type { FormInstance, TableColumnType } from 'ant-design-vue';
+import type { UnwrapRef } from 'vue';
 import { api } from '@/services';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { h } from 'vue';
+import { h, ref } from 'vue';
 import UserDrawer from './UserDrawer.vue';
 
 defineOptions({
@@ -27,8 +28,6 @@ const defaultFormData: ICreateUser = {
   enable: true,
 };
 
-const pagination = reactive({ pageNum: 1, pageSize: 10 });
-
 interface IQueryParam {
   pageNum: number
   pageSize: number
@@ -39,7 +38,10 @@ interface IQueryParam {
   enable: boolean
 }
 
-const queryParam = ref<Partial<IQueryParam>>({});
+const queryParam = ref<Partial<IQueryParam>>({
+  pageNum: 1,
+  pageSize: 10,
+});
 
 const formData = ref<ICreateUser>(defaultFormData);
 
@@ -77,13 +79,11 @@ async function getUserList() {
   }
 }
 
-watch(pagination, value => {
-  queryParam.value = { ...queryParam.value, ...value };
-});
-
 watch(queryParam, async () => {
   // TODO queryParam 变化时重新获取用户列表 这里有问题
   await execute(2000);
+}, {
+  deep: true,
 });
 
 function handleEdit(user: IUserInfo) {
@@ -105,10 +105,72 @@ onMounted(() => {
 function refresh() {
   getUserList();
 }
+
+// ----------------- 菜单查询 -----------------
+interface FormState {
+  username: string
+  nickname: string
+}
+const formRef = ref<FormInstance>();
+const formState: UnwrapRef<FormState> = reactive({
+  username: '',
+  nickname: '',
+});
+
+function handleFinish() {
+  queryParam.value = {
+    pageNum: 1,
+    pageSize: 10,
+    ...formState,
+  };
+}
+
+function resetForm() {
+  formRef.value?.resetFields();
+  queryParam.value = {
+    pageNum: 1,
+    pageSize: 10,
+  };
+}
 </script>
 
 <template>
   <div class="user-management">
+    <a-card title="菜单查询" class="mb-[24px]">
+      <a-form
+        ref="formRef"
+        layout="inline"
+        :label-col="{ span: 4 }"
+        :wrapper-col="{ span: 16 }"
+        :model="formState"
+      >
+        <a-row class="w-full">
+          <a-col :span="6">
+            <a-form-item label="用户名" name="username">
+              <a-input v-model:value="formState.username" placeholder="请输入" allow-clear />
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item label="昵称" name="nickname">
+              <a-input v-model:value="formState.nickname" placeholder="请输入" allow-clear />
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row class="w-full flex-row-reverse mt-4">
+          <a-form-item>
+            <a-space>
+              <a-button @click="resetForm">
+                重置
+              </a-button>
+              <a-button type="primary" @click="handleFinish">
+                查询
+              </a-button>
+            </a-space>
+          </a-form-item>
+        </a-row>
+      </a-form>
+    </a-card>
+
     <a-card title="用户管理">
       <template #extra>
         <a-button type="primary" @click="handleAddUser">
@@ -145,7 +207,7 @@ function refresh() {
         </template>
       </a-table>
       <div class="flex m-auto">
-        <a-pagination v-model:current="pagination.pageNum" v-model:page-size="pagination.pageSize" :total="500" />
+        <a-pagination v-model:current="queryParam.pageNum" v-model:page-size="queryParam.pageSize" :total="500" />
       </div>
     </a-card>
 
