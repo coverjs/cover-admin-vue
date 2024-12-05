@@ -267,7 +267,7 @@ export interface CommonResponseVo {
   msg: string;
 }
 
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
+import type { AxiosInstance, AxiosRequestConfig, HeadersDefaults, ResponseType } from "axios";
 import axios from "axios";
 import type { CustomRequestOptions } from "../types";
 
