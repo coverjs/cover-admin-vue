@@ -7,7 +7,7 @@ function getRes(ctx: Context) {
 }
 
 export const responseInterceptor: Middleware<Context, Response> = async function (ctx, next) {
-  const resMode = getReqOptItem(ctx as unknown as Context, 'responseMode');
+  const resMode = getReqOptItem(ctx, 'responseMode');
 
   if (resMode === 'object' || resMode === 'array') {
     try {
@@ -23,14 +23,6 @@ export const responseInterceptor: Middleware<Context, Response> = async function
         : [err as Error, void 0];
     }
   }
-
-  // if (resMode === 'reactive') {
-  //   const immediate = getReqOptItem(ctx, 'requestImmediate');
-  //   return useAsyncState<NormalResponse>(async () => {
-  //     await next();
-  //     return ctx.res?.data;
-  //   }, { data: {}, code: 0, msg: '' }, { immediate });
-  // }
 
   // mode = 'normal'
   await next();
