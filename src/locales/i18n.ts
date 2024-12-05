@@ -12,8 +12,8 @@ export const i18n = createI18n({
 });
 
 const modules = import.meta.glob([
-  './langs/global/**/*.json',
-  './langs/pages/**/*.json',
+  './langs/en-US/**/*.json',
+  './langs/zh-CN/**/*.json',
 ]);
 
 const localesMap = loadLocalesMap(modules);
@@ -21,38 +21,35 @@ const localesMap = loadLocalesMap(modules);
 function loadLocalesMap(modules: Record<string, () => Promise<unknown>>) {
   const result: Record<
     string,
-    () => Promise<{ default: Record<string, string> }>
+    () => Promise<{ default: Record<string, Record<string, string>> }>
   > = {};
 
   each(modules, (loadLocale, path) => {
-    const key = path.match(/([\w-]*)\.(yaml|yml|json)/)?.[1];
-    if (!key)
+    // 提取语言代码（zh-CN, en-US）
+    const langKey = path.match(/langs\/([\w-]*)\//)?.[1];
+    if (!langKey)
       return;
 
-    if (!result[key]) {
-      // 如果没有加载函数，直接赋值
-      result[key] = async () => {
-        const defaultMessages = {};
-        const messages = await loadLocale() as unknown as { default: Record<string, string> }; ;
-        return { default: Object.assign(defaultMessages, messages.default) };
-      };
+    // 提取顶层命名空间（文件名，如 app, widgets）
+    const namespace = path.match(/\/([\w-]*)\.json$/)?.[1];
+    if (!namespace)
+      return;
+
+    if (!result[langKey]) {
+      result[langKey] = async () => ({ default: {} });
     }
-    else {
-      // 如果有加载函数，合并加载函数
-      const previousLoader = result[key];
-      result[key] = async () => {
-        const defaultMessages = {};
-        const previousMessages = await previousLoader();
-        const currentMessages = await loadLocale() as unknown as { default: Record<string, string> };
-        return {
-          default: Object.assign(
-            defaultMessages,
-            previousMessages.default,
-            currentMessages.default
-          ),
-        };
+
+    const previousLoader = result[langKey];
+    result[langKey] = async () => {
+      const defaultMessages = await previousLoader();
+      const currentMessages = await loadLocale() as unknown as { default: Record<string, string> }; ;
+      return {
+        default: {
+          ...defaultMessages.default,
+          [namespace]: currentMessages.default,
+        },
       };
-    }
+    };
   });
   return result;
 }
