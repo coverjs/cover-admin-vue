@@ -57,8 +57,8 @@ async function handleSubmit() {
     const formData = JSON.parse(JSON.stringify(formState.value));
     if (props.type) {
       formData.password = crypto[props.hashType]?.(formData.password)?.toString();
-      const { data: res } = await api.system.userCreate(formData);
-      handleResponse(res, '新增成功');
+      const data = await api.system.userCreate(formData);
+      handleResponse(data, '新增成功');
     }
     else {
       const id = formData.id!;
