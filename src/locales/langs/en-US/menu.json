@@ -1,0 +1,11 @@
+{
+  "system": {
+    "systemAdmin": "System Admin",
+    "userAdmin": "User Admin",
+    "roleAdmin": "Role Admin",
+    "menuAdmin": "Menu Admin"
+  },
+  "home": {
+    "home": "Home"
+  }
+}

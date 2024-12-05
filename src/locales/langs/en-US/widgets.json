@@ -1,0 +1,12 @@
+{
+  "document": "Document",
+  "qa": "Q&A",
+  "setting": "Settings",
+  "logoutTip": "Do you want to logout?",
+  "viewAll": "View All Messages",
+  "notifications": "Notifications",
+  "markAllAsRead": "Make All as Read",
+  "clearNotifications": "Clear",
+  "checkUpdatesTitle": "New Version Available",
+  "checkUpdatesDescription": "Click to refresh and get the latest version"
+}

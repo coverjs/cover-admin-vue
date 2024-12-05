@@ -1,0 +1,24 @@
+{
+  "setting": {
+    "pageStyle": {
+      "pageStyle": "整体风格设置",
+      "light": "亮色菜单风格",
+      "dark": "暗色菜单风格",
+      "light-short": "亮色",
+      "dark-short": "暗色",
+      "auto-match": "跟随系统"
+    },
+    "themeColor": {
+      "themeColor": "主题色",
+      "dust": "薄暮",
+      "volcano": "火山",
+      "sunset": "日暮",
+      "cyan": "明青",
+      "green": "极光绿",
+      "daybreak": "拂晓",
+      "techBlue": "科技",
+      "geekBlue": "极客蓝",
+      "purple": "酱紫（默认）"
+    }
+  }
+}
