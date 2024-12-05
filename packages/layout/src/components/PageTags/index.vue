@@ -58,6 +58,7 @@ function genTagTitle(tag: PageTagItem) {
 
 <template>
   <div
+    v-show="store.tags.value.length"
     class="page-tags-container"
     :style="{
       background: token?.colorBgContainer,

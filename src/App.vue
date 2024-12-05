@@ -28,7 +28,9 @@ watchEffect(() => {
 </script>
 
 <template>
-  <laky-config-provider :theme="antdTheme" :locale="antdLocale" :t="t">
-    <router-view />
-  </laky-config-provider>
+  <a-config-provider :theme="antdTheme" :locale="antdLocale">
+    <laky-config-provider :theme="antdTheme" :locale="antdLocale" :t="t">
+      <router-view />
+    </laky-config-provider>
+  </a-config-provider>
 </template>

@@ -1,9 +1,9 @@
 import { set } from 'lodash-es';
 import { unref } from 'vue';
-import { type Router, useRouter } from 'vue-router';
+import { type Router, type RouteRecordNameGeneric, useRouter } from 'vue-router';
 import PageRedirect from './PageRedirect.vue';
 
-export const REDIRECT_NAME = 'Redirect' as const;
+export const REDIRECT_NAME = 'Redirect' as RouteRecordNameGeneric;
 
 export function useRefreshPage(_router?: Router) {
   const { replace, currentRoute } = _router || useRouter();
@@ -23,7 +23,7 @@ export function useRefreshPage(_router?: Router) {
         set(params, '_redirect_type', 'path');
         set(params, 'path', fullPath);
       }
-      replace({ name: REDIRECT_NAME, params, query }).then(() => resolve(true));
+      replace({ name: REDIRECT_NAME as any, params, query }).then(() => resolve(true));
     });
   }
   return redo;
