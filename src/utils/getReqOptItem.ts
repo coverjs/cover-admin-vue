@@ -10,7 +10,10 @@ function _getVal(
 ) {
   return get(obj, ['customOptions', key]);
 }
-export function getReqOptItem(ctx: Context, key: keyof CustomRequestOptions) {
+export function getReqOptItem(ctx: Context | void, key: keyof CustomRequestOptions) {
+  if (!ctx)
+    return DEFAULT[key];
+
   const [params] = ctx?.args as [RequestParams];
   const config = ctx?.cfg;
 
