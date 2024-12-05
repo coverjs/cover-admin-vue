@@ -2,6 +2,7 @@ import type { Router } from 'vue-router';
 
 import { PageEnum } from '@/enums';
 import { useAppStore, useUserStore } from '@/store';
+import { genLoginRoteLocation } from '@/utils';
 import { isEmpty, omit } from 'lodash-es';
 
 export function createPermissionGuard(router: Router) {
@@ -13,7 +14,8 @@ export function createPermissionGuard(router: Router) {
     to.meta.exception = false;
 
     if (!token && !to.meta.ignoreAuth) {
-      next({ name: 'login', replace: true });
+      const location = genLoginRoteLocation(to);
+      next(location);
       return;
     }
 
