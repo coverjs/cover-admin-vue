@@ -1,9 +1,8 @@
 import type { ApiConfig, CommonResponseVo, RequestParams } from '@/services';
-import type { UseAsyncStateReturnBase } from '@vueuse/core';
 
 export type ErrorMessageMode = 'none' | 'modal' | 'message' | void;
 export type SuccessMessageMode = ErrorMessageMode;
-export type ResponseMode = 'normal' | 'reactive' | 'object' | 'array';
+export type ResponseMode = 'normal' | 'object' | 'array';
 
 export interface CustomRequestOptions {
   loadingInterceptorEnabled?: boolean
@@ -29,8 +28,6 @@ export interface ObjectResponse<Data = any> {
 
 export type ArrayResponse<Data = any> = [Error | void, NormalResponse<Data> | void];
 
-export type ReactiveResponse<Data = any> = UseAsyncStateReturnBase<NormalResponse<Data>, any[], boolean>;
-
-export type Response = NormalResponse | ObjectResponse | ArrayResponse | ReactiveResponse;
+export type Response<Data = any> = NormalResponse<Data> | ObjectResponse<Data> | ArrayResponse<Data>;
 
 export { ApiConfig, RequestParams };

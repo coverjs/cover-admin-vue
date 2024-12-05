@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { CreateMenuDtoWithId } from '@/pages/system/menu/index.vue';
 import type { MenuVo } from '@/services';
-import type { NormalResponse } from '@/types';
 import { useMessage } from '@/hooks';
 import { api } from '@/services';
 
@@ -41,12 +40,12 @@ async function onSubmit() {
       formData.parentId = null as unknown as number; // 现在先这样 等后端改了再改
     }
     if (props.type) {
-      const res = await api.system.menuCreate(formData) as unknown as NormalResponse;
+      const res = await api.system.menuCreate(formData);
       handleResponse(res, '新增成功');
     }
     else {
       const id = formData.id!;
-      const res = await api.system.menuUpdate(id, formData) as unknown as NormalResponse;
+      const res = await api.system.menuUpdate(id, formData);
       handleResponse(res, '修改成功');
     }
   }
