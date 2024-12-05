@@ -1,0 +1,11 @@
+{
+  "pages": {
+    "system": {
+      "menu": {
+        "menuList": "Menu List",
+        "editMenu": "Edit Menu",
+        "createMenu": "Create Menu"
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "pages": {
+    "system": {
+      "menu": {
+        "menuList": "菜单列表",
+        "editMenu": "编辑菜单",
+        "createMenu": "创建菜单"
+      }
+    }
+  }
+}
