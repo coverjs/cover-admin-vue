@@ -40,6 +40,7 @@ declare module 'vue' {
     BlockCheckbox: typeof import('./src/components/SettingDrawer/BlockCheckbox.vue')['default']
     BlockThemeColor: typeof import('./src/components/SettingDrawer/BlockThemeColor.vue')['default']
     ColorModeToggle: typeof import('./src/components/ColorModeToggle.vue')['default']
+    ConfigProvider: typeof import('./src/components/ConfigProvider.vue')['default']
     FallbackPage: typeof import('./src/components/FallbackPage.vue')['default']
     HeaderActions: typeof import('./src/components/HeaderActions.vue')['default']
     HeaderBreadcrumb: typeof import('./src/components/HeaderBreadcrumb/index.vue')['default']

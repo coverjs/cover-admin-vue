@@ -1,6 +1,6 @@
 <script setup lang="tsx">
-import type { WithFalse } from '@/types';
 import type { JSX } from 'vue/jsx-runtime';
+import type { WithFalse } from '../types';
 import { CopyrightOutlined } from '@ant-design/icons-vue';
 
 // import { Layout } from 'ant-design-vue';

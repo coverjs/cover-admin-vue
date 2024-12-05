@@ -2,13 +2,11 @@
 import type { RouteMeta } from 'vue-router';
 
 import Logo from '@/assets/logo.png';
-import PageRouteListener from '@/components/PageTags/PageRouteListener.vue';
 
 import { useAppStore } from '@/store';
 import { loadEnv } from '@/utils';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
-
-import { ProLayout as LakyLayout } from '@lakyjs/components-vue-layout';
+import { LakyLayout, REDIRECT_NAME } from '@lakyjs/components-vue-layout';
 
 defineOptions({ name: 'DefaultLayout' });
 
@@ -21,6 +19,8 @@ const exceptionCode = ref(403);
 const env = loadEnv();
 
 const route = useRoute();
+
+const showBreadcrumb = computed(() => route.name !== REDIRECT_NAME as unknown);
 
 function checkedException(meta: RouteMeta) {
   if (meta.exception) {
@@ -73,7 +73,7 @@ onMounted(() => {
     <template #headerContent>
       <menu-unfold-outlined v-if="collapsed" class="trigger" @click="() => (collapsed = !collapsed)" />
       <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
-      <header-breadcrumb />
+      <header-breadcrumb v-show="showBreadcrumb" />
     </template>
 
     <!-- 头部操作栏 -->
@@ -81,20 +81,24 @@ onMounted(() => {
       <header-actions />
     </template>
 
-    <page-tags v-show="appStore.tags.length > 0" />
-    <div class="page-container mx-[16px] my-[24px] overflow-auto p-[24px]">
+    <!-- 内容 -->
+    <template #default="{ routeListener }">
       <fallback-page v-if="exception" :status="Number(exceptionCode)" />
-      <router-view v-else v-slot="{ Component, route: _route }">
-        <!-- page-route-listener 为 renderless 组件 -->
-        <page-route-listener v-slot="{ include, componentKey }" :component="Component" :route="_route">
+      <router-view v-else v-slot="routeProps">
+        <!-- routeListener 为 renderless 组件 -->
+        <component
+          :is="routeListener"
+          v-slot="{ include, componentKey }"
+          :route-props="routeProps"
+        >
           <transition name="fade-transform" mode="out-in">
             <keep-alive :include="include">
-              <component :is="Component" :key="componentKey" />
+              <component :is="routeProps.Component" :key="componentKey" />
             </keep-alive>
           </transition>
-        </page-route-listener>
+        </component>
       </router-view>
-    </div>
+    </template>
   </laky-layout>
 
   <setting-drawer

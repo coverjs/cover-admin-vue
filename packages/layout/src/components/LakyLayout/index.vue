@@ -1,37 +1,41 @@
 <script setup lang="ts">
 import type { ProlayoutEmits, ProLayoutProps } from './types';
-import { useAntdToken } from '@lakyjs/components-vue-hooks';
-import { Layout as AntLayout, Space as AntSpace } from 'ant-design-vue';
+import { Layout as AntLayout, Space as AntSpace, Spin as AntSpin, theme } from 'ant-design-vue';
 import { computed, type CSSProperties } from 'vue';
+import PageTags from '../PageTags/index.vue';
+import RouteListener from '../PageTags/RouteListener.vue';
 
 defineOptions({ name: 'LakyLayout' });
 
 withDefaults(defineProps<ProLayoutProps>(), {
   pure: false,
+  showPageTags: true
 });
 defineEmits<ProlayoutEmits>();
 
 const { Sider: AntLayoutSider, Header: AntLayoutHeader, Content: AntLayoutContent } = AntLayout;
 
-const { token } = useAntdToken();
+const { token } = theme.useToken();
 
 const headerStyle = computed(() => {
   const defaultStyle: CSSProperties = {
     height: '64px',
     lineHeight: '64px',
     paddingInline: 0,
+    borderBottom: `1px solid ${token.value.colorBorder}}`,
   };
   return defaultStyle;
 });
 </script>
 
 <template>
-  <ant-layout class="laky-layout-container">
+  <ant-layout v-if="!pure" class="laky-layout-container">
     <ant-layout-sider
       :collapsed="collapsed"
       theme="light"
       :trigger="null"
       collapsible
+      :style="{ backgroundColor: token.colorBgContainer, color: token.colorText }"
     >
       <div class="laky-layout-title">
         <span>
@@ -45,7 +49,7 @@ const headerStyle = computed(() => {
       </div>
       <slot name="menu" />
     </ant-layout-sider>
-    <ant-layout :style="{ borderLeft: `1px solid ${token.colorBorder}` }">
+    <ant-layout :style="{ borderLeft: `1px solid ${token?.colorBorder}` }">
       <ant-layout-header :style="headerStyle" class="laky-layout-header">
         <div class="laky-layout-header-container">
           <div class="flex-1 overflow-x-auto">
@@ -56,16 +60,19 @@ const headerStyle = computed(() => {
           </ant-space>
         </div>
       </ant-layout-header>
-      <ant-layout-content>
-        <!-- page-tags -->
-        <suspense>
-          <!-- <div class="page-container mx-[16px] my-[24px] overflow-auto p-[24px]"> -->
-          <slot />
-          <!-- </div> -->
-        </suspense>
+      <ant-layout-content :style="{ backgroundColor: token.colorBgLayout }">
+        <page-tags v-if="showPageTags" />
+        <ant-spin :spinning="loading">
+          <div class="page-container mx-[16px] my-[24px] overflow-auto p-[24px]">
+            <slot :route-listener="RouteListener" />
+          </div>
+        </ant-spin>
       </ant-layout-content>
     </ant-layout>
   </ant-layout>
+  <template v-else>
+    <slot :route-listener="RouteListener" />
+  </template>
 </template>
 
 <style lang="scss" scoped>

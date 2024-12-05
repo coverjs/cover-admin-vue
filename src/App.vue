@@ -3,6 +3,7 @@ import { useAntdToken, useLogoToFavicon, useRefreshPrompt } from '@/hooks';
 import { antdLocale } from '@/locales';
 import { useAppStore } from '@/store';
 import { registerTokenToCSSVar } from '@/utils';
+import { LakyConfigProvider } from '@lakyjs/components-vue-layout';
 import { theme } from 'ant-design-vue';
 
 defineOptions({
@@ -14,6 +15,7 @@ useLogoToFavicon();
 
 const appStore = useAppStore();
 const { theme: antdTheme } = storeToRefs(appStore);
+const { t } = useI18n();
 
 // 重新设置 全局的token
 const { token } = theme.useToken();
@@ -26,7 +28,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <a-config-provider :theme="antdTheme" :locale="antdLocale">
+  <laky-config-provider :theme="antdTheme" :locale="antdLocale" :t="t">
     <router-view />
-  </a-config-provider>
+  </laky-config-provider>
 </template>
