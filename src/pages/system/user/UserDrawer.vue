@@ -54,7 +54,7 @@ function handleResponse(res: any, successMessage: string) {
 async function handleSubmit() {
   try {
     await formRef.value?.validate();
-    const formData = toRaw(formState.value);
+    const formData = JSON.parse(JSON.stringify(formState.value));
     if (props.type) {
       formData.password = crypto[props.hashType]?.(formData.password)?.toString();
       const { data: res } = await api.system.userCreate(formData);
@@ -94,7 +94,7 @@ watch(
 <template>
   <a-drawer
     v-model:open="open"
-    width="50%"
+    width="30%"
     class="custom-class"
     root-class-name="root-class-name"
     :root-style="{ color: 'blue' }"
@@ -112,8 +112,8 @@ watch(
       ref="formRef"
       :model="formState"
       name="basic"
-      :label-col="{ span: 6 }"
-      :wrapper-col="{ span: 18 }"
+      :label-col="{ span: 4 }"
+      :wrapper-col="{ span: 16 }"
       autocomplete="off"
     >
       <a-form-item label="昵称" name="nickname" :rules="[{ required: true, message: '请输入昵称' }]">
@@ -128,7 +128,7 @@ watch(
         name="password"
         :rules="[{ required: true, message: '请输入密码' }]"
       >
-        <a-input v-model:value="formState.password" />
+        <a-input-password v-model:value="formState.password" type="password" />
       </a-form-item>
       <a-form-item
         label="邮箱"
