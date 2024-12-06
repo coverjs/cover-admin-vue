@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import type { CreateUserDto, UserInfoVo } from '@/services';
-import type { ReactiveResponse } from '@/types';
 import type { FormInstance, TableColumnType } from 'ant-design-vue';
 import type { UnwrapRef } from 'vue';
+import { useRequest } from '@/hooks';
 import { api } from '@/services';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { h, ref } from 'vue';
@@ -14,20 +14,10 @@ defineOptions({
 
 const open = ref(false);
 const type = ref<boolean>(false); // 编辑 true | 新增 false
-const userList = ref<UserInfoVo[]>([]);
+const userList = shallowRef<UserInfoVo[]>([]);
 
 export type ICreateUser = CreateUserDto & { id?: number };
 export type IUserInfo = UserInfoVo & { password: string };
-
-const defaultFormData: ICreateUser = {
-  username: '',
-  nickname: '',
-  password: '',
-  email: '',
-  roleId: 1,
-  enable: true,
-};
-
 interface IQueryParam {
   pageNum: number
   pageSize: number
@@ -38,11 +28,20 @@ interface IQueryParam {
   enable: boolean
 }
 
+const defaultFormData: ICreateUser = {
+  username: '',
+  nickname: '',
+  password: '',
+  email: '',
+  roleId: 1,
+  enable: true,
+};
+
 const queryParam = ref<Partial<IQueryParam>>({
   pageNum: 1,
   pageSize: 10,
 });
-
+const total = ref(0);
 const formData = ref<ICreateUser>(defaultFormData);
 
 // 设置表格列
@@ -65,23 +64,29 @@ function showDrawer(state: boolean) {
   type.value = state;
 }
 
-async function handleEnableOrDisableUser(user: IUserInfo) {
+function handleEnableOrDisableUser(user: IUserInfo) {
   // TODO 启用或禁用用户 后端接口还没写
   return user;
 }
 
 // 获取用户列表
-const { isLoading, error, execute, state } = await api.system.userFindList(toRaw(queryParam.value), { customOptions: { responseMode: 'reactive' } }) as unknown as ReactiveResponse<UserInfoVo[]>;
+// const { isLoading, error, execute, state } = await api.system.userFindList(toRaw(queryParam.value), { customOptions: { responseMode: 'reactive' } }) as unknown as ReactiveResponse<UserInfoVo[]>;
+const { isLoading, error, execute, state } = useRequest(() => api.system.userFindList(toRaw(queryParam.value)), {} as any);
+
 async function getUserList() {
   await execute();
   if (!error.value) {
-    userList.value = state.value.data;
+    userList.value = state.value.data!.list;
+    total.value = state.value.data!.total;
   }
 }
 
 watch(queryParam, async () => {
-  // TODO queryParam 变化时重新获取用户列表 这里有问题
-  await execute(2000);
+  await execute();
+  if (!error.value) {
+    userList.value = state.value.data!.list;
+    total.value = state.value.data!.total;
+  }
 }, {
   deep: true,
 });
@@ -207,7 +212,7 @@ function resetForm() {
         </template>
       </a-table>
       <div class="flex m-auto">
-        <a-pagination v-model:current="queryParam.pageNum" v-model:page-size="queryParam.pageSize" :total="500" />
+        <a-pagination v-model:current="queryParam.pageNum" v-model:page-size="queryParam.pageSize" :total />
       </div>
     </a-card>
 

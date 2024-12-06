@@ -17,12 +17,12 @@ export interface AccountLoginVo {
 export interface AccountLoginDto {
   /**
    * 账号
-   * @example "admin"
+   * @pattern ^\w{5,12}$
    */
   username: string;
   /**
    * 密码
-   * @example "admin"
+   * @pattern ^[\w.]{5,16}$
    */
   password: string;
 }
@@ -43,9 +43,15 @@ export interface RoleVo {
    * @example "管理员"
    */
   description: string;
-  /** 创建时间 */
+  /**
+   * 创建时间
+   * @format date-time
+   */
   createdAt: string;
-  /** 更新日期 */
+  /**
+   * 更新日期
+   * @format date-time
+   */
   updatedAt: string;
 }
 
@@ -60,14 +66,24 @@ export interface ProfileVo {
   role: RoleVo;
   /** 是否启用 */
   enable: boolean;
-  /** 创建时间 */
+  /**
+   * 创建时间
+   * @format date-time
+   */
   createdAt: string;
-  /** 更新日期 */
+  /**
+   * 更新日期
+   * @format date-time
+   */
   updatedAt: string;
 }
 
 export interface UpdateProfileDto {
-  /** 昵称 */
+  /**
+   * 昵称
+   * @minLength 2
+   * @maxLength 6
+   */
   nickname?: string;
   /** 邮箱 */
   email?: string;
@@ -123,14 +139,24 @@ export interface MenuVo {
 }
 
 export interface CreateUserDto {
-  /** 用户账号 */
+  /**
+   * 账号
+   * @pattern ^\w{5,12}$
+   */
   username: string;
-  /** 密码 */
+  /**
+   * 密码
+   * @pattern ^[\w.]{5,16}$
+   */
   password: string;
-  /** 昵称 */
+  /**
+   * 昵称
+   * @minLength 2
+   * @maxLength 6
+   */
   nickname: string;
   /** 邮箱 */
-  email: string;
+  email?: string;
   /** 角色id */
   roleId: number;
   /** 是否启用 */
@@ -148,9 +174,15 @@ export interface UserInfoVo {
   role: RoleVo;
   /** 是否启用 */
   enable: boolean;
-  /** 创建时间 */
+  /**
+   * 创建时间
+   * @format date-time
+   */
   createdAt: string;
-  /** 更新日期 */
+  /**
+   * 更新日期
+   * @format date-time
+   */
   updatedAt: string;
 }
 
@@ -267,7 +299,7 @@ export interface CommonResponseVo {
   msg: string;
 }
 
-import type { AxiosInstance, AxiosRequestConfig, HeadersDefaults, ResponseType } from "axios";
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
 import axios from "axios";
 import type { CustomRequestOptions } from "../types";
 
@@ -376,7 +408,7 @@ export class HttpClient<SecurityDataType = unknown> {
     format,
     body,
     ...params
-  }: FullRequestParams)=> {
+  }: FullRequestParams) => {
     const secureParams =
       ((typeof secure === "boolean" ? secure : this.secure) &&
         this.securityWorker &&
@@ -577,7 +609,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     userFindList: (
-      query?: {
+      query: {
         /**
          * 当前页码
          * @min 1
@@ -590,7 +622,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
          * @example 10
          */
         pageSize?: number;
-        /** 用户账号 */
+        /** 用户名称 */
         username?: string;
         /** 昵称 */
         nickname?: string;
@@ -605,10 +637,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<
         CommonResponseVo & {
-          data?: UserInfoVo[];
+          data?: {
+            list: UserInfoVo[];
+            /** @default 0 */
+            total: number;
+          };
         },
         CommonResponseVo & {
-          data?: UserInfoVo[];
+          data?: {
+            list: UserInfoVo[];
+            /** @default 0 */
+            total: number;
+          };
         }
       >({
         path: `/system/user`,
@@ -619,7 +659,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * No description
+     * @description [ 权限码：system:user:export ]
      *
      * @tags 系统管理-用户管理
      * @name UserExportJob
@@ -628,7 +668,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     userExportJob: (
-      query?: {
+      query: {
         /**
          * 当前页码
          * @min 1
@@ -641,16 +681,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
          * @example 10
          */
         pageSize?: number;
-        /** 用户账号 */
-        username?: string;
+        /** 用户名称 */
+        username: string;
         /** 昵称 */
-        nickname?: string;
+        nickname: string;
         /** 邮箱 */
-        email?: string;
+        email: string;
         /** 角色id */
-        roleId?: number;
+        roleId: number;
         /** 是否启用 */
-        enable?: boolean;
+        enable: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -711,10 +751,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<
         CommonResponseVo & {
-          data?: RoleVo[];
+          data?: {
+            list: RoleVo[];
+            /** @default 0 */
+            total: number;
+          };
         },
         CommonResponseVo & {
-          data?: RoleVo[];
+          data?: {
+            list: RoleVo[];
+            /** @default 0 */
+            total: number;
+          };
         }
       >({
         path: `/system/role`,

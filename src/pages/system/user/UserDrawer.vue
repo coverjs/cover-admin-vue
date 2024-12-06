@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import type { RoleVo } from '@/services';
-import type { ReactiveResponse } from '@/types';
 import type { ICreateUser } from './index.vue';
-import { useMessage } from '@/hooks';
+import { useMessage, useRequest } from '@/hooks';
 import { api } from '@/services';
 import crypto from 'crypto-js';
 import { ref } from 'vue';
@@ -62,6 +61,7 @@ async function handleSubmit() {
     }
     else {
       const id = formData.id!;
+      // TODO 修改用户接口还没完成 waiting
       return id;
       // const { data: res } = await api.system.userUpdate(id, formData as unknown as UpdateRoleDto);
       // handleResponse(res, '修改成功');
@@ -73,12 +73,12 @@ async function handleSubmit() {
 }
 
 const roleList = ref<RoleVo[]>([]);
-const { error, execute, state } = await api.system.roleFineList({}, { customOptions: { responseMode: 'reactive' } }) as unknown as ReactiveResponse<RoleVo[]>;
+const { error, execute, state } = useRequest(api.system.roleFineList, {} as any);
 
 onMounted(async () => {
   await execute();
   if (!error.value) {
-    roleList.value = state.value.data;
+    roleList.value = state.value.data!.list;
   }
 });
 
@@ -98,10 +98,9 @@ watch(
     class="custom-class"
     root-class-name="root-class-name"
     :root-style="{ color: 'blue' }"
-    :title="
-      type
-        ? $t('pages.system.user.createUser')
-        : $t('pages.system.user.editUser')
+    :title="type
+      ? $t('pages.system.user.createUser')
+      : $t('pages.system.user.editUser')
     "
     placement="right"
     destroy-on-close
