@@ -3,6 +3,8 @@ import type { ArrayResponse } from '@/types';
 import { PageEnum, TimeEnum } from '@/enums';
 import { router } from '@/router';
 import { api } from '@/services';
+import { genLoginRoteLocation } from '@/utils';
+import { useRedirectPage } from '@lakyjs/components-vue-layout';
 import { delay, each, get, set } from 'lodash-es';
 import { store, useAppStore } from '.';
 
@@ -22,7 +24,6 @@ export const useUserStore = defineStore(
     } = useTimeoutPoll(
       async () => {
         const [err, res] = await api.profile.profileFindUserInfo({ customOptions: { responseMode: 'array' } }) as unknown as ArrayResponse<UserInfoVo>;
-
         if (err)
           return;
 
@@ -43,7 +44,6 @@ export const useUserStore = defineStore(
           responseMode: 'array'
         },
       }) as unknown as ArrayResponse;
-
       if (err)
         throw err;
 
@@ -55,9 +55,13 @@ export const useUserStore = defineStore(
     async function logout(callApi: boolean = true) {
       if (callApi)
         await api.auth.authLogout();
+      const { currentRoute, replace } = router;
 
+      // callapi 说明是自动登出 则不需要保留 redirect 信息
+      const location = callApi ? PageEnum.BASE_LOGIN : genLoginRoteLocation(unref(currentRoute));
       setToken(void 0);
-      await router.replace(PageEnum.BASE_LOGIN);
+
+      await replace(location);
       isPollActive.value && stopGetUserInfoPoll();
     }
 
@@ -69,7 +73,20 @@ export const useUserStore = defineStore(
       const routes = await appStore.generateDynamicRoutes();
       router.addRoute(routes);
 
-      goHome && (await router.replace(PageEnum.BASE_HOME));
+      const { currentRoute } = router;
+
+      if (goHome) {
+        await router.replace(PageEnum.BASE_HOME);
+        return;
+      }
+
+      const currentQuery = currentRoute.value.query;
+      const redirect = useRedirectPage({
+        router,
+        fullPath: currentQuery.redirect as string || '/',
+        query: JSON.parse(currentQuery.redirectQuery as string || '{}'),
+      });
+      redirect();
     }
 
     async function getUserInfoAction() {

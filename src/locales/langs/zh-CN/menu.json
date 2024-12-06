@@ -1,0 +1,11 @@
+{
+  "system": {
+    "systemAdmin": "系统管理",
+    "userAdmin": "用户管理",
+    "roleAdmin": "角色管理",
+    "menuAdmin": "菜单管理"
+  },
+  "home": {
+    "home": "首页"
+  }
+}

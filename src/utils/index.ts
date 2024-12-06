@@ -1,4 +1,5 @@
 export * from './dynamicCSS';
+export * from './genLoginLocation';
 export * from './genStorageKey';
 export * from './genThemeColor';
 export * from './getRawRoute';

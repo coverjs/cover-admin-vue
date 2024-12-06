@@ -267,7 +267,7 @@ export interface CommonResponseVo {
   msg: string;
 }
 
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
+import type { AxiosInstance, AxiosRequestConfig, HeadersDefaults, ResponseType } from "axios";
 import axios from "axios";
 import type { CustomRequestOptions } from "../types";
 
@@ -376,7 +376,7 @@ export class HttpClient<SecurityDataType = unknown> {
     format,
     body,
     ...params
-  }: FullRequestParams): Promise<AxiosResponse<T>> => {
+  }: FullRequestParams)=> {
     const secureParams =
       ((typeof secure === "boolean" ? secure : this.secure) &&
         this.securityWorker &&
@@ -393,7 +393,7 @@ export class HttpClient<SecurityDataType = unknown> {
       body = JSON.stringify(body);
     }
 
-    return this.instance.request({
+    return this.instance.request<any,T>({
       ...requestParams,
       headers: {
         ...(requestParams.headers || {}),
@@ -429,7 +429,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     authLogin: (data: AccountLoginDto, params: RequestParams = {}) =>
       this.request<
-        any,
+        CommonResponseVo & {
+          data?: AccountLoginVo;
+        },
         CommonResponseVo & {
           data?: AccountLoginVo;
         }
@@ -451,7 +453,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     authLogout: (params: RequestParams = {}) =>
-      this.request<any, CommonResponseVo>({
+      this.request<CommonResponseVo, CommonResponseVo>({
         path: `/auth/logout`,
         method: "POST",
         secure: true,
@@ -470,7 +472,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     profileFindUserInfo: (params: RequestParams = {}) =>
       this.request<
-        any,
+        CommonResponseVo & {
+          data?: ProfileVo;
+        },
         CommonResponseVo & {
           data?: ProfileVo;
         }
@@ -491,7 +495,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     profileUpdateUserInfo: (data: UpdateProfileDto, params: RequestParams = {}) =>
-      this.request<any, CommonResponseVo>({
+      this.request<CommonResponseVo, CommonResponseVo>({
         path: `/profile/update`,
         method: "PATCH",
         body: data,
@@ -510,7 +514,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     profileUpdatePassword: (data: UpdatePasswordDto, params: RequestParams = {}) =>
-      this.request<any, CommonResponseVo>({
+      this.request<CommonResponseVo, CommonResponseVo>({
         path: `/profile/updatePassword`,
         method: "PATCH",
         body: data,
@@ -530,7 +534,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     profileGetMenus: (params: RequestParams = {}) =>
       this.request<
-        any,
+        CommonResponseVo & {
+          data?: MenuVo[];
+        },
         CommonResponseVo & {
           data?: MenuVo[];
         }
@@ -552,7 +558,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     userCreate: (data: CreateUserDto, params: RequestParams = {}) =>
-      this.request<any, CommonResponseVo>({
+      this.request<CommonResponseVo, CommonResponseVo>({
         path: `/system/user`,
         method: "POST",
         body: data,
@@ -598,12 +604,58 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       params: RequestParams = {},
     ) =>
       this.request<
-        any,
+        CommonResponseVo & {
+          data?: UserInfoVo[];
+        },
         CommonResponseVo & {
           data?: UserInfoVo[];
         }
       >({
         path: `/system/user`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 系统管理-用户管理
+     * @name UserExportJob
+     * @summary 导出用户列表
+     * @request GET:/system/user/export
+     * @secure
+     */
+    userExportJob: (
+      query?: {
+        /**
+         * 当前页码
+         * @min 1
+         * @example 1
+         */
+        pageNum?: number;
+        /**
+         * 每页条数
+         * @min 1
+         * @example 10
+         */
+        pageSize?: number;
+        /** 用户账号 */
+        username?: string;
+        /** 昵称 */
+        nickname?: string;
+        /** 邮箱 */
+        email?: string;
+        /** 角色id */
+        roleId?: number;
+        /** 是否启用 */
+        enable?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<File, File>({
+        path: `/system/user/export`,
         method: "GET",
         query: query,
         secure: true,
@@ -620,7 +672,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     roleCreate: (data: CreateRoleDto, params: RequestParams = {}) =>
-      this.request<any, CommonResponseVo>({
+      this.request<CommonResponseVo, CommonResponseVo>({
         path: `/system/role`,
         method: "POST",
         body: data,
@@ -658,7 +710,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       params: RequestParams = {},
     ) =>
       this.request<
-        any,
+        CommonResponseVo & {
+          data?: RoleVo[];
+        },
         CommonResponseVo & {
           data?: RoleVo[];
         }
@@ -680,7 +734,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     roleRemove: (id: number, params: RequestParams = {}) =>
-      this.request<any, CommonResponseVo>({
+      this.request<CommonResponseVo, CommonResponseVo>({
         path: `/system/role/${id}`,
         method: "DELETE",
         secure: true,
@@ -697,7 +751,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     roleUpdate: (id: number, data: UpdateRoleDto, params: RequestParams = {}) =>
-      this.request<any, CommonResponseVo>({
+      this.request<CommonResponseVo, CommonResponseVo>({
         path: `/system/role/${id}`,
         method: "PATCH",
         body: data,
@@ -716,7 +770,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     menuCreate: (data: CreateMenuDto, params: RequestParams = {}) =>
-      this.request<any, CommonResponseVo>({
+      this.request<CommonResponseVo, CommonResponseVo>({
         path: `/system/menu`,
         method: "POST",
         body: data,
@@ -736,7 +790,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     menuFindList: (params: RequestParams = {}) =>
       this.request<
-        any,
+        CommonResponseVo & {
+          data?: MenuVo[];
+        },
         CommonResponseVo & {
           data?: MenuVo[];
         }
@@ -757,7 +813,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     menuUpdate: (id: number, data: UpdateMenuDto, params: RequestParams = {}) =>
-      this.request<any, CommonResponseVo>({
+      this.request<CommonResponseVo, CommonResponseVo>({
         path: `/system/menu/${id}`,
         method: "PATCH",
         body: data,
@@ -783,7 +839,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       params: RequestParams = {},
     ) =>
       this.request<
-        any,
+        CommonResponseVo & {
+          data?: string;
+        },
         CommonResponseVo & {
           data?: string;
         }
@@ -810,7 +868,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       params: RequestParams = {},
     ) =>
       this.request<
-        any,
+        CommonResponseVo & {
+          data?: string;
+        },
         CommonResponseVo & {
           data?: string;
         }
@@ -840,7 +900,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       params: RequestParams = {},
     ) =>
       this.request<
-        any,
+        CommonResponseVo & {
+          data?: string;
+        },
         CommonResponseVo & {
           data?: string;
         }

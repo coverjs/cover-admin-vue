@@ -1,7 +1,7 @@
 import type { BreadcrumbProps } from 'ant-design-vue';
 import type { VNode } from 'vue';
 import type { JSX } from 'vue/jsx-runtime';
-import type { RouterTypes, WithFalse } from '../../types';
+import type { WithFalse } from '../types';
 
 export interface ProLayoutProps {
   /**
@@ -65,6 +65,8 @@ export interface ProLayoutProps {
    */
   itemRender?: BreadcrumbProps['itemRender']
 
+  showPageTags?: boolean
+
   className?: string
 
   /**
@@ -76,6 +78,6 @@ export interface ProLayoutProps {
 }
 
 export interface ProlayoutEmits {
-  (e: 'page-change', location?: RouterTypes['location']): void
+  (e: 'page-change', location?: { pathname?: string }): void
   (e: 'collapse', collapse: boolean): void
 }

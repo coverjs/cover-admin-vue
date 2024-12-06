@@ -1,4 +1,7 @@
-import PageContainer from './components/PageContainer/index.vue';
-import ProLayout from './components/ProLayout/index.vue';
+import LakyConfigProvider from './components/ConfigProvider/ConfigProvider.vue';
+import LakyLayout from './components/LakyLayout/index.vue';
+import LakyPageContainer from './components/PageContainer/index.vue';
 
-export { PageContainer, ProLayout };
+export * from './components/ConfigProvider/useConfig';
+export * from './components/PageRedirect';
+export { LakyConfigProvider, LakyLayout, LakyPageContainer };

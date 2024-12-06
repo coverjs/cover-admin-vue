@@ -13,6 +13,9 @@ const loginFormRef = useTemplateRef<{ getFieldsValue: () => AccountLoginDto }>(
 );
 const { createNotify } = useMessage();
 const { t } = useI18n();
+const route = useRoute();
+
+const hasRedirect = !!route.query.redirect;
 
 const {
   isLoading: loginLoading,
@@ -21,7 +24,7 @@ const {
   state: userInfo,
 } = useAsyncState<Partial<UserInfoVo>>(
   () =>
-    userStore.login(loginFormRef.value?.getFieldsValue() as AccountLoginDto),
+    userStore.login(loginFormRef.value?.getFieldsValue() as AccountLoginDto, !hasRedirect),
   { nickname: '' },
   { immediate: false },
 );

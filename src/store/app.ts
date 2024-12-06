@@ -1,10 +1,8 @@
 import type { MenuData, MenuDataItem } from '@/router/types.ts';
 
-import type { LayoutSetting, NormalResponse, PageTagItem, ThemeType } from '@/types';
+import type { LayoutSetting, ThemeType } from '@/types';
 import type { ThemeConfig } from 'ant-design-vue/es/config-provider/context';
-import type { Router } from 'vue-router';
 import { PageEnum } from '@/enums';
-import { useRedo } from '@/hooks';
 import { generateMenuAndRoutes } from '@/router/dynamicRoutes.ts';
 import staticRoutes from '@/router/staticRoutes.ts';
 import { api } from '@/services';
@@ -112,7 +110,7 @@ export const useAppStore = defineStore('app', () => {
    * @returns {Promise<any>} 返回生成的菜单和路由数据
    */
   async function getMenuData() {
-    const res = await api.profile.profileGetMenus() as unknown as NormalResponse;
+    const res = await api.profile.profileGetMenus();
     return generateMenuAndRoutes(res.data);
   }
 
@@ -148,55 +146,6 @@ export const useAppStore = defineStore('app', () => {
    * ----------------------------- menu&router end-----------------------------
    */
 
-  /**
-   * ----------------------------- tags start---------------------------------
-   * --------------------------标签页相关------------------------------------
-   */
-
-  const tags: Ref<Array<PageTagItem>> = ref([] as PageTagItem[]);
-  const cacheTags: Ref< Set<string>> = ref(new Set());
-
-  const getCacheTags = computed(() => Array.from(cacheTags.value));
-
-  function updateCacheTags() {
-    const newSet: Set<string> = new Set();
-    for (const tag of tags.value) {
-      newSet.add(tag.name);
-    }
-    cacheTags.value = newSet;
-  }
-
-  function addTag(tag: PageTagItem) {
-    const isExist = tags.value.some(item => item.path === tag.path);
-    if (!isExist) {
-      tags.value.push(tag);
-    }
-    updateCacheTags();
-  }
-
-  function removeTag(tag: PageTagItem) {
-    tags.value = tags.value.filter(item => item.path !== tag.path);
-    updateCacheTags();
-  }
-
-  function removeTags(target: PageTagItem[]) {
-    tags.value = tags.value.filter(item => !target.includes(item));
-    updateCacheTags();
-  }
-
-  function refreshTag(router: Router) {
-    const { currentRoute } = router;
-    const route = unref(currentRoute);
-    const fullPath = route.fullPath;
-
-    const findTab = tags.value.find(item => item.fullPath === fullPath);
-    if (findTab) {
-      cacheTags.value.delete(findTab.name);
-    }
-    const redo = useRedo(router);
-    redo();
-  }
-
   return {
     layoutSetting,
     theme: themeConfig,
@@ -204,11 +153,5 @@ export const useAppStore = defineStore('app', () => {
     generateDynamicRoutes,
     menuData,
     routerData,
-    tags,
-    addTag,
-    refreshTag,
-    removeTag,
-    removeTags,
-    getCacheTags,
   };
 });
