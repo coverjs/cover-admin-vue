@@ -23,7 +23,7 @@
     "@ant-design/icons-vue": "^7.0.1",
     "@onion-interceptor/pipes": "^1.0.4",
     "@vueuse/core": "^10.11.1",
-    "ant-design-vue": "^4.2.5",  
+    "ant-design-vue": "^4.2.5",
     "axios": "^1.7.7",
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.13",

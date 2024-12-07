@@ -4,6 +4,7 @@ import type { Context, Middleware } from 'onion-interceptor';
 import { StatusEnum } from '@/enums';
 import { useLogoutConfirm, useMessage } from '@/hooks';
 import { t } from '@/locales';
+import { useUserStore } from '@/store';
 import { getReqOptItem } from '@/utils';
 import { tap } from '@onion-interceptor/pipes';
 import { AxiosError, isAxiosError, isCancel } from 'axios';
@@ -39,6 +40,11 @@ statusHandlers.set(
   StatusEnum.INTERNAL_SERVER_ERRO,
   (msg?: string) => msg || t('fallback.http.internalServerError'),
 );
+statusHandlers.set(StatusEnum.LOGIN_OTHER_DEVICE, (message?: string) => {
+  autoOffline(message!);
+  return false;
+});
+
 function _getCode(ctx: Context) {
   return get(ctx, ['res', 'data', 'code']);
 }
@@ -147,4 +153,18 @@ function callMsg(errMsg: string, errorMessageMode: ErrorMessageMode) {
       key: `global_error_message_status_${status}`,
     });
   }
+}
+
+function autoOffline(message: string) {
+  const { createConfirm } = useMessage();
+  const { logout } = useUserStore();
+  setTimeout(() => {
+    createConfirm({
+      title: t('common.prompt'),
+      content: message,
+      iconType: 'warning',
+      // 不能调用登录API 否则登录接口会校验登录设备，循环弹窗
+      onOk: () => logout(false)
+    });
+  }, 200);
 }

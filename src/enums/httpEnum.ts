@@ -10,4 +10,5 @@ export enum StatusEnum {
   NOT_FOUND = 404,
   TIMEOUT = 408,
   INTERNAL_SERVER_ERRO = 500,
+  LOGIN_OTHER_DEVICE = 1000,
 }
