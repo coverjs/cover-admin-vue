@@ -452,19 +452,17 @@ export class HttpClient<SecurityDataType = unknown> {
       body = JSON.stringify(body);
     }
 
-    return this.instance
-      .request({
-        ...requestParams,
-        headers: {
-          ...(requestParams.headers || {}),
-          ...(type ? { "Content-Type": type } : {}),
-        },
-        params: query,
-        responseType: responseFormat,
-        data: body,
-        url: path,
-      })
-      .then((response) => response.data);
+    return this.instance.request({
+      ...requestParams,
+      headers: {
+        ...(requestParams.headers || {}),
+        ...(type ? { "Content-Type": type } : {}),
+      },
+      params: query,
+      responseType: responseFormat,
+      data: body,
+      url: path,
+    });
   };
 }
 

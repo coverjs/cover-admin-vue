@@ -27,7 +27,7 @@
     "axios": "^1.7.7",
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.13",
-    "laky": "^0.3.5",
+    "laky": "^0.3.6",
     "lodash-es": "^4.17.21",
     "nprogress": "^0.2.0",
     "object-hash": "^3.0.0",
