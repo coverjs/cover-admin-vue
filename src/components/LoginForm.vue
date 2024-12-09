@@ -31,8 +31,10 @@ const props = withDefaults(
       | 'SHA512'
       | 'RIPEMD160'
     initialUserHash?: string
+    pwdMinLength?: number
+    pwdMaxLength?: number
   }>(),
-  { loading: false, securePassword: true, hashType: 'MD5' },
+  { loading: false, securePassword: true, hashType: 'MD5', pwdMaxLength: 16, pwdMinLength: 5 },
 );
 
 defineEmits<{
@@ -115,7 +117,14 @@ defineExpose({
     </a-form-item>
     <a-form-item
       name="password"
-      :rules="[{ required: true, message: $t('authentication.passwordTip') }]"
+      :rules="[
+        { required: true, message: $t('authentication.passwordTip') },
+        {
+          max: pwdMaxLength,
+          min: pwdMinLength,
+          message: $t('authentication.passwordLength', { max: pwdMaxLength, min: pwdMinLength }),
+        },
+      ]"
     >
       <a-input-password
         v-model:value="formData.password"
