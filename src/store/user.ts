@@ -23,7 +23,7 @@ export const useUserStore = defineStore(
       isActive: isPollActive,
     } = useTimeoutPoll(
       async () => {
-        const [err, res] = await api.profile.profileFindUserInfo({ customOptions: { responseMode: 'array' } }) as unknown as ArrayResponse<UserInfoVo>;
+        const [err, res] = await api.profile.profileGetInfo({ customOptions: { responseMode: 'array' } }) as unknown as ArrayResponse<UserInfoVo>;
         if (err)
           return;
 
@@ -97,7 +97,7 @@ export const useUserStore = defineStore(
         !isPollActive.value && startGetUserInfoPoll();
       }, TimeEnum.LONG_POLLING_INTERVAL);
 
-      const [err, res] = await api.profile.profileFindUserInfo({ customOptions: { responseMode: 'array' } }) as unknown as ArrayResponse;
+      const [err, res] = await api.profile.profileGetInfo({ customOptions: { responseMode: 'array' } }) as unknown as ArrayResponse;
 
       if (err)
         throw err;
