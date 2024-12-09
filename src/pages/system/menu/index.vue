@@ -96,12 +96,12 @@ const treeTableData = computed(() => {
 });
 
 // const { isLoading, error, execute, state } = await api.system.menuFindList({ customOptions: { responseMode: 'reactive' } }) as unknown as ReactiveResponse<MenuVo[]>;
-const { isLoading, error, execute, state } = useRequest(api.system.menuFindList, []);
+const { isLoading, error, execute, state } = useRequest(api.system.menuFindList, { list: [], total: 0 });
 
 async function fetchData() {
   await execute();
   if (!error.value) {
-    tableData.value = state.value.data!;
+    tableData.value = state.value.data!.list;
   }
 }
 

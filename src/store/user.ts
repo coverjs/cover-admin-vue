@@ -46,7 +46,6 @@ export const useUserStore = defineStore(
       }) as unknown as ArrayResponse;
       if (err)
         throw err;
-
       setToken(res!.data!.token);
       await afterLoginAction(goHome);
       return userInfo;
