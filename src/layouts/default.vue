@@ -5,8 +5,7 @@ import Logo from '@/assets/logo.png';
 
 import { useAppStore } from '@/store';
 import { loadEnv } from '@/utils';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
-import { LakyLayout, REDIRECT_NAME } from '@lakyjs/components-vue-layout';
+import { LakyLayout } from '@lakyjs/components-vue-layout';
 
 defineOptions({ name: 'DefaultLayout' });
 
@@ -19,8 +18,6 @@ const exceptionCode = ref(403);
 const env = loadEnv();
 
 const route = useRoute();
-
-const showBreadcrumb = computed(() => route.name !== REDIRECT_NAME as unknown);
 
 function checkedException(meta: RouteMeta) {
   if (meta.exception) {
@@ -49,7 +46,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <laky-layout :collapsed="collapsed">
+  <laky-layout v-model:collapsed="collapsed">
     <!-- 系统Logo -->
     <template #logo>
       <img class="title-logo" :src="Logo" alt="logo">
@@ -69,35 +66,9 @@ onMounted(() => {
       </a-menu>
     </template>
 
-    <!-- 头部 -->
-    <template #headerContent>
-      <menu-unfold-outlined v-if="collapsed" class="trigger" @click="() => (collapsed = !collapsed)" />
-      <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
-      <header-breadcrumb v-show="showBreadcrumb" />
-    </template>
-
     <!-- 头部操作栏 -->
     <template #headerActions>
       <header-actions />
-    </template>
-
-    <!-- 内容 -->
-    <template #default="{ routeListener }">
-      <fallback-page v-if="exception" :status="Number(exceptionCode)" />
-      <router-view v-else v-slot="routeProps">
-        <!-- routeListener 为 renderless 组件 -->
-        <component
-          :is="routeListener"
-          v-slot="{ include, componentKey }"
-          :route-props="routeProps"
-        >
-          <transition name="fade-transform" mode="out-in">
-            <keep-alive :include="include">
-              <component :is="routeProps.Component" :key="componentKey" />
-            </keep-alive>
-          </transition>
-        </component>
-      </router-view>
     </template>
   </laky-layout>
 

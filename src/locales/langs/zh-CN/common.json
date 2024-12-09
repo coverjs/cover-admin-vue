@@ -7,6 +7,7 @@
   "error": "错误",
   "cancel": "取消",
   "confirm": "确认",
+  "confirmDelay": "确认({s})",
   "noData": "暂无数据",
   "refresh": "刷新",
   "loadingMenu": "加载菜单中"
