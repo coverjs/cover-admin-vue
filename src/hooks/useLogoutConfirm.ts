@@ -12,7 +12,7 @@ const modal: ShallowReactive<{
   visible: false,
   instance: void 0,
 });
-export function useLogoutConfirm(mode: 'auto' | 'manual' = 'manual') {
+export function useLogoutConfirm(mode: 'auto' | 'manual' = 'manual', content?: string, title?: string) {
   const userStore = useUserStore();
   const isManual = mode === 'manual';
 
@@ -38,10 +38,10 @@ export function useLogoutConfirm(mode: 'auto' | 'manual' = 'manual') {
       modal.visible = true;
       let secondsToGo = 5;
       modal.instance = createConfirm({
-        title: t(titleKey),
-        content: t(contentKey),
+        title: title ?? t(titleKey),
+        content: content ?? t(contentKey),
         iconType: 'warning',
-        okText: !isManual ? `${t('common.confirm')}(${secondsToGo})` : void 0,
+        okText: !isManual ? t('common.confirmDelay', { s: secondsToGo }) : void 0,
         onOk: onConfirm,
         onCancel: () => (modal.visible = false),
       });
@@ -52,7 +52,7 @@ export function useLogoutConfirm(mode: 'auto' | 'manual' = 'manual') {
       const interval = setInterval(() => {
         secondsToGo--;
         modal.instance?.update({
-          okText: `${t('common.confirm')}(${secondsToGo})`,
+          okText: t('common.confirmDelay', { s: secondsToGo }),
         });
         if (secondsToGo > 0)
           return;

@@ -80,4 +80,5 @@ export interface ProLayoutProps {
 export interface ProlayoutEmits {
   (e: 'page-change', location?: { pathname?: string }): void
   (e: 'collapse', collapse: boolean): void
+  (e: 'update:collapsed', collapse: boolean): void
 }

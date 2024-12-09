@@ -7,6 +7,7 @@
   "error": "Error",
   "cancel": "Cancel",
   "confirm": "Comfirm",
+  "confirmDelay": "Comfirm({s})",
   "noData": "No Data",
   "refresh": "Refresh",
   "loadingMenu": "Loading Menu"
