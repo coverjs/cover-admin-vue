@@ -3,8 +3,9 @@ import { defineConfig } from 'laky';
 export default defineConfig({
   generateApi: {
     name: 'api.ts',
-    // url: `${process.env.VITE_API_BASE}/docs-json`,
-    url: 'http://localhost:1118/docs-json',
+    // eslint-disable-next-line node/prefer-global/process
+    url: `${process.env.VITE_API_BASE}/docs-json`,
+    // url: 'http://localhost:1118/docs-json',
     httpClientType: 'axios',
     unwrapResponseData: true,
     hooks: {
