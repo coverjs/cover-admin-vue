@@ -5,10 +5,6 @@ import { defaultRequestConfig } from '@config';
 import objHash from 'object-hash';
 import { createInterceptor } from 'onion-interceptor';
 
-// interface IAPI extends Api<unknown> {
-//   instance: any
-// }
-
 const apis: Map<string, Api<unknown>> = new Map();
 
 export function createApi(config: ApiConfig = defaultRequestConfig) {
@@ -17,7 +13,7 @@ export function createApi(config: ApiConfig = defaultRequestConfig) {
   if (apis.has(key))
     return apis.get(key)!;
 
-  const api = new Api<any>(config);
+  const api = new Api<unknown>(config);
 
   createInterceptor(api.instance).use(...interceptors);
 
