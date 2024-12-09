@@ -18,9 +18,12 @@ const localeStorage = useLocalStorage(
 
 async function handleUpdate(value: LanguagesType) {
   await loadMessages(value);
+}
+
+watch(i18n.global.locale, value => {
   selectedKeys.value = [value];
   localeStorage.value = value;
-}
+});
 </script>
 
 <template>
