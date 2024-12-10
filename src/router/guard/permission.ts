@@ -11,7 +11,7 @@ export function createPermissionGuard(router: Router) {
 
   router.beforeEach(async (to, _from, next) => {
     const token = userStore.getToken;
-    to.meta.exception = false;
+    to.meta.pageStatus = 0;
 
     if (!token && !to.meta.ignoreAuth) {
       const location = genLoginRoteLocation(to);
@@ -27,7 +27,7 @@ export function createPermissionGuard(router: Router) {
     if (
       isEmpty(userStore.userInfo)
       && !to.meta.ignoreAuth
-      && !to.meta.exception
+      && to.meta.pageStatus === 0
     ) {
       try {
         await userStore.getUserInfoAction();
@@ -37,7 +37,7 @@ export function createPermissionGuard(router: Router) {
       catch (e) {
         next(/** 正常展示 fallback 页面 */);
         to.meta.exception = !!e;
-        to.meta.exceptionCode = 500;
+        to.meta.pageStatus = 500;
         return;
       }
 
@@ -49,8 +49,7 @@ export function createPermissionGuard(router: Router) {
     }
 
     if (to.path === '/403') {
-      to.meta.exception = true;
-      to.meta.exceptionCode = 403;
+      to.meta.pageStatus = 403;
     }
 
     next();

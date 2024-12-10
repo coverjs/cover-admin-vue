@@ -6,12 +6,18 @@ import { computed, type CSSProperties } from 'vue';
 import PageTags from '../PageTags/index.vue';
 import RouteListener from '../PageTags/RouteListener.vue';
 import Breadcrumb from './Breadcrumb.vue';
+import FallbackPage from './FallbackPage.vue';
+import SiderMenu from './SiderMenu.vue';
+
+type PageStatus = 0 | 404 | 403 | 500 ;
 
 defineOptions({ name: 'LakyLayout' });
 
 withDefaults(defineProps<ProLayoutProps>(), {
   pure: false,
-  showPageTags: true
+  showPageTags: true,
+  loading: false,
+  status: 0,
 });
 const emits = defineEmits<ProlayoutEmits>();
 
@@ -54,7 +60,9 @@ function updatedCollapsed(val: boolean) {
           </slot>
         </span>
       </div>
-      <slot name="menu" />
+      <slot name="menu">
+        <sider-menu :menu-data="menuData ?? []" :open-kyes="openKeys ?? []" />
+      </slot>
     </ant-layout-sider>
     <ant-layout :style="{ borderLeft: `1px solid ${token?.colorBorder}` }">
       <ant-layout-header :style="headerStyle" class="laky-layout-header">
@@ -84,11 +92,13 @@ function updatedCollapsed(val: boolean) {
                   v-slot="{ include, componentKey }"
                   :route-props="routeProps"
                 >
-                  <transition name="fade-transform" mode="out-in">
-                    <keep-alive :include="include">
-                      <component :is="routeProps.Component" :key="componentKey" />
-                    </keep-alive>
-                  </transition>
+                  <fallback-page :status="routeProps?.route?.meta?.pageStatus as PageStatus ?? 0" :home-path="homePath ?? '/'">
+                    <transition name="fade-transform" mode="out-in">
+                      <keep-alive :include="include">
+                        <component :is="routeProps.Component" :key="componentKey" />
+                      </keep-alive>
+                    </transition>
+                  </fallback-page>
                 </route-listener>
               </router-view>
             </slot>

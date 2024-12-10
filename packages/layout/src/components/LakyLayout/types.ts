@@ -1,7 +1,30 @@
 import type { BreadcrumbProps } from 'ant-design-vue';
-import type { VNode } from 'vue';
+import type { VNode, VNodeChild } from 'vue';
 import type { JSX } from 'vue/jsx-runtime';
 import type { WithFalse } from '../types';
+
+export interface MenuDataItem {
+  // 唯一id
+  id?: string | number
+  // 标题
+  title: string | (() => VNodeChild)
+  // 图标
+  icon?: string
+  // 地址
+  path: string
+  // 绑定的哪个组件
+  component?: string
+  // 子集菜单
+  children?: MenuDataItem[]
+  // 同路由中的name
+  name?: string
+  // 菜单类型
+  type?: 'DIRECTORY' | 'MENU' | 'ACTION'
+  // 国际化
+  locale?: string
+}
+
+export type MenuData = MenuDataItem[];
 
 export interface ProLayoutProps {
   /**
@@ -66,6 +89,12 @@ export interface ProLayoutProps {
   itemRender?: BreadcrumbProps['itemRender']
 
   showPageTags?: boolean
+
+  homePath?: string
+
+  menuData?: MenuData
+
+  openKeys?: string[]
 
   className?: string
 

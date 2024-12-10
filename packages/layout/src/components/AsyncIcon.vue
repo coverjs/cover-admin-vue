@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { VNodeChild } from 'vue';
 import * as icons from '@ant-design/icons-vue';
 import { isFunction } from 'lodash-es';
+import { computed, type VNodeChild } from 'vue';
 
 defineOptions({
   name: 'AsyncIcon',

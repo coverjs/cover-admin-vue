@@ -63,9 +63,10 @@ function isLastItem(idx: number) {
           >
             <ant-dropdown>
               <span class="breadcrumb-item__title" :class="{ disabled: isLastItem(index) }">
-                <router-link :to="item.path">
+                <router-link v-if="item.components" :to="item.path">
                   {{ genItemTitle(item) }}
                 </router-link>
+                <span v-else>{{ genItemTitle(item) }}</span>
                 <down-outlined v-if="item.children.length > 1" style="margin-inline-start: 4px;width: 12px;height: 12px;" />
               </span>
               <template v-if="item.children.length > 1" #overlay>
