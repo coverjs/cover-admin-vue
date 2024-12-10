@@ -8,8 +8,6 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AAvatar: typeof import('ant-design-vue/es')['Avatar']
-    ABreadcrumb: typeof import('ant-design-vue/es')['Breadcrumb']
-    ABreadcrumbItem: typeof import('ant-design-vue/es')['BreadcrumbItem']
     AButton: typeof import('ant-design-vue/es')['Button']
     ACard: typeof import('ant-design-vue/es')['Card']
     ACheckbox: typeof import('ant-design-vue/es')['Checkbox']
@@ -29,8 +27,6 @@ declare module 'vue' {
     AResult: typeof import('ant-design-vue/es')['Result']
     ARow: typeof import('ant-design-vue/es')['Row']
     ASpace: typeof import('ant-design-vue/es')['Space']
-    ASubMenu: typeof import('ant-design-vue/es')['SubMenu']
-    AsyncIcon: typeof import('./src/components/SubMenu/AsyncIcon.vue')['default']
     ATable: typeof import('ant-design-vue/es')['Table']
     ATag: typeof import('ant-design-vue/es')['Tag']
     ATooltip: typeof import('ant-design-vue/es')['Tooltip']
@@ -42,7 +38,6 @@ declare module 'vue' {
     ColorModeToggle: typeof import('./src/components/ColorModeToggle.vue')['default']
     FallbackPage: typeof import('./src/components/FallbackPage.vue')['default']
     HeaderActions: typeof import('./src/components/HeaderActions.vue')['default']
-    HeaderBreadcrumb: typeof import('./src/components/HeaderBreadcrumb/index.vue')['default']
     LanguageToggle: typeof import('./src/components/LanguageToggle.vue')['default']
     LoginForm: typeof import('./src/components/LoginForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -50,6 +45,5 @@ declare module 'vue' {
     ScreenfullToggle: typeof import('./src/components/ScreenfullToggle.vue')['default']
     SettingBlock: typeof import('./src/components/SettingDrawer/SettingBlock.vue')['default']
     SettingDrawer: typeof import('./src/components/SettingDrawer/index.vue')['default']
-    SubMenu: typeof import('./src/components/SubMenu/index.vue')['default']
   }
 }
