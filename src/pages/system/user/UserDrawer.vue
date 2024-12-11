@@ -57,8 +57,8 @@ function handleResponse(res: any, successMessage?: string) {
 }
 
 async function handleSubmit() {
+  await formRef.value?.validate();
   try {
-    await formRef.value?.validate();
     const formData = JSON.parse(JSON.stringify(formState.value));
     if (props.type) {
       formData.password = crypto[props.hashType]?.(formData.password)?.toString();
