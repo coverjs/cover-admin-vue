@@ -20,6 +20,7 @@
     "forbidden": "Forbidden. You do not have permission to access this resource.",
     "notFound": "Not Found. The requested resource could not be found.",
     "internalServerError": "Internal Server Error. Something went wrong on our end. Please try again later.",
+    "loginOtherDevice": "Login again on another device, please login again.",
     "errMsg401": "The user does not have permission (token, user name, password error)!",
     "errMsg403": "The user is authorized, but access is forbidden!",
     "errMsg404": "Network request error, the resource was not found!",

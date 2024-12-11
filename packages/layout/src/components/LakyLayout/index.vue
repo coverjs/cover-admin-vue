@@ -1,17 +1,25 @@
 <script setup lang="ts">
 import type { ProlayoutEmits, ProLayoutProps } from './types';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import { Layout as AntLayout, Space as AntSpace, Spin as AntSpin, theme } from 'ant-design-vue';
 import { computed, type CSSProperties } from 'vue';
 import PageTags from '../PageTags/index.vue';
 import RouteListener from '../PageTags/RouteListener.vue';
+import Breadcrumb from './Breadcrumb.vue';
+import FallbackPage from './FallbackPage.vue';
+import SiderMenu from './SiderMenu.vue';
+
+type PageStatus = 0 | 404 | 403 | 500 ;
 
 defineOptions({ name: 'LakyLayout' });
 
 withDefaults(defineProps<ProLayoutProps>(), {
   pure: false,
-  showPageTags: true
+  showPageTags: true,
+  loading: false,
+  status: 0,
 });
-defineEmits<ProlayoutEmits>();
+const emits = defineEmits<ProlayoutEmits>();
 
 const { Sider: AntLayoutSider, Header: AntLayoutHeader, Content: AntLayoutContent } = AntLayout;
 
@@ -26,6 +34,11 @@ const headerStyle = computed(() => {
   };
   return defaultStyle;
 });
+
+function updatedCollapsed(val: boolean) {
+  emits('collapse', val);
+  emits('update:collapsed', val);
+}
 </script>
 
 <template>
@@ -47,13 +60,21 @@ const headerStyle = computed(() => {
           </slot>
         </span>
       </div>
-      <slot name="menu" />
+      <slot name="menu">
+        <sider-menu :menu-data="menuData ?? []" :open-kyes="openKeys ?? []" />
+      </slot>
     </ant-layout-sider>
     <ant-layout :style="{ borderLeft: `1px solid ${token?.colorBorder}` }">
       <ant-layout-header :style="headerStyle" class="laky-layout-header">
         <div class="laky-layout-header-container">
           <div class="flex-1 overflow-x-auto">
-            <slot name="headerContent" />
+            <slot name="headerContent">
+              <menu-unfold-outlined v-if="collapsed" class="trigger" @click="updatedCollapsed(false)" />
+              <menu-fold-outlined v-else class="trigger" @click="updatedCollapsed(true)" />
+              <slot name="breadcrumb">
+                <breadcrumb />
+              </slot>
+            </slot>
           </div>
           <ant-space align="center" class="flex-shrink-0">
             <slot name="headerActions" />
@@ -64,7 +85,23 @@ const headerStyle = computed(() => {
         <page-tags v-if="showPageTags" />
         <ant-spin :spinning="loading">
           <div class="page-container mx-[16px] my-[24px] overflow-auto p-[24px]">
-            <slot :route-listener="RouteListener" />
+            <slot :route-listener="RouteListener">
+              <router-view v-slot="routeProps">
+                <!-- routeListener 为 renderless 组件 -->
+                <route-listener
+                  v-slot="{ include, componentKey }"
+                  :route-props="routeProps"
+                >
+                  <fallback-page :status="routeProps?.route?.meta?.pageStatus as PageStatus ?? 0" :home-path="homePath ?? '/'">
+                    <transition name="fade-transform" mode="out-in">
+                      <keep-alive :include="include">
+                        <component :is="routeProps.Component" :key="componentKey" />
+                      </keep-alive>
+                    </transition>
+                  </fallback-page>
+                </route-listener>
+              </router-view>
+            </slot>
           </div>
         </ant-spin>
       </ant-layout-content>
@@ -116,6 +153,21 @@ const headerStyle = computed(() => {
   }
   .page-container {
     overflow-x: hidden;
+  }
+
+  .fade-transform-enter-active,
+  .fade-transform-leave-active {
+    transition: all 0.5s;
+  }
+
+  .fade-transform-enter-from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+
+  .fade-transform-leave-to {
+    opacity: 0;
+    transform: translateX(-50px);
   }
 }
 </style>

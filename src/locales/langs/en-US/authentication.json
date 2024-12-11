@@ -25,6 +25,7 @@
   "agreeTip": "Please agree to the Privacy Policy and Terms",
   "goToLogin": "Login instead",
   "passwordStrength": "Use 8 or more characters with a mix of letters, numbers & symbols",
+  "passwordLength": "Password length is {min} to {max} characters",
   "forgetPassword": "Forget Password?",
   "forgetPasswordSubtitle": "Enter your email and we'll send you instructions to reset your password",
   "emailTip": "Please enter email",

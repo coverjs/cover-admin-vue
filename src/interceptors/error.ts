@@ -39,6 +39,12 @@ statusHandlers.set(
   StatusEnum.INTERNAL_SERVER_ERRO,
   (msg?: string) => msg || t('fallback.http.internalServerError'),
 );
+statusHandlers.set(StatusEnum.LOGIN_OTHER_DEVICE, () => {
+  const logout = useLogoutConfirm('auto', t('fallback.http.loginOtherDevice'));
+  logout();
+  return false;
+});
+
 function _getCode(ctx: Context) {
   return get(ctx, ['res', 'data', 'code']);
 }

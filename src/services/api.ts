@@ -9,6 +9,18 @@
  * ---------------------------------------------------------------
  */
 
+export interface ChatMessageDto {
+  /** 消息内容 */
+  content: string;
+  /** 角色 */
+  role: string;
+}
+
+export interface ChatDto {
+  /** 消息内容列表 */
+  messages: ChatMessageDto[];
+}
+
 export interface AccountLoginVo {
   /** 登录成功后返回token */
   token: string;
@@ -17,14 +29,27 @@ export interface AccountLoginVo {
 export interface AccountLoginDto {
   /**
    * 账号
-   * @pattern ^\w{5,12}$
+   * @example "admin"
    */
   username: string;
   /**
    * 密码
-   * @pattern ^[\w.]{5,16}$
+   * @example "admin"
    */
   password: string;
+}
+
+export interface CommonResponseVo {
+  /**
+   * 响应状态码
+   * @default 0
+   */
+  code: number;
+  /**
+   * 响应信息
+   * @default "ok"
+   */
+  msg: string;
 }
 
 export interface RoleVo {
@@ -43,15 +68,9 @@ export interface RoleVo {
    * @example "管理员"
    */
   description: string;
-  /**
-   * 创建时间
-   * @format date-time
-   */
+  /** 创建时间 */
   createdAt: string;
-  /**
-   * 更新日期
-   * @format date-time
-   */
+  /** 更新日期 */
   updatedAt: string;
 }
 
@@ -61,29 +80,19 @@ export interface ProfileVo {
   /** 昵称 */
   nickname: string;
   /** 邮箱 */
-  email: string;
+  email?: string;
   /** 角色 */
   role: RoleVo;
   /** 是否启用 */
   enable: boolean;
-  /**
-   * 创建时间
-   * @format date-time
-   */
+  /** 创建时间 */
   createdAt: string;
-  /**
-   * 更新日期
-   * @format date-time
-   */
+  /** 更新日期 */
   updatedAt: string;
 }
 
 export interface UpdateProfileDto {
-  /**
-   * 昵称
-   * @minLength 2
-   * @maxLength 6
-   */
+  /** 昵称 */
   nickname?: string;
   /** 邮箱 */
   email?: string;
@@ -139,24 +148,14 @@ export interface MenuVo {
 }
 
 export interface CreateUserDto {
-  /**
-   * 账号
-   * @pattern ^\w{5,12}$
-   */
+  /** 用户账号 */
   username: string;
-  /**
-   * 密码
-   * @pattern ^[\w.]{5,16}$
-   */
+  /** 密码 */
   password: string;
-  /**
-   * 昵称
-   * @minLength 2
-   * @maxLength 6
-   */
+  /** 昵称 */
   nickname: string;
   /** 邮箱 */
-  email?: string;
+  email: string;
   /** 角色id */
   roleId: number;
   /** 是否启用 */
@@ -169,21 +168,30 @@ export interface UserInfoVo {
   /** 昵称 */
   nickname: string;
   /** 邮箱 */
-  email: string;
+  email?: string;
   /** 角色 */
   role: RoleVo;
   /** 是否启用 */
   enable: boolean;
-  /**
-   * 创建时间
-   * @format date-time
-   */
+  /** 创建时间 */
   createdAt: string;
-  /**
-   * 更新日期
-   * @format date-time
-   */
+  /** 更新日期 */
   updatedAt: string;
+}
+
+export interface UpdateUserDto {
+  /**
+   * 昵称
+   * @minLength 2
+   * @maxLength 6
+   */
+  nickname: string;
+  /** 邮箱 */
+  email?: string;
+  /** 角色id */
+  roleId: number;
+  /** 是否启用 */
+  enable: boolean;
 }
 
 export interface CreateRoleDto {
@@ -299,7 +307,7 @@ export interface CommonResponseVo {
   msg: string;
 }
 
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
+import type { AxiosInstance, AxiosRequestConfig, HeadersDefaults, ResponseType } from "axios";
 import axios from "axios";
 import type { CustomRequestOptions } from "../types";
 
@@ -408,7 +416,7 @@ export class HttpClient<SecurityDataType = unknown> {
     format,
     body,
     ...params
-  }: FullRequestParams) => {
+  }: FullRequestParams)=> {
     const secureParams =
       ((typeof secure === "boolean" ? secure : this.secure) &&
         this.securityWorker &&
@@ -425,7 +433,7 @@ export class HttpClient<SecurityDataType = unknown> {
       body = JSON.stringify(body);
     }
 
-    return this.instance.request<any,T>({
+    return this.instance.request({
       ...requestParams,
       headers: {
         ...(requestParams.headers || {}),
@@ -450,6 +458,41 @@ export class HttpClient<SecurityDataType = unknown> {
  * 推荐使用<a href="https://apifox.com/apidoc/shared-0995dfb9-d5c1-49d1-a153-4bc5574445bc/">Apifox</a>查看更友好的接口文档
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  openai = {
+    /**
+     * No description
+     *
+     * @tags OpenAI
+     * @name OpenaiGetChat
+     * @summary AI聊天
+     * @request POST:/openai/chat
+     */
+    openaiGetChat: (data: ChatDto, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/openai/chat`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags OpenAI
+     * @name OpenaiGetChatStream
+     * @summary AI聊天
+     * @request POST:/openai/chat/stream
+     */
+    openaiGetChatStream: (data: ChatDto, params: RequestParams = {}) =>
+      this.request<any, object>({
+        path: `/openai/chat/stream`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+  };
   auth = {
     /**
      * No description
@@ -464,14 +507,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         CommonResponseVo & {
           data?: AccountLoginVo;
         },
-        CommonResponseVo & {
-          data?: AccountLoginVo;
-        }
+        CommonResponseVo
       >({
         path: `/auth/login`,
         method: "POST",
         body: data,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -489,6 +531,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/auth/logout`,
         method: "POST",
         secure: true,
+        format: "json",
         ...params,
       }),
   };
@@ -497,23 +540,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags 个人信息
-     * @name ProfileFindUserInfo
+     * @name ProfileGetInfo
      * @summary 获取当前用户信息
      * @request GET:/profile
      * @secure
      */
-    profileFindUserInfo: (params: RequestParams = {}) =>
+    profileGetInfo: (params: RequestParams = {}) =>
       this.request<
         CommonResponseVo & {
           data?: ProfileVo;
         },
-        CommonResponseVo & {
-          data?: ProfileVo;
-        }
+        CommonResponseVo
       >({
         path: `/profile`,
         method: "GET",
         secure: true,
+        format: "json",
         ...params,
       }),
 
@@ -521,18 +563,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags 个人信息
-     * @name ProfileUpdateUserInfo
+     * @name ProfileUpdateInfo
      * @summary 修改当前登录用户信息
      * @request PATCH:/profile/update
      * @secure
      */
-    profileUpdateUserInfo: (data: UpdateProfileDto, params: RequestParams = {}) =>
+    profileUpdateInfo: (data: UpdateProfileDto, params: RequestParams = {}) =>
       this.request<CommonResponseVo, CommonResponseVo>({
         path: `/profile/update`,
         method: "PATCH",
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -552,6 +595,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -569,13 +613,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         CommonResponseVo & {
           data?: MenuVo[];
         },
-        CommonResponseVo & {
-          data?: MenuVo[];
-        }
+        CommonResponseVo
       >({
         path: `/profile/menus`,
         method: "GET",
         secure: true,
+        format: "json",
         ...params,
       }),
   };
@@ -596,6 +639,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -637,29 +681,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<
         CommonResponseVo & {
-          data?: {
-            list: UserInfoVo[];
-            /** @default 0 */
-            total: number;
-          };
+          data?: UserInfoVo[];
         },
         CommonResponseVo & {
-          data?: {
-            list: UserInfoVo[];
-            /** @default 0 */
-            total: number;
-          };
+          data?: UserInfoVo[];
         }
       >({
         path: `/system/user`,
         method: "GET",
         query: query,
         secure: true,
+        format: "json",
         ...params,
       }),
 
     /**
-     * @description [ 权限码：system:user:export ]
+     * No description
      *
      * @tags 系统管理-用户管理
      * @name UserExportJob
@@ -681,8 +718,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
          * @example 10
          */
         pageSize?: number;
-        /** 用户名称 */
-        username: string;
+        /** 用户账号 */
+        username?: string;
         /** 昵称 */
         nickname: string;
         /** 邮箱 */
@@ -694,7 +731,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<File, File>({
+      this.request<any, File>({
         path: `/system/user/export`,
         method: "GET",
         query: query,
@@ -718,6 +755,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -751,24 +789,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<
         CommonResponseVo & {
-          data?: {
-            list: RoleVo[];
-            /** @default 0 */
-            total: number;
-          };
+          data?: RoleVo[];
         },
         CommonResponseVo & {
-          data?: {
-            list: RoleVo[];
-            /** @default 0 */
-            total: number;
-          };
+          data?: RoleVo[];
         }
       >({
         path: `/system/role`,
         method: "GET",
         query: query,
         secure: true,
+        format: "json",
         ...params,
       }),
 
@@ -786,6 +817,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/system/role/${id}`,
         method: "DELETE",
         secure: true,
+        format: "json",
         ...params,
       }),
 
@@ -805,6 +837,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -824,6 +857,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -832,27 +866,30 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags 系统管理-菜单管理
      * @name MenuFindList
-     * @summary 查询菜单列表
+     * @summary 获取菜单列表
      * @request GET:/system/menu
      * @secure
      */
     menuFindList: (params: RequestParams = {}) =>
       this.request<
         CommonResponseVo & {
-          data?: MenuVo[];
+          data?: {
+            list: MenuVo[];
+            /** @default 0 */
+            total: number;
+          };
         },
-        CommonResponseVo & {
-          data?: MenuVo[];
-        }
+        CommonResponseVo
       >({
         path: `/system/menu`,
         method: "GET",
         secure: true,
+        format: "json",
         ...params,
       }),
 
     /**
-     * No description
+     * @description [ 权限码：system:menu:update ]
      *
      * @tags 系统管理-菜单管理
      * @name MenuUpdate
@@ -867,6 +904,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
   };
@@ -890,14 +928,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         CommonResponseVo & {
           data?: string;
         },
-        CommonResponseVo & {
-          data?: string;
-        }
+        CommonResponseVo
       >({
         path: `/upload/file`,
         method: "POST",
         body: data,
         type: ContentType.FormData,
+        format: "json",
         ...params,
       }),
 
@@ -919,14 +956,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         CommonResponseVo & {
           data?: string;
         },
-        CommonResponseVo & {
-          data?: string;
-        }
+        CommonResponseVo
       >({
         path: `/upload/files`,
         method: "POST",
         body: data,
         type: ContentType.FormData,
+        format: "json",
         ...params,
       }),
 
@@ -951,14 +987,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         CommonResponseVo & {
           data?: string;
         },
-        CommonResponseVo & {
-          data?: string;
-        }
+        CommonResponseVo
       >({
         path: `/upload/fields`,
         method: "POST",
         body: data,
         type: ContentType.FormData,
+        format: "json",
         ...params,
       }),
   };

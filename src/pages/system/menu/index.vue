@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import type { CreateMenuDto, MenuVo } from '@/services';
-import AsyncIcon from '@/components/SubMenu/AsyncIcon.vue';
 import { useRequest } from '@/hooks';
 import { api } from '@/services';
-
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
+
+import { LakyAsyncIcon } from '@lakyjs/components-vue-layout';
 
 import { h } from 'vue';
 import MenuDrawer from './MenuDrawer.vue';
@@ -96,12 +96,12 @@ const treeTableData = computed(() => {
 });
 
 // const { isLoading, error, execute, state } = await api.system.menuFindList({ customOptions: { responseMode: 'reactive' } }) as unknown as ReactiveResponse<MenuVo[]>;
-const { isLoading, error, execute, state } = useRequest(api.system.menuFindList, []);
+const { isLoading, error, execute, state } = useRequest(api.system.menuFindList, { list: [], total: 0 });
 
 async function fetchData() {
   await execute();
   if (!error.value) {
-    tableData.value = state.value.data!;
+    tableData.value = state.value.data!.list;
   }
 }
 
@@ -145,7 +145,7 @@ function refresh() {
       <a-table :columns="columns" :data-source="treeTableData" :loading="isLoading">
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'icon'">
-            <async-icon :icon="text" />
+            <laky-async-icon :icon="text" />
           </template>
           <template v-if="column.dataIndex === 'operation'">
             <div class="editable-row-operations">

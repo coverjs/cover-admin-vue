@@ -25,6 +25,7 @@
   "agreeTip": "请同意隐私政策和条款",
   "goToLogin": "去登录",
   "passwordStrength": "使用 8 个或更多字符，混合字母、数字和符号",
+  "passwordLength": "密码长度为 {min}到{max} 个字符",
   "forgetPassword": "忘记密码?",
   "forgetPasswordSubtitle": "输入您的电子邮件，我们将向您发送重置密码的连接",
   "emailTip": "请输入邮箱",
