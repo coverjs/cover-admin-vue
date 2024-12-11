@@ -29,12 +29,12 @@ export interface AccountLoginVo {
 export interface AccountLoginDto {
   /**
    * 账号
-   * @example "admin"
+   * @pattern ^\w{5,12}$
    */
   username: string;
   /**
    * 密码
-   * @example "admin"
+   * @pattern ^[\w.]{5,16}$
    */
   password: string;
 }
@@ -68,9 +68,15 @@ export interface RoleVo {
    * @example "管理员"
    */
   description: string;
-  /** 创建时间 */
+  /**
+   * 创建时间
+   * @format date-time
+   */
   createdAt: string;
-  /** 更新日期 */
+  /**
+   * 更新日期
+   * @format date-time
+   */
   updatedAt: string;
 }
 
@@ -85,14 +91,24 @@ export interface ProfileVo {
   role: RoleVo;
   /** 是否启用 */
   enable: boolean;
-  /** 创建时间 */
+  /**
+   * 创建时间
+   * @format date-time
+   */
   createdAt: string;
-  /** 更新日期 */
+  /**
+   * 更新日期
+   * @format date-time
+   */
   updatedAt: string;
 }
 
 export interface UpdateProfileDto {
-  /** 昵称 */
+  /**
+   * 昵称
+   * @minLength 2
+   * @maxLength 6
+   */
   nickname?: string;
   /** 邮箱 */
   email?: string;
@@ -148,14 +164,24 @@ export interface MenuVo {
 }
 
 export interface CreateUserDto {
-  /** 用户账号 */
+  /**
+   * 账号
+   * @pattern ^\w{5,12}$
+   */
   username: string;
-  /** 密码 */
+  /**
+   * 密码
+   * @pattern ^[\w.]{5,16}$
+   */
   password: string;
-  /** 昵称 */
+  /**
+   * 昵称
+   * @minLength 2
+   * @maxLength 6
+   */
   nickname: string;
   /** 邮箱 */
-  email: string;
+  email?: string;
   /** 角色id */
   roleId: number;
   /** 是否启用 */
@@ -173,10 +199,18 @@ export interface UserInfoVo {
   role: RoleVo;
   /** 是否启用 */
   enable: boolean;
-  /** 创建时间 */
+  /**
+   * 创建时间
+   * @format date-time
+   */
   createdAt: string;
-  /** 更新日期 */
+  /**
+   * 更新日期
+   * @format date-time
+   */
   updatedAt: string;
+  /** 角色id */
+  roleId: number
 }
 
 export interface UpdateUserDto {
@@ -294,19 +328,6 @@ export interface UpdateMenuDto {
   type: "DIRECTORY" | "MENU" | "ACTION";
 }
 
-export interface CommonResponseVo {
-  /**
-   * 响应状态码
-   * @default 0
-   */
-  code: number;
-  /**
-   * 响应信息
-   * @default "ok"
-   */
-  msg: string;
-}
-
 import type { AxiosInstance, AxiosRequestConfig, HeadersDefaults, ResponseType } from "axios";
 import axios from "axios";
 import type { CustomRequestOptions } from "../types";
@@ -416,7 +437,7 @@ export class HttpClient<SecurityDataType = unknown> {
     format,
     body,
     ...params
-  }: FullRequestParams)=> {
+  }: FullRequestParams): Promise<T> => {
     const secureParams =
       ((typeof secure === "boolean" ? secure : this.secure) &&
         this.securityWorker &&
@@ -653,7 +674,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     userFindList: (
-      query: {
+      query?: {
         /**
          * 当前页码
          * @min 1
@@ -681,11 +702,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<
         CommonResponseVo & {
-          data?: UserInfoVo[];
+          data?: {
+            list: UserInfoVo[];
+            /** @default 0 */
+            total: number;
+          };
         },
-        CommonResponseVo & {
-          data?: UserInfoVo[];
-        }
+        CommonResponseVo
       >({
         path: `/system/user`,
         method: "GET",
@@ -696,7 +719,45 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * No description
+     * @description [ 权限码：system:user.delete ]
+     *
+     * @tags 系统管理-用户管理
+     * @name UserDeleteUser
+     * @summary 根据id删除用户
+     * @request DELETE:/system/user/{id}
+     * @secure
+     */
+    userDeleteUser: (id: number, params: RequestParams = {}) =>
+      this.request<CommonResponseVo, CommonResponseVo>({
+        path: `/system/user/${id}`,
+        method: "DELETE",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description [ 权限码：system:user:update ]
+     *
+     * @tags 系统管理-用户管理
+     * @name UserUpdateUser
+     * @summary 根据id修改用户
+     * @request PATCH:/system/user/{id}
+     * @secure
+     */
+    userUpdateUser: (id: number, data: UpdateUserDto, params: RequestParams = {}) =>
+      this.request<CommonResponseVo, CommonResponseVo>({
+        path: `/system/user/${id}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description [ 权限码：system:user:export ]
      *
      * @tags 系统管理-用户管理
      * @name UserExportJob
@@ -705,7 +766,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     userExportJob: (
-      query: {
+      query?: {
         /**
          * 当前页码
          * @min 1
@@ -718,16 +779,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
          * @example 10
          */
         pageSize?: number;
-        /** 用户账号 */
+        /** 用户名称 */
         username?: string;
         /** 昵称 */
-        nickname: string;
+        nickname?: string;
         /** 邮箱 */
-        email: string;
+        email?: string;
         /** 角色id */
-        roleId: number;
+        roleId?: number;
         /** 是否启用 */
-        enable: boolean;
+        enable?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -789,11 +850,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ) =>
       this.request<
         CommonResponseVo & {
-          data?: RoleVo[];
+          data?: {
+            list: RoleVo[];
+            /** @default 0 */
+            total: number;
+          };
         },
-        CommonResponseVo & {
-          data?: RoleVo[];
-        }
+        CommonResponseVo
       >({
         path: `/system/role`,
         method: "GET",

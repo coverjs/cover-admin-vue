@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { RoleVo } from '@/services';
+import type { RoleVo, UpdateUserDto } from '@/services';
 import type { ICreateUser } from './index.vue';
 import { useMessage, useRequest } from '@/hooks';
 import { api } from '@/services';
@@ -39,7 +39,7 @@ function handleClose() {
   formRef.value.resetFields();
 }
 
-function handleResponse(res: any, successMessage: string) {
+function handleResponse(res: any, successMessage?: string) {
   if (res.code === 0) {
     createNotify.success({
       message: successMessage,
@@ -47,6 +47,12 @@ function handleResponse(res: any, successMessage: string) {
     });
     open.value = false;
     emit('refresh');
+  }
+  else {
+    createNotify.error({
+      message: res.msg,
+      duration: 3,
+    });
   }
 }
 
@@ -56,19 +62,17 @@ async function handleSubmit() {
     const formData = JSON.parse(JSON.stringify(formState.value));
     if (props.type) {
       formData.password = crypto[props.hashType]?.(formData.password)?.toString();
-      const data = await api.system.userCreate(formData);
-      handleResponse(data, '新增成功');
+      const res = await api.system.userCreate(formData);
+      handleResponse(res, '新增成功');
     }
     else {
       const id = formData.id!;
-      // TODO 修改用户接口还没完成 waiting
-      return id;
-      // const { data: res } = await api.system.userUpdate(id, formData as unknown as UpdateRoleDto);
-      // handleResponse(res, '修改成功');
+      const res = await api.system.userUpdateUser(id, formData as unknown as UpdateUserDto);
+      handleResponse(res, '修改成功');
     }
   }
   catch (error: any) {
-    console.error(error);
+    handleResponse({ code: 1, msg: error.message });
   }
 }
 
@@ -118,7 +122,12 @@ watch(
       <a-form-item label="昵称" name="nickname" :rules="[{ required: true, message: '请输入昵称' }]">
         <a-input v-model:value="formState.nickname" />
       </a-form-item>
-      <a-form-item label="用户名" name="username" :rules="[{ required: true, message: '请输入用户名' }]">
+      <a-form-item
+        v-if="type"
+        label="用户名"
+        name="username"
+        :rules="[{ required: true, message: '请输入用户名' }]"
+      >
         <a-input v-model:value="formState.username" />
       </a-form-item>
       <a-form-item

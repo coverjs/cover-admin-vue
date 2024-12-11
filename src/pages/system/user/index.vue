@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import type { CreateUserDto, UserInfoVo } from '@/services';
+import type { CreateUserDto, UpdateUserDto, UserInfoVo } from '@/services';
 import type { FormInstance, TableColumnType } from 'ant-design-vue';
 import type { UnwrapRef } from 'vue';
-import { useRequest } from '@/hooks';
+import { useMessage, useRequest } from '@/hooks';
 import { api } from '@/services';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { h, ref } from 'vue';
@@ -11,13 +11,13 @@ import UserDrawer from './UserDrawer.vue';
 defineOptions({
   name: 'UserPage',
 });
-
+const { createNotify } = useMessage();
 const open = ref(false);
 const type = ref<boolean>(false); // 编辑 true | 新增 false
 const userList = shallowRef<UserInfoVo[]>([]);
 
 export type ICreateUser = CreateUserDto & { id?: number };
-export type IUserInfo = UserInfoVo & { password: string };
+export type IUserInfo = UserInfoVo & { password: string, id?: number };
 interface IQueryParam {
   pageNum: number
   pageSize: number
@@ -64,9 +64,31 @@ function showDrawer(state: boolean) {
   type.value = state;
 }
 
-function handleEnableOrDisableUser(user: IUserInfo) {
-  // TODO 启用或禁用用户 后端接口还没写
-  return user;
+async function handleEnableOrDisableUser(user: IUserInfo) {
+  const updateUser = JSON.parse(JSON.stringify(user));
+  delete updateUser.role;
+  try {
+    const res = await api.system.userUpdateUser(updateUser.id!, updateUser as unknown as UpdateUserDto);
+    if (res.code === 0) {
+      createNotify.success({
+        message: '修改成功',
+        duration: 3,
+      });
+      getUserList();
+    }
+    else {
+      createNotify.error({
+        message: res.msg,
+        duration: 3,
+      });
+    }
+  }
+  catch (e: any) {
+    createNotify.error({
+      message: e.message,
+      duration: 3,
+    });
+  }
 }
 
 // 获取用户列表
@@ -93,14 +115,25 @@ watch(queryParam, async () => {
 
 function handleEdit(user: IUserInfo) {
   const { createdAt, updatedAt, role, ...rest } = user;
-  const roleId = role?.id || 0;
-  formData.value = { ...rest, roleId };
+  formData.value = { ...rest };
   showDrawer(false);
 }
 
-function handleDelete(id: number) {
-  // TODO 删除用户
-  return id;
+async function handleDelete(id: number) {
+  const data = await api.system.userDeleteUser(id);
+  if (data.code === 0) {
+    createNotify.success({
+      message: '删除成功',
+      duration: 3,
+    });
+    getUserList();
+  }
+  else {
+    createNotify.error({
+      message: data.msg,
+      duration: 3,
+    });
+  }
 }
 
 onMounted(() => {
@@ -165,10 +198,10 @@ function resetForm() {
           <a-form-item>
             <a-space>
               <a-button @click="resetForm">
-                重置
+                {{ $t('common.reset') }}
               </a-button>
               <a-button type="primary" @click="handleFinish">
-                查询
+                {{ $t('common.search') }}
               </a-button>
             </a-space>
           </a-form-item>
