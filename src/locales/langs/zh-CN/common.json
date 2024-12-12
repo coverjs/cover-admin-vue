@@ -10,5 +10,7 @@
   "confirmDelay": "确认({s})",
   "noData": "暂无数据",
   "refresh": "刷新",
-  "loadingMenu": "加载菜单中"
+  "loadingMenu": "加载菜单中",
+  "reset": "重置",
+  "search": "查询"
 }
