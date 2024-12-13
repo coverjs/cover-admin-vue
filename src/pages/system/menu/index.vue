@@ -142,7 +142,12 @@ function refresh() {
           {{ $t("pages.system.menu.editMenu") }}
         </a-button>
       </template>
-      <a-table :columns="columns" :data-source="treeTableData" :loading="isLoading">
+      <a-table
+        :columns="columns"
+        :data-source="treeTableData"
+        :loading="isLoading"
+        :pagination="false"
+      >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'icon'">
             <laky-async-icon :icon="text" />
