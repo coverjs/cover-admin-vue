@@ -209,6 +209,8 @@ export interface UserInfoVo {
    * @format date-time
    */
   updatedAt: string;
+  /** 角色id */
+  roleId: number
 }
 
 export interface UpdateUserDto {

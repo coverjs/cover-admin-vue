@@ -57,7 +57,6 @@ async function login() {
     </a-typography>
     <login-form
       ref="loginForm"
-      hash-type="RIPEMD160"
       :loading="loginLoading"
       :initial-user-hash="initialUserHash"
       secure-pwd
