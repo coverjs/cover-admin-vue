@@ -109,8 +109,8 @@ async function fetchTreeData() {
     :root-style="{ color: 'blue' }"
     :title="
       type
-        ? $t('pages.system.menu.createMenu')
-        : $t('pages.system.menu.createMenu')
+        ? $t('pages.system.role.createRole')
+        : $t('pages.system.role.editRole')
     "
     placement="right"
     destroy-on-close

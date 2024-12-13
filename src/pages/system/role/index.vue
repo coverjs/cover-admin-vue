@@ -139,7 +139,7 @@ function resetForm() {
 
 <template>
   <div>
-    <a-card title="菜单查询" class="mb-[24px]">
+    <a-card :title="$t('pages.system.menuQuery')" class="mb-[24px]">
       <a-form
         ref="formRef"
         layout="inline"
@@ -169,10 +169,10 @@ function resetForm() {
       </a-form>
     </a-card>
 
-    <a-card :title="$t('pages.system.menu.menuList')">
+    <a-card :title="$t('pages.system.role.roleList')">
       <template #extra>
         <a-button type="primary" @click="handleAdd">
-          {{ $t("pages.system.menu.editMenu") }}
+          {{ $t("pages.system.role.createRole") }}
         </a-button>
       </template>
       <a-table

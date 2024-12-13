@@ -1,5 +1,7 @@
 {
   "system": {
+    "menuQuery": "Query",
+
     "menu": {
       "menuList": "Menu List",
       "editMenu": "Edit Menu",
@@ -9,6 +11,11 @@
       "userList": "User List",
       "createUser": "Create User",
       "editUser": "Edit User"
+    },
+    "role": {
+      "roleList": "Role List",
+      "createRole": "Create Role",
+      "editRole": "Edit Role"
     }
   }
 }

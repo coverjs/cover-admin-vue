@@ -188,7 +188,7 @@ function resetForm() {
 
 <template>
   <div class="user-management">
-    <a-card title="菜单查询" class="mb-[24px]">
+    <a-card :title="$t('pages.system.menuQuery')" class="mb-[24px]">
       <a-form
         ref="formRef"
         layout="inline"
@@ -223,7 +223,7 @@ function resetForm() {
       </a-form>
     </a-card>
 
-    <a-card title="用户管理">
+    <a-card :title="$t('pages.system.user.userList')">
       <template #extra>
         <a-button type="primary" @click="handleAddUser">
           {{ $t("pages.system.user.createUser") }}

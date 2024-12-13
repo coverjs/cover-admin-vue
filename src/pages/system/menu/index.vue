@@ -132,14 +132,14 @@ function refresh() {
 
 <template>
   <div>
-    <a-card title="菜单查询" class="mb-[24px]">
+    <a-card :title="$t('pages.system.menuQuery')" class="mb-[24px]">
       <!-- TODO 查询 -->
     </a-card>
 
     <a-card :title="$t('pages.system.menu.menuList')">
       <template #extra>
         <a-button type="primary" @click="handleAdd">
-          {{ $t("pages.system.menu.editMenu") }}
+          {{ $t("pages.system.menu.createMenu") }}
         </a-button>
       </template>
       <a-table
