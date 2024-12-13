@@ -87,7 +87,6 @@ watch(queryParam, async () => {
 async function handleDelete(_id: number) {
   const res = await api.system.roleRemove(_id);
   if (res.code === 0) {
-    // TODO 删除逻辑
     fetchData();
   }
 }

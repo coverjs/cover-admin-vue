@@ -2,6 +2,7 @@
 import type { CreateRoleDto, MenuVo } from '@/services';
 import type { CreateRoleDtoWithId } from './index.vue';
 import { useMessage, useRequest } from '@/hooks';
+import { MenuMap } from '@/pages/system/menu/utils';
 import { api } from '@/services';
 
 interface Props {
@@ -33,10 +34,8 @@ function onClose() {
 
 async function onSubmit() {
   await formRef.value?.validate();
-
   try {
     const formData = toRaw(formState.value);
-    // TODO  角色菜单问题
     if (props.type) {
       const res = await api.system.roleCreate(formData as unknown as CreateRoleDto);
       handleResponse(res, '新增成功');
@@ -82,7 +81,7 @@ function generateTreeDataWithKey(data: MenuVo[]): MenuVo[] {
     return {
       ...item,
       key: item.id,
-      children: item.children && item.children[0].type !== 'ACTION'
+      children: item.children
         ? generateTreeDataWithKey(item.children)
         : void 0,
     };
@@ -149,8 +148,8 @@ async function fetchTreeData() {
           checkable
           :tree-data="treeTableData"
         >
-          <template #title="{ name }">
-            {{ name }}
+          <template #title="{ name, type: t }">
+            {{ name }} -- {{ MenuMap[t] }}
           </template>
         </a-tree>
       </a-form-item>
