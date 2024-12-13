@@ -7,8 +7,7 @@ import { genStorageKey } from '@/utils';
 import { LockOutlined, UserOutlined } from '@ant-design/icons-vue';
 import crypto from 'crypto-js';
 
-import { cloneDeep, isEqual } from 'lodash-es';
-import objHash from 'object-hash';
+import { cloneDeep } from 'lodash-es';
 
 interface FormData {
   username: string
@@ -60,10 +59,7 @@ const rememberMe = ref(rememberMeInStorage.value ?? false);
 
 function getFieldsValue(nameList?: InternalNamePath[] | true) {
   const result = cloneDeep(formRef.value?.getFieldsValue(nameList));
-  const shouldEncryptPwd
-    = !isEqual(objHash(formData), props.initialUserHash ?? '')
-    && props.securePwd
-    && result?.password;
+  const shouldEncryptPwd = props.securePwd && result?.password;
 
   if (shouldEncryptPwd) {
     result.password = crypto[props.hashType]?.(result.password)?.toString();

@@ -10,5 +10,7 @@
   "confirmDelay": "Comfirm({s})",
   "noData": "No Data",
   "refresh": "Refresh",
-  "loadingMenu": "Loading Menu"
+  "loadingMenu": "Loading Menu",
+  "reset": "Reset",
+  "search": "Search"
 }

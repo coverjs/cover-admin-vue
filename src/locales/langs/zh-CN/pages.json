@@ -4,6 +4,11 @@
       "menuList": "菜单列表",
       "editMenu": "编辑菜单",
       "createMenu": "创建菜单"
+    },
+    "user": {
+      "userList": "用户列表",
+      "createUser": "创建用户",
+      "editUser": "编辑用户"
     }
   }
 }
