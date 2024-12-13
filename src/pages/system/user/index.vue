@@ -44,6 +44,12 @@ const queryParam = ref<Partial<IQueryParam>>({
 const total = ref(0);
 const formData = ref<ICreateUser>(defaultFormData);
 
+const pagination = computed(() => ({
+  total: total.value,
+  current: queryParam.value.pageNum,
+  pageSize: queryParam.value.pageSize
+}));
+
 // 设置表格列
 const columns: TableColumnType<IUserInfo>[] = [
   { title: '用户名', dataIndex: 'username', key: 'username' },
@@ -101,6 +107,14 @@ async function getUserList() {
     userList.value = state.value.data!.list;
     total.value = state.value.data!.total;
   }
+}
+
+function handleTableChange(pagination: any) {
+  queryParam.value = {
+    ...queryParam.value,
+    pageNum: pagination.current,
+    pageSize: pagination.pageSize,
+  };
 }
 
 watch(queryParam, async () => {
@@ -216,7 +230,13 @@ function resetForm() {
         </a-button>
       </template>
 
-      <a-table :columns="columns" :data-source="userList" :loading="isLoading">
+      <a-table
+        :columns="columns"
+        :data-source="userList"
+        :loading="isLoading"
+        :pagination="pagination"
+        @change="handleTableChange"
+      >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'icon'">
             <async-icon :icon="text" />
@@ -244,9 +264,6 @@ function resetForm() {
           </template>
         </template>
       </a-table>
-      <div class="flex m-auto">
-        <a-pagination v-model:current="queryParam.pageNum" v-model:page-size="queryParam.pageSize" :total />
-      </div>
     </a-card>
 
     <user-drawer
