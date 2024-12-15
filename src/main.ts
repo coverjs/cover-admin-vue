@@ -1,6 +1,7 @@
+import type { App as VueApp } from 'vue';
 import { createApp } from 'vue';
-
 import App from './App.vue';
+import { setupAccessDirective } from './directive';
 import { setupLocale } from './locales';
 import { setupRouter } from './router';
 import { setupStore } from './store';
@@ -21,8 +22,13 @@ function bootstrap() {
   setupStore(app, { namespace });
 
   setupRouter(app);
+  setupDirective(app);
 
   app.mount('#app');
+}
+
+function setupDirective(app: VueApp) {
+  setupAccessDirective(app);
 }
 
 bootstrap();

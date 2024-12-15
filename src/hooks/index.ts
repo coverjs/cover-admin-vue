@@ -1,3 +1,4 @@
+export * from './useAccess';
 export * from './useAntdToken';
 export * from './useIcon';
 export * from './useLogoutConfirm';

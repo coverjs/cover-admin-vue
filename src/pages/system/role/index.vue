@@ -169,11 +169,12 @@ function resetForm() {
 
     <a-card :title="$t('pages.system.role.roleList')">
       <template #extra>
-        <a-button type="primary" @click="handleAdd">
+        <a-button v-access="['system:role:add']" type="primary" @click="handleAdd">
           {{ $t("pages.system.role.createRole") }}
         </a-button>
       </template>
       <a-table
+        v-access="['system:role:list']"
         :columns="columns"
         :data-source="tableData"
         :loading="isLoading"
@@ -184,13 +185,23 @@ function resetForm() {
           <template v-if="column.dataIndex === 'operation'">
             <div class="editable-row-operations">
               <a-space>
-                <a-button type="link" :icon="h(EditOutlined)" @click="handleEdit(record)" />
+                <a-button
+                  v-access="['system:role:update']"
+                  type="link"
+                  :icon="h(EditOutlined)"
+                  @click="handleEdit(record)"
+                />
                 <a-popconfirm
                   v-if="tableData.length"
                   :title="$t('fallback.sureDelete')"
                   @confirm="handleDelete(record.id)"
                 >
-                  <a-button type="link" danger :icon="h(DeleteOutlined)" />
+                  <a-button
+                    v-access="['system:role:delete']"
+                    type="link"
+                    danger
+                    :icon="h(DeleteOutlined)"
+                  />
                 </a-popconfirm>
               </a-space>
             </div>

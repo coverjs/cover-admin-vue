@@ -8,6 +8,7 @@ import staticRoutes from '@/router/staticRoutes.ts';
 import { api } from '@/services';
 import { defaultLayoutSetting } from '@config';
 import { theme as antdTheme } from 'ant-design-vue/es';
+import { useUserStore } from './user';
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
@@ -102,6 +103,27 @@ export const useAppStore = defineStore('app', () => {
   const menuData = shallowRef<MenuData>([]);
 
   /**
+   * 将角色信息存入到 userStore 中
+   * @param data 树形结构的菜单数据
+   */
+  function getRolesToStore(data: any) {
+    const roles: string[] = [];
+    const userStore = useUserStore();
+    const getRoles = (data: any) => {
+      data.forEach((item: any) => {
+        if (item.code) {
+          roles.push(item.code);
+        }
+        if (item.children) {
+          getRoles(item.children);
+        }
+      });
+    };
+    getRoles(data);
+    userStore.setRoles(roles);
+  }
+
+  /**
    * 异步获取菜单数据并生成对应的路由和菜单
    *
    * 本函数通过调用API获取当前用户的菜单信息，然后根据这些信息生成应用中的菜单和路由
@@ -111,6 +133,8 @@ export const useAppStore = defineStore('app', () => {
    */
   async function getMenuData() {
     const res = await api.profile.profileGetMenus();
+    // 同时收集 code 存入到 userStore 中 roles
+    getRolesToStore(res.data);
     return generateMenuAndRoutes(res.data);
   }
 
