@@ -237,10 +237,7 @@ function resetForm() {
         :pagination="pagination"
         @change="handleTableChange"
       >
-        <template #bodyCell="{ column, text, record }">
-          <template v-if="column.dataIndex === 'icon'">
-            <async-icon :icon="text" />
-          </template>
+        <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex === 'role'">
             {{ record.role?.name }}
           </template>
