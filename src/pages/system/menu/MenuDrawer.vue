@@ -3,6 +3,7 @@ import type { CreateMenuDtoWithId } from '@/pages/system/menu/index.vue';
 import type { MenuVo } from '@/services';
 import { useMessage } from '@/hooks';
 import { api } from '@/services';
+import { LakySvgIcon } from '@lakyjs/components-vue-layout';
 import { AntdIcons } from './utils';
 
 interface Props {
@@ -183,7 +184,7 @@ function handleIconSelected(icon: string) {
                     class="flex-center h-[32px] w-[32px] rounded-md cursor-pointer hover:bg-[var(--hover-color)]"
                     @click="handleIconSelected(item)"
                   >
-                    <svg-icon :name="item" class="text-[var(--text-color)]" />
+                    <laky-svg-icon :name="item" class="text-[var(--text-color)]" />
                   </div>
                 </div>
                 <div class="flex-center mt-2">

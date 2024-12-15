@@ -7,7 +7,6 @@ import { useRequest } from '@/hooks';
 import { api } from '@/services';
 
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { LakyAsyncIcon } from '@lakyjs/components-vue-layout';
 import { h } from 'vue';
 import MenuDrawer from './RoleDrawer.vue';
 
@@ -181,10 +180,7 @@ function resetForm() {
         :pagination="pagination"
         @change="handleTableChange"
       >
-        <template #bodyCell="{ column, text, record }">
-          <template v-if="column.dataIndex === 'icon'">
-            <laky-async-icon :icon="text" />
-          </template>
+        <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex === 'operation'">
             <div class="editable-row-operations">
               <a-space>

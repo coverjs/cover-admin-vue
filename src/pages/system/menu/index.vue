@@ -3,7 +3,7 @@ import type { CreateMenuDto, MenuVo } from '@/services';
 import { useRequest } from '@/hooks';
 import { api } from '@/services';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-
+import { LakySvgIcon } from '@lakyjs/components-vue-layout';
 import { h } from 'vue';
 import MenuDrawer from './MenuDrawer.vue';
 
@@ -148,7 +148,7 @@ function refresh() {
       >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'icon'">
-            <svg-icon :name="text" />
+            <laky-svg-icon :name="text" />
           </template>
           <template v-if="column.dataIndex === 'operation'">
             <div class="editable-row-operations">
