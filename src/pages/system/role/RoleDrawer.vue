@@ -97,6 +97,11 @@ async function fetchTreeData() {
     tableData.value = state.value.data!.list;
   }
 }
+
+function onCheck(checkedKeys: string[], info: any) {
+  const checked = [...checkedKeys, ...info.halfCheckedKeys];
+  formState.value.menuIds = checked;
+}
 </script>
 
 <template>
@@ -141,12 +146,11 @@ async function fetchTreeData() {
 
       <a-form-item
         label="菜单分配"
-        name="xxx"
       >
         <a-tree
-          v-model:checked-keys="formState.menuIds"
           checkable
           :tree-data="treeTableData"
+          @check="onCheck"
         >
           <template #title="{ name, type: t }">
             {{ name }} -- {{ MenuMap[t] }}
