@@ -3,6 +3,7 @@ import type { CreateMenuDtoWithId } from '@/pages/system/menu/index.vue';
 import type { MenuVo } from '@/services';
 import { useMessage } from '@/hooks';
 import { api } from '@/services';
+import { AntdIcons } from './utils';
 
 interface Props {
   type: boolean
@@ -72,6 +73,22 @@ watch(
   },
   { immediate: true },
 );
+
+// --------------- 图标 picker ----------------
+const isDark = useDark();
+
+// 获取 背景颜色 --bg-color 的值
+const bgColor = computed(() => {
+  return isDark.value ? 'rgb(36, 37, 37)' : '#fff';
+});
+const page = ref(1);
+const icons = computed(() => {
+  return AntdIcons.icons.slice((page.value - 1) * 25, page.value * 25);
+});
+
+function handleIconSelected(icon: string) {
+  formState.value.icon = icon;
+}
 </script>
 
 <template>
@@ -81,10 +98,9 @@ watch(
     class="custom-class"
     root-class-name="root-class-name"
     :root-style="{ color: 'blue' }"
-    :title="
-      type
-        ? $t('pages.system.menu.createMenu')
-        : $t('pages.system.menu.editMenu')
+    :title="type
+      ? $t('pages.system.menu.createMenu')
+      : $t('pages.system.menu.editMenu')
     "
     placement="right"
     destroy-on-close
@@ -101,11 +117,7 @@ watch(
     >
       <a-row>
         <a-col :lg="12" :md="24">
-          <a-form-item
-            label="菜单类型"
-            name="type"
-            :rules="[{ required: true, message: '请选择菜单类型!' }]"
-          >
+          <a-form-item label="菜单类型" name="type" :rules="[{ required: true, message: '请选择菜单类型!' }]">
             <a-radio-group v-model:value="formState.type">
               <a-radio-button value="DIRECTORY">
                 目录
@@ -122,11 +134,7 @@ watch(
       </a-row>
       <a-row>
         <a-col :lg="12" :md="24">
-          <a-form-item
-            label="菜单名称"
-            name="name"
-            :rules="[{ required: true, message: '输入菜单名称!' }]"
-          >
+          <a-form-item label="菜单名称" name="name" :rules="[{ required: true, message: '输入菜单名称!' }]">
             <a-input v-model:value="formState.name" />
           </a-form-item>
         </a-col>
@@ -148,11 +156,7 @@ watch(
           </a-form-item>
         </a-col>
         <a-col :lg="12" :md="24">
-          <a-form-item
-            label="排序"
-            name="sort"
-            :rules="[{ required: true, message: '输入排序!' }]"
-          >
+          <a-form-item label="排序" name="sort" :rules="[{ required: true, message: '输入排序!' }]">
             <a-input v-model:value="formState.sort" />
           </a-form-item>
         </a-col>
@@ -165,7 +169,44 @@ watch(
 
         <a-col v-if="formState.type !== 'ACTION'" :lg="12" :md="24">
           <a-form-item label="图标" name="icon">
-            <a-input v-model:value="formState.icon" />
+            <a-tooltip
+              placement="bottomRight"
+              trigger="click"
+              :color="bgColor"
+            >
+              <template #title>
+                <!--  7x7 -->
+                <div class="w-[250px] grid  grid-cols-5 grid-rows-5 gap-2">
+                  <div
+                    v-for="item in icons"
+                    :key="item"
+                    class="flex-center h-[32px] w-[32px] rounded-md cursor-pointer hover:bg-[var(--hover-color)]"
+                    @click="handleIconSelected(item)"
+                  >
+                    <svg-icon :name="item" class="text-[var(--text-color)]" />
+                  </div>
+                </div>
+                <div class="flex-center mt-2">
+                  <a-pagination
+                    simple
+                    :current="page"
+                    :default-page-size="25"
+                    :total="AntdIcons.icons.length"
+                    :show-size-changer="false"
+                    size="small"
+                    responsive
+                    @change="page = $event"
+                  />
+                </div>
+              </template>
+              <div class="icon-input">
+                <a-input v-model:value="formState.icon" class="cursor-pointer">
+                  <template #addonAfter>
+                    <div class="i-ant-design:appstore-outlined text-base" />
+                  </template>
+                </a-input>
+              </div>
+            </a-tooltip>
           </a-form-item>
         </a-col>
         <a-col v-if="formState.type !== 'ACTION'" :lg="12" :md="24">
@@ -175,11 +216,7 @@ watch(
         </a-col>
 
         <a-col :lg="12" :md="24">
-          <a-form-item
-            label="权限标识"
-            name="code"
-            :rules="[{ required: true, message: '输入权限标识!' }]"
-          >
+          <a-form-item label="权限标识" name="code" :rules="[{ required: true, message: '输入权限标识!' }]">
             <a-input v-model:value="formState.code" />
           </a-form-item>
         </a-col>
@@ -200,3 +237,11 @@ watch(
     </template>
   </a-drawer>
 </template>
+
+<style scoped lang="scss">
+.icon-input{
+  :deep(.ant-input){
+    cursor: pointer;
+  }
+}
+</style>

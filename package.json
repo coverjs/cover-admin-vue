@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.9.2",
-    "@iconify-json/mdi": "^1.2.1",
+    "@iconify-json/ant-design": "^1.2.3",
     "@lakyjs/components-vue-hooks": "workspace:*",
     "@lakyjs/components-vue-layout": "workspace:*",
     "@lakyjs/components-vue-utils": "workspace:*",
