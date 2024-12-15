@@ -3,9 +3,7 @@ import type { CreateMenuDto, MenuVo } from '@/services';
 import { useRequest } from '@/hooks';
 import { api } from '@/services';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-
-import { LakyAsyncIcon } from '@lakyjs/components-vue-layout';
-
+import { LakySvgIcon } from '@lakyjs/components-vue-layout';
 import { h } from 'vue';
 import MenuDrawer from './MenuDrawer.vue';
 
@@ -132,20 +130,25 @@ function refresh() {
 
 <template>
   <div>
-    <a-card title="菜单查询" class="mb-[24px]">
+    <a-card :title="$t('pages.system.menuQuery')" class="mb-[24px]">
       <!-- TODO 查询 -->
     </a-card>
 
     <a-card :title="$t('pages.system.menu.menuList')">
       <template #extra>
         <a-button type="primary" @click="handleAdd">
-          {{ $t("pages.system.menu.editMenu") }}
+          {{ $t("pages.system.menu.createMenu") }}
         </a-button>
       </template>
-      <a-table :columns="columns" :data-source="treeTableData" :loading="isLoading">
+      <a-table
+        :columns="columns"
+        :data-source="treeTableData"
+        :loading="isLoading"
+        :pagination="false"
+      >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'icon'">
-            <laky-async-icon :icon="text" />
+            <laky-svg-icon :name="text" />
           </template>
           <template v-if="column.dataIndex === 'operation'">
             <div class="editable-row-operations">

@@ -4,13 +4,14 @@ import transformerDirectives from '@unocss/transformer-directives';
 // 为 UnoCSS 启用 Windi CSS 的 变体组特性。
 import transformerVariantGroup from '@unocss/transformer-variant-group';
 import { defineConfig, presetUno } from 'unocss';
+import { icons } from './src/pages/system/menu/utils';
 
 export default defineConfig({
   presets: [
     presetIcons({
       warn: true,
       collections: {
-        mdi: () => import('@iconify-json/mdi/icons.json').then(i => i.default),
+        'ant-design': () => import('@iconify-json/ant-design/icons.json').then(i => i.default),
       }
     }),
     presetUno(),
@@ -96,4 +97,5 @@ export default defineConfig({
     transformerDirectives(),
     transformerVariantGroup(),
   ],
+  safelist: icons
 });

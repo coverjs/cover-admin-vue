@@ -1,5 +1,6 @@
 {
   "system": {
+    "menuQuery": "查询",
     "menu": {
       "menuList": "菜单列表",
       "editMenu": "编辑菜单",
@@ -9,6 +10,11 @@
       "userList": "用户列表",
       "createUser": "创建用户",
       "editUser": "编辑用户"
+    },
+    "role": {
+      "roleList": "角色列表",
+      "createRole": "创建角色",
+      "editRole": "编辑角色"
     }
   }
 }

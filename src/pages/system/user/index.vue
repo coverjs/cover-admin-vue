@@ -44,6 +44,12 @@ const queryParam = ref<Partial<IQueryParam>>({
 const total = ref(0);
 const formData = ref<ICreateUser>(defaultFormData);
 
+const pagination = computed(() => ({
+  total: total.value,
+  current: queryParam.value.pageNum,
+  pageSize: queryParam.value.pageSize
+}));
+
 // 设置表格列
 const columns: TableColumnType<IUserInfo>[] = [
   { title: '用户名', dataIndex: 'username', key: 'username' },
@@ -93,7 +99,7 @@ async function handleEnableOrDisableUser(user: IUserInfo) {
 
 // 获取用户列表
 // const { isLoading, error, execute, state } = await api.system.userFindList(toRaw(queryParam.value), { customOptions: { responseMode: 'reactive' } }) as unknown as ReactiveResponse<UserInfoVo[]>;
-const { isLoading, error, execute, state } = useRequest(() => api.system.userFindList(toRaw(queryParam.value)), {} as any);
+const { isLoading, error, execute, state } = useRequest(() => api.system.userFindList(toRaw(queryParam.value)), { list: [], total: 0 });
 
 async function getUserList() {
   await execute();
@@ -101,6 +107,14 @@ async function getUserList() {
     userList.value = state.value.data!.list;
     total.value = state.value.data!.total;
   }
+}
+
+function handleTableChange(pagination: any) {
+  queryParam.value = {
+    ...queryParam.value,
+    pageNum: pagination.current,
+    pageSize: pagination.pageSize,
+  };
 }
 
 watch(queryParam, async () => {
@@ -174,7 +188,7 @@ function resetForm() {
 
 <template>
   <div class="user-management">
-    <a-card title="菜单查询" class="mb-[24px]">
+    <a-card :title="$t('pages.system.menuQuery')" class="mb-[24px]">
       <a-form
         ref="formRef"
         layout="inline"
@@ -209,18 +223,21 @@ function resetForm() {
       </a-form>
     </a-card>
 
-    <a-card title="用户管理">
+    <a-card :title="$t('pages.system.user.userList')">
       <template #extra>
         <a-button type="primary" @click="handleAddUser">
           {{ $t("pages.system.user.createUser") }}
         </a-button>
       </template>
 
-      <a-table :columns="columns" :data-source="userList" :loading="isLoading">
-        <template #bodyCell="{ column, text, record }">
-          <template v-if="column.dataIndex === 'icon'">
-            <async-icon :icon="text" />
-          </template>
+      <a-table
+        :columns="columns"
+        :data-source="userList"
+        :loading="isLoading"
+        :pagination="pagination"
+        @change="handleTableChange"
+      >
+        <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex === 'role'">
             {{ record.role?.name }}
           </template>
@@ -244,9 +261,6 @@ function resetForm() {
           </template>
         </template>
       </a-table>
-      <div class="flex m-auto">
-        <a-pagination v-model:current="queryParam.pageNum" v-model:page-size="queryParam.pageSize" :total />
-      </div>
     </a-card>
 
     <user-drawer

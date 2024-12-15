@@ -2,8 +2,8 @@
 import type { MenuData, MenuDataItem } from './types';
 import { Menu as AntMenu, MenuItem as AntMenuItem, SubMenu } from 'ant-design-vue';
 import { RouterLink, useRoute } from 'vue-router';
-import AsyncIcon from '../AsyncIcon.vue';
 import { type GlobalConfig, useConfig } from '../ConfigProvider';
+import SvgIcon from '../SvgIcon.vue';
 
 defineOptions({ name: 'SiderMenu' });
 defineProps<{
@@ -19,7 +19,7 @@ function MenuItem(item: MenuDataItem) {
     return (
       <SubMenu
         key={item.path}
-        icon={item.icon ? <AsyncIcon icon={item.icon} /> : void 0}
+        icon={item.icon ? <SvgIcon name={item.icon} /> : void 0}
         title={t(item.locale!) || item.name}
       >
         {
@@ -31,7 +31,7 @@ function MenuItem(item: MenuDataItem) {
   return (
     <AntMenuItem
       key={item.path}
-      icon={item.icon ? <AsyncIcon icon={item.icon} /> : void 0}
+      icon={item.icon ? <SvgIcon name={item.icon} /> : void 0}
     >
       <RouterLink to={item.path}>{t(item.locale!) || item.name}</RouterLink>
     </AntMenuItem>
