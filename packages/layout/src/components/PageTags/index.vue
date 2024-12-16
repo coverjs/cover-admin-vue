@@ -171,6 +171,8 @@ function genTagTitle(tag: PageTagItem) {
 }
 .tags-leave-active {
   position: absolute;
-  display: none;
+}
+.tags-enter-from, .tags-leave-to {
+  opacity: 0;
 }
 </style>
