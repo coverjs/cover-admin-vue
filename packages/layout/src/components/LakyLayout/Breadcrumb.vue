@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { DownOutlined, LoadingOutlined } from '@ant-design/icons-vue';
-import { Dropdown as AntDropdown, theme } from 'ant-design-vue';
+import { Dropdown as AntDropdown, Menu as AntMenu, MenuItem as AntMenuItem, theme } from 'ant-design-vue';
 import { isEmpty, last, split } from 'lodash-es';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { type RouteRecordRaw, useRoute } from 'vue-router';
 import { useConfig } from '../ConfigProvider';
 import { REDIRECT_NAME } from '../PageRedirect';
@@ -15,14 +15,12 @@ const route = useRoute();
 const config = useConfig();
 const { token } = theme.useToken();
 
-const textColor = ref(token.value.colorText);
-const textDisabledColor = ref(token.value.colorTextDisabled);
+const textColor = computed(() => token.value.colorText);
+const textDisabledColor = computed(() => token.value.colorTextDisabled);
 
-const showBreadcrumb = computed(() => route.name !== REDIRECT_NAME as unknown);
+const showLoading = computed(() => route.name === REDIRECT_NAME as unknown);
 
-const breadcrumbList = computed(() =>
-  route.matched.filter(item => item.meta?.title),
-);
+const breadcrumbList = computed(() => route.matched.filter(item => item.meta?.title));
 
 function genMenuItems(children: RouteRecordRaw[]) {
   return children.map(item => ({
@@ -51,13 +49,11 @@ function isLastItem(idx: number) {
   <div class="breadcrumb-container">
     <ol class="breadcrumb">
       <transition-group name="breadcrumb">
-        <loading-outlined v-if="!showBreadcrumb" />
-        <template
-          v-for="(item, index) in breadcrumbList"
-          :key="item.path"
-        >
+        <loading-outlined v-if="showLoading" />
+        <template v-else>
           <li
-            v-show="showBreadcrumb"
+            v-for="(item, index) in breadcrumbList"
+            :key="item.path"
             class="breadcrumb-item"
             :class="{ 'breadcrumb-item-last': isLastItem(index) }"
           >
@@ -70,15 +66,15 @@ function isLastItem(idx: number) {
                 <down-outlined v-if="item.children.length > 1" style="margin-inline-start: 4px;width: 12px;height: 12px;" />
               </span>
               <template v-if="item.children.length > 1" #overlay>
-                <a-menu :selected-keys="[$route.path]">
-                  <a-menu-item
+                <ant-menu :selected-keys="[$route.path]">
+                  <ant-menu-item
                     v-for="menuItem in genMenuItems(item.children)"
                     :key="menuItem.key"
                     @click="() => $router.push(menuItem.key)"
                   >
                     {{ menuItem.title }}
-                  </a-menu-item>
-                </a-menu>
+                  </ant-menu-item>
+                </ant-menu>
               </template>
             </ant-dropdown>
             <span v-if="!isLastItem(index)" style="margin-inline:8px;">/</span>
