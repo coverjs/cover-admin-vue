@@ -50,6 +50,5 @@ declare module 'vue' {
     ScreenfullToggle: typeof import('./src/components/ScreenfullToggle.vue')['default']
     SettingBlock: typeof import('./src/components/SettingDrawer/SettingBlock.vue')['default']
     SettingDrawer: typeof import('./src/components/SettingDrawer/index.vue')['default']
-    SvgIcon: typeof import('./src/components/SvgIcon.vue')['default']
   }
 }

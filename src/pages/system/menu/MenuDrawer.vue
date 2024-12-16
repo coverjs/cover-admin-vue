@@ -29,11 +29,6 @@ const formRef = ref();
 const formState = ref<CreateMenuDtoWithId>(toRaw(props.formData));
 const { createNotify } = useMessage();
 
-function onClose() {
-  open.value = false;
-  formRef.value.resetFields();
-}
-
 async function onSubmit() {
   try {
     await formRef.value?.validate();
@@ -89,6 +84,13 @@ const icons = computed(() => {
 
 function handleIconSelected(icon: string) {
   formState.value.icon = icon;
+}
+
+// -------------- 关闭抽屉 --------------
+function onClose() {
+  open.value = false;
+  formRef.value.resetFields();
+  page.value = 1;
 }
 </script>
 
@@ -158,7 +160,7 @@ function handleIconSelected(icon: string) {
         </a-col>
         <a-col :lg="12" :md="24">
           <a-form-item label="排序" name="sort" :rules="[{ required: true, message: '输入排序!' }]">
-            <a-input v-model:value="formState.sort" />
+            <a-input v-model:value.number="formState.sort" />
           </a-form-item>
         </a-col>
 

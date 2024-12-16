@@ -12,6 +12,7 @@ export const useUserStore = defineStore(
   'user',
   () => {
     const token = ref<string | void>('');
+    const roles = ref<string[]>([]);
     const userInfo = reactive<Partial<UserInfoVo>>({});
     const appStore = useAppStore();
 
@@ -35,6 +36,10 @@ export const useUserStore = defineStore(
 
     function setToken(value: string | void) {
       token.value = value;
+    }
+
+    function setRoles(value: string[]) {
+      roles.value = value;
     }
 
     async function login(data: AccountLoginDto, goHome: boolean = true) {
@@ -109,9 +114,11 @@ export const useUserStore = defineStore(
 
     return {
       token,
+      roles,
       userInfo,
       getToken,
       setToken,
+      setRoles,
       login,
       logout,
       afterLoginAction,

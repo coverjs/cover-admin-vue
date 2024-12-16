@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { CreateMenuDto, MenuVo } from '@/services';
-import { useRequest } from '@/hooks';
+import { useAccess, useRequest } from '@/hooks';
 import { api } from '@/services';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { LakySvgIcon } from '@lakyjs/components-vue-layout';
@@ -12,49 +12,17 @@ defineOptions({
 });
 
 const columns = [
-  {
-    title: '菜单名称',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '图标',
-    dataIndex: 'icon',
-    key: 'icon',
-  },
-  {
-    title: '路由',
-    dataIndex: 'path',
-    key: 'path',
-  },
-  {
-    title: 'locale',
-    dataIndex: 'locale',
-    key: 'locale',
-  },
-  {
-    title: '权限标识',
-    dataIndex: 'code',
-    key: 'code',
-  },
-  {
-    title: '排序',
-    dataIndex: 'sort',
-    key: 'sort',
-  },
-  {
-    title: '创建时间',
-    dataIndex: 'createdAt',
-    key: 'createdAt',
-  },
-  {
-    title: '操作',
-    dataIndex: 'operation',
-    key: 'operation',
-    width: 120,
-  },
+  { title: '菜单名称', dataIndex: 'name', key: 'name' },
+  { title: '图标', dataIndex: 'icon', key: 'icon' },
+  { title: '路由', dataIndex: 'path', key: 'path' },
+  { title: 'locale', dataIndex: 'locale', key: 'locale' },
+  { title: '权限标识', dataIndex: 'code', key: 'code' },
+  { title: '排序', dataIndex: 'sort', key: 'sort' },
+  { title: '创建时间', dataIndex: 'createdAt', key: 'createdAt' },
+  { title: '操作', dataIndex: 'operation', key: 'operation', width: 120 },
 ];
 
+const { hasAccess } = useAccess();
 const open = ref<boolean>(false);
 const tableData = shallowRef<MenuVo[]>([]);
 const defaultFormData: CreateMenuDto = {
@@ -136,11 +104,12 @@ function refresh() {
 
     <a-card :title="$t('pages.system.menu.menuList')">
       <template #extra>
-        <a-button type="primary" @click="handleAdd">
+        <a-button v-if="hasAccess(['system:menu:add'])" type="primary" @click="handleAdd">
           {{ $t("pages.system.menu.createMenu") }}
         </a-button>
       </template>
       <a-table
+        v-if="hasAccess(['system:menu:list'])"
         :columns="columns"
         :data-source="treeTableData"
         :loading="isLoading"
@@ -154,16 +123,18 @@ function refresh() {
             <div class="editable-row-operations">
               <a-space>
                 <a-button
+                  v-if="hasAccess(['system:menu:update'])"
                   type="link"
                   :icon="h(EditOutlined)"
                   @click="handleEdit(record)"
                 />
-                <a-popconfirm
-                  v-if="tableData.length"
-                  :title="$t('fallback.sureDelete')"
-                  @confirm="onDelete(record.id)"
-                >
-                  <a-button type="link" danger :icon="h(DeleteOutlined)" />
+                <a-popconfirm v-if="tableData.length" :title="$t('fallback.sureDelete')" @confirm="onDelete(record.id)">
+                  <a-button
+                    v-if="hasAccess(['system:menu:delete'])"
+                    type="link"
+                    danger
+                    :icon="h(DeleteOutlined)"
+                  />
                 </a-popconfirm>
               </a-space>
             </div>
