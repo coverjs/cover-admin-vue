@@ -81,8 +81,8 @@ function updatedCollapsed(val: boolean) {
           </ant-space>
         </div>
       </ant-layout-header>
-      <ant-layout-content :style="{ backgroundColor: token.colorBgLayout }">
-        <page-tags v-if="showPageTags" />
+      <page-tags v-if="showPageTags" />
+      <ant-layout-content :style="{ backgroundColor: token.colorBgLayout, overflowY: 'scroll' }">
         <ant-spin :spinning="loading">
           <div class="page-container mx-[16px] my-[24px] overflow-auto p-[24px]">
             <slot :route-listener="RouteListener">

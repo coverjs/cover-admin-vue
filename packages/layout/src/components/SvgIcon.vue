@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-defineOptions({
-  name: 'SvgIcon',
-});
+defineOptions({ name: 'SvgIcon' });
 const props = withDefaults(defineProps<{
   name: string
   prefix?: string
