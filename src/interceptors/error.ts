@@ -18,11 +18,6 @@ statusHandlers.set(
   StatusEnum.BAD_REQUEST,
   (msg?: string) => msg || t('fallback.http.badRequest'),
 );
-statusHandlers.set(StatusEnum.UNAUTHORIZED, () => {
-  const logout = useLogoutConfirm('auto');
-  logout();
-  return false;
-});
 statusHandlers.set(
   StatusEnum.FORBIDDEN,
   (msg?: string) => msg || t('fallback.http.forbidden'),
@@ -39,11 +34,26 @@ statusHandlers.set(
   StatusEnum.INTERNAL_SERVER_ERRO,
   (msg?: string) => msg || t('fallback.http.internalServerError'),
 );
-statusHandlers.set(StatusEnum.LOGIN_OTHER_DEVICE, () => {
-  const logout = useLogoutConfirm('auto', t('fallback.http.loginOtherDevice'));
-  logout();
-  return false;
-});
+statusHandlers.set(StatusEnum.UNAUTHORIZED, loginAgain(StatusEnum.UNAUTHORIZED)); // 登陆超时，重新登录
+statusHandlers.set(StatusEnum.LOGIN_OTHER_DEVICE, loginAgain(StatusEnum.LOGIN_OTHER_DEVICE));// 账号已在其他设备登录,重新登录
+statusHandlers.set(StatusEnum.ROLE_UPDATED, loginAgain(StatusEnum.ROLE_UPDATED));// 角色权限已更新,重新登录
+
+function loginAgain(code: StatusEnum) {
+  let i18nKey: string | void = void 0;
+
+  if (code === StatusEnum.LOGIN_OTHER_DEVICE) {
+    i18nKey = 'fallback.http.loginOtherDevice';
+  }
+
+  if (code === StatusEnum.ROLE_UPDATED) {
+    i18nKey = 'fallback.http.rolePermisstionsUpdate';
+  }
+  return () => {
+    const logout = useLogoutConfirm('auto', !isNil(i18nKey) ? t(i18nKey as string) : void 0);
+    logout();
+    return false as const;
+  };
+}
 
 function _getCode(ctx: Context) {
   return get(ctx, ['res', 'data', 'code']);
