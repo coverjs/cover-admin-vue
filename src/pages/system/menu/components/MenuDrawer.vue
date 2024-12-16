@@ -4,7 +4,7 @@ import type { MenuVo } from '@/services';
 import { useMessage } from '@/hooks';
 import { api } from '@/services';
 import { LakySvgIcon } from '@lakyjs/components-vue-layout';
-import { AntdIcons } from './utils';
+import { AntdIcons } from '../utils';
 
 interface Props {
   type: boolean

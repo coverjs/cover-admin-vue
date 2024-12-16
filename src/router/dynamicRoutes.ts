@@ -1,6 +1,7 @@
 import type { MenuData, MenuDataItem } from '@/router/types.ts';
 import type { RouteRecordRaw } from 'vue-router';
 import { t } from '@/locales';
+import { get, set } from 'lodash-es';
 
 export const basicRouteMap = {
   // 空页面 跳转 404
@@ -53,6 +54,7 @@ export function genRoutes(
   const routesData: RouteRecordRaw[] = [];
   menus.forEach(menu => {
     const item = formatRoute(menu, parent);
+    set(item, ['meta', 'roleCode'], get(menu, 'code', void 0));
     item.children = [];
     if (menu.children && menu.children.length) {
       item.children = genRoutes(menu.children, menu);

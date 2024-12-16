@@ -1,13 +1,12 @@
 import { useUserStore } from '@/store';
-import { toArray } from 'lodash-es';
+import { isArray } from 'lodash-es';
 
 export function useAccess() {
   const userStore = useUserStore();
   const roles = computed(() => userStore.roles);
-  const hasAccess = (roles: string | string[]) => {
-    const accessRoles = userStore.roles;
-    const roleArr = toArray(roles).flat(1);
-    return roleArr.some(role => accessRoles?.includes(role));
+  const hasAccess = (value: string | string[]) => {
+    const roleArr = isArray(value) ? value.flat(1) : [value];
+    return roleArr.some(role => roles.value?.includes(role));
   };
   return {
     hasAccess,

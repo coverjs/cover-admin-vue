@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { CreateRoleDto, MenuVo } from '@/services';
-import type { CreateRoleDtoWithId } from './index.vue';
+import type { CreateRoleDtoWithId } from '../index.vue';
 import { useMessage, useRequest } from '@/hooks';
 import { MenuMap } from '@/pages/system/menu/utils';
 import { api } from '@/services';

@@ -10,5 +10,6 @@ declare module 'vue-router' {
     locale?: string
     loaded?: boolean
     ignoreAuth?: boolean
+    roleCode?: string
   }
 }

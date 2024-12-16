@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { RoleVo, UpdateUserDto } from '@/services';
-import type { ICreateUser } from './index.vue';
+import type { ICreateUser } from '../index.vue';
 import { useMessage, useRequest } from '@/hooks';
 import { api } from '@/services';
 import crypto from 'crypto-js';
