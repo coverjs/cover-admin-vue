@@ -6,7 +6,7 @@ import { useMessage, useRequest } from '@/hooks';
 import { api } from '@/services';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { h, ref } from 'vue';
-import UserDrawer from './UserDrawer.vue';
+import UserDrawer from './components/UserDrawer.vue';
 
 defineOptions({
   name: 'UserPage',
@@ -283,4 +283,7 @@ function resetForm() {
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<route lang="yaml">
+meta:
+  roleCode: system:user
+</route>

@@ -5,7 +5,7 @@ import { api } from '@/services';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { LakySvgIcon } from '@lakyjs/components-vue-layout';
 import { h } from 'vue';
-import MenuDrawer from './MenuDrawer.vue';
+import MenuDrawer from './components/MenuDrawer.vue';
 
 defineOptions({
   name: 'MenuPage',
@@ -152,3 +152,8 @@ function refresh() {
     />
   </div>
 </template>
+
+<route lang="yaml">
+meta:
+  roleCode: system:menu
+</route>

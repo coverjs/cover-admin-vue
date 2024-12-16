@@ -1,5 +1,6 @@
 import type { MenuData, MenuDataItem } from '@/router/types.ts';
 
+import type { MenuVo } from '@/services';
 import type { LayoutSetting, ThemeType } from '@/types';
 import type { ThemeConfig } from 'ant-design-vue/es/config-provider/context';
 import { PageEnum } from '@/enums';
@@ -106,11 +107,11 @@ export const useAppStore = defineStore('app', () => {
    * 将角色信息存入到 userStore 中
    * @param data 树形结构的菜单数据
    */
-  function getRolesToStore(data: any) {
+  function getRolesToStore(data: MenuVo[]) {
     const roles: string[] = [];
     const userStore = useUserStore();
-    const getRoles = (data: any) => {
-      data.forEach((item: any) => {
+    const getRoles = (data: MenuVo[]) => {
+      data.forEach((item: MenuVo) => {
         if (item.code) {
           roles.push(item.code);
         }
@@ -134,7 +135,7 @@ export const useAppStore = defineStore('app', () => {
   async function getMenuData() {
     const res = await api.profile.profileGetMenus();
     // 同时收集 code 存入到 userStore 中 roles
-    getRolesToStore(res.data);
+    getRolesToStore(res.data ?? []);
     return generateMenuAndRoutes(res.data);
   }
 
