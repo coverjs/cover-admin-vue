@@ -1,9 +1,10 @@
-<script setup lang="ts">
+<script setup lang="tsx">
+import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 import type { PageTagItem } from './types';
 import { CloseOutlined, MenuOutlined, SyncOutlined, VerticalLeftOutlined, VerticalRightOutlined } from '@ant-design/icons-vue';
 import { Dropdown as AntDropdown, Menu as AntMenu, MenuDivider as AntMenuDivider, MenuItem as AntMenuItem, Space as AntSpace, Tag as AntTag, theme } from 'ant-design-vue';
-import { isEmpty, last, size, split } from 'lodash-es';
-import { computed } from 'vue';
+import { isEmpty, isNil, last, size, split } from 'lodash-es';
+import { computed, ref, type Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useConfig } from '../ConfigProvider';
 import { useStore } from './useStore';
@@ -36,6 +37,22 @@ const isCloseOtherDisabled = computed(() => {
   return size(store.tags.value) <= 1;
 });
 
+function isTagCloseRightDisabled(tag: PageTagItem) {
+  if (size(store.tags.value) <= 1) {
+    return true;
+  }
+  const idx = store.tags?.value.findIndex(item => item.path === tag.path);
+  return idx === size(store.tags.value) - 1;
+}
+
+function isTagCloseLeftDisabled(tag: PageTagItem) {
+  if (size(store.tags.value) <= 1) {
+    return true;
+  }
+  const idx = store.tags?.value.findIndex(item => item.path === tag.path);
+  return idx === 0;
+}
+
 function handleItemClose(tag: PageTagItem) {
   store.removeTag(tag);
 }
@@ -46,27 +63,38 @@ menuHandlers.set('refresh', () => {
 });
 
 menuHandlers.set('close-right', (tag: PageTagItem) => {
-  const index = store.tags.value.indexOf(tag);
+  const index = store.tags.value.findIndex(item => item.path === tag.path);
   const target = store.tags.value.filter((_, idx) => idx > index);
-
+  const current = router.currentRoute.value;
   store.removeTags(target);
+  if (target.some(item => item.path === current.path)) {
+    router.push(store.tags.value[store.tags.value.length - 1].path);
+  }
 });
 
 menuHandlers.set('close-left', (tag: PageTagItem) => {
-  const index = store.tags.value.indexOf(tag);
+  const index = store.tags.value.findIndex(item => item.path === tag.path);
   const target = store.tags.value.filter((_, idx) => idx < index);
+  const current = router.currentRoute.value;
   store.removeTags(target);
+  if (target.some(item => item.path === current.path)) {
+    router.push(store.tags.value[0].path);
+  }
 });
 
 menuHandlers.set('close-other', (tag: PageTagItem) => {
-  const target = store.tags.value.filter(item => item.fullPath !== tag.fullPath);
+  const target = store.tags.value.filter(item => item.path !== tag.path);
+  const current = router.currentRoute.value;
   store.removeTags(target);
+  if (target.some(item => item.path === current.path)) {
+    router.push(store.tags.value[0].path);
+  }
 });
 
-function handleMenuClick(key: string) {
-  const current = store.tags.value.find(item => item.path === route.path);
-  if (current)
-    menuHandlers.has(key) && menuHandlers.get(key)?.(current);
+function handleMenuClick(key: string, tag?: PageTagItem) {
+  const target = isNil(tag) ? store.tags.value.find(item => item.path === route.path) : tag;
+  if (target)
+    menuHandlers.has(key) && menuHandlers.get(key)?.(target);
 }
 
 function genTagTitle(tag: PageTagItem) {
@@ -77,6 +105,21 @@ function genTagTitle(tag: PageTagItem) {
     return tag.meta.title;
   }
   return last(split(tag.path, '/'));
+}
+
+const contextmenuTag: Ref<PageTagItem | void> = ref(void 0);
+function DropdownMenu(tag?: PageTagItem) {
+  const hasTag = !isEmpty(tag?.path);
+  return (
+    <AntMenu onClick={(e: MenuInfo) => handleMenuClick(e.key as string, hasTag ? tag : void 0)} selectedKeys={[]}>
+      <AntMenuItem key="refresh" icon={<SyncOutlined />} disabled={hasTag ? route.path !== tag?.path : false}>刷新</AntMenuItem>
+      <AntMenuDivider />
+      <AntMenuItem key="close-right" icon={<VerticalLeftOutlined />} disabled={hasTag ? isTagCloseRightDisabled(tag!) : isCloseRightDisabled.value}>关闭右侧</AntMenuItem>
+      <AntMenuItem key="close-left" icon={<VerticalRightOutlined />} disabled={hasTag ? isTagCloseLeftDisabled(tag!) : isCloseLeftDisabled.value}>关闭左侧</AntMenuItem>
+      <AntMenuDivider />
+      <AntMenuItem key="close-other" icon={<CloseOutlined />} disabled={isCloseOtherDisabled.value}>关闭其他</AntMenuItem>
+    </AntMenu>
+  );
 }
 </script>
 
@@ -90,55 +133,34 @@ function genTagTitle(tag: PageTagItem) {
       borderBottom: `1px solid ${token?.colorBorder}`,
     }"
   >
-    <div class="scroll-view">
-      <transition-group name="tags">
-        <ant-tag
-          v-for="tag in store.tags.value"
-          :key="tag.fullPath"
-          :checked="route.fullPath === tag.fullPath"
-          :closable="size(store.tags.value) > 1 && tag.fullPath !== route.fullPath"
-          :color="route.path === tag.path ? token?.colorPrimaryActive : ''"
-          @close="handleItemClose(tag)"
-        >
-          <router-link :to="tag.fullPath">
-            {{ genTagTitle(tag) }}
-          </router-link>
-        </ant-tag>
-      </transition-group>
-    </div>
+    <ant-dropdown :trigger="['contextmenu']">
+      <div class="scroll-view">
+        <transition-group name="tags">
+          <ant-tag
+            v-for="tag in store.tags.value"
+            :key="tag.fullPath"
+            :checked="route.fullPath === tag.fullPath"
+            :closable="size(store.tags.value) > 1 && tag.fullPath !== route.fullPath"
+            :color="route.path === tag.path ? token?.colorPrimaryActive : ''"
+            @close="handleItemClose(tag)"
+            @contextmenu="contextmenuTag = tag"
+          >
+            <router-link :to="tag.fullPath">
+              {{ genTagTitle(tag) }}
+            </router-link>
+          </ant-tag>
+        </transition-group>
+      </div>
+      <template #overlay>
+        <dropdown-menu v-bind="contextmenuTag" />
+      </template>
+    </ant-dropdown>
     <div class="page-tags-right">
       <ant-space>
         <ant-dropdown>
           <menu-outlined />
           <template #overlay>
-            <ant-menu @click="handleMenuClick($event.key as string)">
-              <ant-menu-item key="refresh">
-                <template #icon>
-                  <sync-outlined />
-                </template>
-                刷新
-              </ant-menu-item>
-              <ant-menu-divider />
-              <ant-menu-item key="close-right" :disabled="isCloseRightDisabled">
-                <template #icon>
-                  <vertical-left-outlined />
-                </template>
-                关闭右侧
-              </ant-menu-item>
-              <ant-menu-item key="close-left" :disabled="isCloseLeftDisabled">
-                <template #icon>
-                  <vertical-right-outlined />
-                </template>
-                关闭左侧
-              </ant-menu-item>
-              <ant-menu-divider />
-              <ant-menu-item key="close-other" :disabled="isCloseOtherDisabled">
-                <template #icon>
-                  <close-outlined />
-                </template>
-                关闭其他
-              </ant-menu-item>
-            </ant-menu>
+            <dropdown-menu />
           </template>
         </ant-dropdown>
       </ant-space>
@@ -152,9 +174,9 @@ function genTagTitle(tag: PageTagItem) {
   align-items: center;
   padding: 10px 24px;
   width: 100%;
+  justify-content: space-between;
   .scroll-view{
-    overflow-x: auto;
-    flex: auto;
+    overflow-x: hidden;
   }
   span.ant-tag {
     cursor: pointer;
@@ -167,7 +189,7 @@ function genTagTitle(tag: PageTagItem) {
 }
 
 .tags-enter-from{
-  transform: translateX(20px);
+  transform: translateX(40px);
 }
 .tags-leave-active {
   position: absolute;

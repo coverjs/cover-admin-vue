@@ -10,7 +10,7 @@ export function getStyle(token: GlobalToken, key: string) {
     paddingBlockEnd: 0,
     paddingInlineStart: addUnit(token.paddingXL),
     paddingInlineEnd: addUnit(token.paddingXL),
-    backgroundColor: token.colorBgElevated,
+    // backgroundColor: token.colorBgElevated,
   });
 
   styleMap.set('breadcrumb', {

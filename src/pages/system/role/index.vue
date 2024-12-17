@@ -3,10 +3,11 @@ import type { RoleVo, UpdateRoleDto } from '@/services';
 import type { FormInstance } from 'ant-design-vue';
 import type { UnwrapRef } from 'vue';
 import { useRequest } from '@/hooks';
-
 import { api } from '@/services';
 
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
+
+import { LakyPageContainer } from '@lakyjs/components-vue-layout';
 import { h } from 'vue';
 import MenuDrawer from './components/RoleDrawer.vue';
 
@@ -54,7 +55,6 @@ onMounted(() => {
   fetchData();
 });
 
-// const { isLoading, error, execute, state } = await api.system.menuFindList({ customOptions: { responseMode: 'reactive' } }) as unknown as ReactiveResponse<MenuVo[]>;
 const { isLoading, error, execute, state } = useRequest(() => api.system.roleFineList(toRaw(queryParam.value)), { list: [], total: 0 });
 
 async function fetchData() {
@@ -136,7 +136,7 @@ function resetForm() {
 </script>
 
 <template>
-  <div>
+  <laky-page-container :header="{ title: $t('menu.system.roleAdmin') }">
     <a-card :title="$t('pages.system.menuQuery')" class="mb-[24px]">
       <a-form
         ref="formRef"
@@ -216,7 +216,7 @@ function resetForm() {
       :form-data
       @refresh="refresh"
     />
-  </div>
+  </laky-page-container>
 </template>
 
 <route lang="yaml">

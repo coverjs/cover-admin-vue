@@ -5,6 +5,7 @@ import type { UnwrapRef } from 'vue';
 import { useMessage, useRequest } from '@/hooks';
 import { api } from '@/services';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
+import { LakyPageContainer } from '@lakyjs/components-vue-layout';
 import { h, ref } from 'vue';
 import UserDrawer from './components/UserDrawer.vue';
 
@@ -98,7 +99,6 @@ async function handleEnableOrDisableUser(user: IUserInfo) {
 }
 
 // 获取用户列表
-// const { isLoading, error, execute, state } = await api.system.userFindList(toRaw(queryParam.value), { customOptions: { responseMode: 'reactive' } }) as unknown as ReactiveResponse<UserInfoVo[]>;
 const { isLoading, error, execute, state } = useRequest(() => api.system.userFindList(toRaw(queryParam.value)), { list: [], total: 0 });
 
 async function getUserList() {
@@ -187,7 +187,7 @@ function resetForm() {
 </script>
 
 <template>
-  <div class="user-management">
+  <laky-page-container :header="{ title: $t('menu.system.userAdmin') }" class="user-management">
     <a-card :title="$t('pages.system.menuQuery')" class="mb-[24px]">
       <a-form
         ref="formRef"
@@ -280,7 +280,7 @@ function resetForm() {
       :form-data
       @refresh="refresh"
     />
-  </div>
+  </laky-page-container>
 </template>
 
 <route lang="yaml">

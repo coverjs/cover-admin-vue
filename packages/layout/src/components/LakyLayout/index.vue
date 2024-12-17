@@ -84,7 +84,7 @@ function updatedCollapsed(val: boolean) {
       <page-tags v-if="showPageTags" />
       <ant-layout-content :style="{ backgroundColor: token.colorBgLayout, overflowY: 'scroll' }">
         <ant-spin :spinning="loading">
-          <div class="page-container mx-[16px] my-[24px] overflow-auto p-[24px]">
+          <div class="page-container">
             <slot :route-listener="RouteListener">
               <router-view v-slot="routeProps">
                 <!-- routeListener 为 renderless 组件 -->

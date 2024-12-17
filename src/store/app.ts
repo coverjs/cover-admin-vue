@@ -159,7 +159,7 @@ export const useAppStore = defineStore('app', () => {
       path: '/home',
       name: '首页',
       locale: 'menu.home.home',
-      icon: 'FileOutlined',
+      icon: 'home-filled',
     } as MenuDataItem;
 
     menuData.value = [homePage, ...treeMenuData];
