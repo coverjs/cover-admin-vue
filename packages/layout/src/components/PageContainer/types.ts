@@ -15,7 +15,7 @@ export interface PageContainerProps {
     title: string | VueNode
     subTitle?: string | VueNode
     extra?: VueNode[] | VueNode
-    breadcrumb: WithFalse<{
+    breadcrumb?: WithFalse<{
       items: { path: string, title: string }[]
     }>
   }

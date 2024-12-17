@@ -3,7 +3,7 @@ import type { CreateMenuDto, MenuVo } from '@/services';
 import { useAccess, useRequest } from '@/hooks';
 import { api } from '@/services';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { LakySvgIcon } from '@lakyjs/components-vue-layout';
+import { LakyPageContainer, LakySvgIcon } from '@lakyjs/components-vue-layout';
 import { h } from 'vue';
 import MenuDrawer from './components/MenuDrawer.vue';
 
@@ -61,7 +61,6 @@ const treeTableData = computed(() => {
   return generateTreeDataWithKey(tableData.value);
 });
 
-// const { isLoading, error, execute, state } = await api.system.menuFindList({ customOptions: { responseMode: 'reactive' } }) as unknown as ReactiveResponse<MenuVo[]>;
 const { isLoading, error, execute, state } = useRequest(api.system.menuFindList, { list: [], total: 0 });
 
 async function fetchData() {
@@ -97,7 +96,7 @@ function refresh() {
 </script>
 
 <template>
-  <div>
+  <laky-page-container :header="{ title: $t('menu.system.menuAdmin') }">
     <a-card :title="$t('pages.system.menuQuery')" class="mb-[24px]">
       <!-- TODO 查询 -->
     </a-card>
@@ -150,7 +149,7 @@ function refresh() {
       :tree-data="tableData"
       @refresh="refresh"
     />
-  </div>
+  </laky-page-container>
 </template>
 
 <route lang="yaml">

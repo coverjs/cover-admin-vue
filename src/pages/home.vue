@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import welcomeImg from '@/assets/welcome.png';
+import { LakyPageContainer } from '@lakyjs/components-vue-layout';
 
 defineOptions({
   name: 'HomePage',
@@ -7,9 +8,13 @@ defineOptions({
 </script>
 
 <template>
-  <div>
+  <laky-page-container
+    :header="{
+      title: $t('menu.home.home'),
+    }"
+  >
     <img class="welcome-img" :src="welcomeImg" alt="welcomeImg">
-  </div>
+  </laky-page-container>
 </template>
 
 <style lang="scss" scoped>
