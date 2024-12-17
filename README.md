@@ -1,6 +1,6 @@
-# laky-admin-vue
+# admin-vue
 
-lacy admin是一个使用vue开发的中后台模板框架
+admin-vue 是一个使用vue开发的中后台模板框架
 
 ## 开发
 
