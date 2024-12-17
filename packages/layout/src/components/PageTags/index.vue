@@ -2,9 +2,10 @@
 import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 import type { PageTagItem } from './types';
 import { CloseOutlined, MenuOutlined, SyncOutlined, VerticalLeftOutlined, VerticalRightOutlined } from '@ant-design/icons-vue';
+import { useDebounceFn } from '@vueuse/core';
 import { Dropdown as AntDropdown, Menu as AntMenu, MenuDivider as AntMenuDivider, MenuItem as AntMenuItem, Space as AntSpace, Tag as AntTag, theme } from 'ant-design-vue';
-import { isEmpty, isNil, last, size, split } from 'lodash-es';
-import { computed, ref, type Ref } from 'vue';
+import { get, isEmpty, isNil, last, size, split } from 'lodash-es';
+import { computed, nextTick, onMounted, ref, type Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useConfig } from '../ConfigProvider';
 import { useStore } from './useStore';
@@ -121,6 +122,40 @@ function DropdownMenu(tag?: PageTagItem) {
     </AntMenu>
   );
 }
+
+function bindDraggable() {
+  const tagsView = document.querySelector('.scroll-view');
+  const changeIndex = useDebounceFn(store.changeIndex, 100);
+  let currentNode: EventTarget | void;
+
+  tagsView?.addEventListener('dragstart', e => {
+    nextTick(() => {
+      get(e, ['target', 'classList'])?.add('dragging');
+    });
+    currentNode = e.target as EventTarget;
+  });
+
+  tagsView?.addEventListener('dragenter', e => {
+    if (e.target === tagsView || e.target === currentNode) {
+      return;
+    }
+    const tags = [...tagsView.children];
+    const current = tags.indexOf(currentNode as HTMLElement);
+    const target = tags.indexOf(e.target as HTMLElement);
+    if (target === -1) {
+      return;
+    }
+    changeIndex(current, target);
+  });
+
+  tagsView?.addEventListener('dragend', e => {
+    nextTick(() => {
+      get(e, ['target', 'classList'])?.remove('dragging');
+    });
+  });
+}
+
+onMounted(() => bindDraggable());
 </script>
 
 <template>
@@ -142,12 +177,12 @@ function DropdownMenu(tag?: PageTagItem) {
             :checked="route.fullPath === tag.fullPath"
             :closable="size(store.tags.value) > 1 && tag.fullPath !== route.fullPath"
             :color="route.path === tag.path ? token?.colorPrimaryActive : ''"
+            draggable="true"
             @close="handleItemClose(tag)"
             @contextmenu="contextmenuTag = tag"
+            @click="router.push(tag.path)"
           >
-            <router-link :to="tag.fullPath">
-              {{ genTagTitle(tag) }}
-            </router-link>
+            {{ genTagTitle(tag) }}
           </ant-tag>
         </transition-group>
       </div>
@@ -176,10 +211,15 @@ function DropdownMenu(tag?: PageTagItem) {
   width: 100%;
   justify-content: space-between;
   .scroll-view{
-    overflow-x: hidden;
+    overflow: hidden;
   }
   span.ant-tag {
     cursor: pointer;
+  }
+  .ant-tag.dragging{
+    background: transparent;
+    color:transparent;
+    border: 1px dashed #ccc;
   }
 }
 

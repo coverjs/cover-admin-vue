@@ -49,6 +49,12 @@ export const useStore = createSharedComposable(() => {
     refresh();
   }
 
+  function changeIndex(currentIdx: number, targetIdx: number) {
+    const temp: PageTagItem = tags.value[targetIdx];
+    tags.value[targetIdx] = tags.value[currentIdx];
+    tags.value[currentIdx] = temp;
+  }
+
   return {
     tags,
     cacheTags,
@@ -56,6 +62,7 @@ export const useStore = createSharedComposable(() => {
     addTag,
     removeTag,
     removeTags,
-    refreshTag
+    refreshTag,
+    changeIndex
   };
 });
